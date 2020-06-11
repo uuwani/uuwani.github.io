@@ -1,21 +1,18 @@
----
-layout: compress
----
-
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
   {% include head.html %}
 
   <body>
-     {% include masthead.html %}
 
-      <main id="main" role="main">
-	      
+    {% include header.html %}
+
+    <div class="page-content">
         {{ content }}
-      </main>
+    </div>
 
     {% include footer.html %}
 
   </body>
+
 </html>

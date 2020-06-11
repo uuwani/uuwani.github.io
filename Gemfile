@@ -1,8 +1,5 @@
-source "https://rubygems.org"
-gem 'jekyll'
-gem 'jekyll-paginate'
-gem 'jekyll-gist'
-gem 'jekyll-seo-tag'
+source 'https://rubygems.org'
+gem 'jekyll', '<4'
+gem 'jekyll-archives'
 gem 'jekyll-sitemap'
-gem 'jekyll-git_metadata'
-gem 'disqus-for-jekyll'
+gem 'jekyll-paginate-v2'
