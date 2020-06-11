@@ -1,94 +1,68 @@
-# Jekyll Resume Theme
-
-Live demo at https://jekyll-theme-minimal-resume.netlify.com/
-
-[![Netlify Status](https://api.netlify.com/api/v1/badges/24d80ae8-c3d9-4645-a6d8-9e97fc8dec3c/deploy-status)](https://app.netlify.com/sites/jekyll-theme-minimal-resume/deploys)
-
-# Stack
-
-![](https://img.shields.io/badge/jekyll-✓-blue.svg)
-![](https://img.shields.io/badge/html5-✓-blue.svg)
-![](https://img.shields.io/badge/sass-✓-blue.svg)
-![](https://img.shields.io/badge/sweet--scroll-✓-blue.svg)
-![](https://img.shields.io/badge/particle--js-✓-blue.svg)
-![](https://img.shields.io/badge/font--awesome-✓-blue.svg)
-![](https://img.shields.io/badge/devicon-✓-blue.svg)
-![](https://img.shields.io/badge/gulp-✓-blue.svg)
-
-***
-
-<h3 align="center">Please help this repo with a :star: if you find it useful! :blush:</h3>
-
-***
-
-# Screenshot
-
+<p align="right">
+    <a href="https://badge.fury.io/rb/just-the-docs"><img src="https://badge.fury.io/rb/just-the-docs.svg" alt="Gem version"></a> <a href="https://github.com/pmarsceill/just-the-docs/actions?query=workflow%3A%22Master+branch+CI%22"><img src="https://github.com/pmarsceill/just-the-docs/workflows/Master%20branch%20CI/badge.svg" alt="Build status"></a>
+</p>
+<br><br>
 <p align="center">
-  <img src="https://github.com/murraco/jekyll-theme-minimal-resume/blob/master/screenshot.png" width="90%" />
+    <h1 align="center">Just the Docs</h1>
+    <p align="center">A modern, highly customizable, and responsive Jekyll theme for documentation with built-in search.<br>Easily hosted on GitHub Pages with few dependencies.</p>
+    <p align="center"><strong><a href="https://pmarsceill.github.io/just-the-docs/">See it in action!</a></strong></p>
+    <br><br><br>
 </p>
 
-# Quick Setup
+![jtd](https://user-images.githubusercontent.com/896475/47384541-89053c80-d6d5-11e8-98dc-dba16e192de9.gif)
 
-1. Install Jekyll: `gem install jekyll bundler`
-2. Fork this repository and clone your fork
-3. Edit `_config.yml` to personalize your site
+## Installation
 
-# Settings
+Add this line to your Jekyll site's Gemfile:
 
-You have to fill some informations on `_config.yml` to customize your site:
-
-## Site settings
-```yml
-description: A blog about lorem ipsum dolor sit amet
-baseurl: "" # the subpath of your site, e.g. /blog/
-url: "http://localhost:3000" # the base hostname & protocol for your site
+```ruby
+gem "just-the-docs"
 ```
 
-## User settings
-```yml
-username: Lorem Ipsum
-user_description: Software Engineer at Lorem Ipsum Dolor
-user_title: Mauricio Urraco
-email: mauriurraco@gmail.com
+And add this line to your Jekyll site's `_config.yml`:
+
+```yaml
+theme: just-the-docs
 ```
 
-> Don't forget to change your URL before you deploy your site!
+And then execute:
 
-# Color and Particle Customization
+    $ bundle
 
-- Color Customization
-  - Edit the `.sass` variables
-- Particle Customization
-  - Edit the json data in particle function in `app.js`
-  - Refer to `Particle.js` for help
+Or install it yourself as:
 
-# Content
+    $ gem install just-the-docs
 
-You can (and should) edit the `.html` files for adding your own information, icons, working experience, social links or whatever you want to add. I.e.:
+## Usage
 
-```html
-<a aria-label="My Github" target="_blank" href="https://github.com/murraco">
-  <i class="icon fa fa-github-alt" aria-hidden="true"></i>
-</a>
-```
+[View the documentation](https://pmarsceill.github.io/just-the-docs/) for usage information.
 
-# Running locally
+## Contributing
 
-In order to compile the assets and run `Jekyll` locally you need to follow those steps:
+Bug reports and pull requests are welcome on GitHub at https://github.com/pmarsceill/just-the-docs. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
-1. Install Jekyll
-2. Run `jekyll build`
-3. Start and http-server in the folder `_site`
+### Submitting code changes:
 
-# Contribution
+- Open a [Pull Request](https://github.com/pmarsceill/just-the-docs/pulls)
+- Ensure all CI tests pass
+- Await code review
+- Bump the version number in `just-the-docs.gemspec` and `package.json` according to [semantic versioning](https://semver.org/).
 
-- Report issues
-- Open pull request with improvements
-- Spread the word
-- Reach out to me directly at <mauriurraco@gmail.com>
+### Design and development principles of this theme:
 
-# Donate
+1. As few dependencies as possible
+2. No build script needed
+3. First class mobile experience
+4. Make the content shine
 
-`btc: 36V7HqqENSKn6iFCBuE4iCdtB29uGoCKzN`
+## Development
 
-`eth: 0xB419E3E9fa2233383E0877d442e55C34B9C944dD`
+To set up your environment to develop this theme, run `bundle install`.
+
+Your theme is set up just like a normal Jekyll site! To test your theme, run `bundle exec jekyll serve` and open your browser at `http://localhost:4000`. This starts a Jekyll server using your theme. Add pages, documents, data, etc. like normal to test your theme's contents. As you make modifications to your theme and to your content, your site will regenerate and you should see the changes in the browser after a refresh, just like normal.
+
+When the theme is released, only the files in `_layouts`, `_includes`, and `_sass` tracked with Git will be released.
+
+## License
+
+The theme is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).

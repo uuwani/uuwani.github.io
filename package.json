@@ -1,21 +1,23 @@
 {
-  "name": "jekyll-theme-minimal-resume",
-  "version": "1.0.0",
-  "description": "This is a simple Jekyll theme for a minimal resume website.",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Mauricio Urraco <mauriurraco@gmail.com>",
+  "name": "just-the-docs",
+  "version": "0.2.8",
+  "description": "A modern Jekyll theme for documentation",
+  "repository": "pmarsceill/just-the-docs",
   "license": "MIT",
-  "dependencies": {
-    "browser-sync": "^2.18.6",
-    "gulp": "^4.0.2",
-    "gulp-concat": "^2.6.1",
-    "gulp-csso": "^4.0.1",
-    "gulp-imagemin": "^6.2.0",
-    "gulp-plumber": "^1.1.0",
-    "gulp-sass": "^4.0.2",
-    "gulp-uglify": "^3.0.2"
-  }
+  "bugs": "https://github.com/pmarsceill/just-the-docs/issues",
+  "devDependencies": {
+    "@primer/css": "^14.3.0",
+    "prettier": "^2.0.5",
+    "stylelint": "^13.3.3",
+    "stylelint-config-prettier": "^8.0.1",
+    "stylelint-config-primer": "^9.0.0",
+    "stylelint-prettier": "^1.1.2",
+    "stylelint-selector-no-utility": "^4.0.0"
+  },
+  "scripts": {
+    "test": "stylelint '**/*.scss'",
+    "format": "prettier --write '**/*.{scss,js,json}'",
+    "stylelint-check": "stylelint-config-prettier-check"
+  },
+  "dependencies": {}
 }
