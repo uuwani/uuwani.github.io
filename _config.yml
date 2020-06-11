@@ -17,14 +17,14 @@ description: "Maxime Kjaer's blog posts about the Web, software & technology. Mo
 
 # Your website URL
 # Used in sitemap.xml and feed.xml
-url: https://uuwani.github.io/
+url: https://uuwani.github.io
 
 # Information about the author. Used in feed.xml
 author:
   name: Maxime Kjaer
   email: maxime.kjaer@gmail.com
   twitter: maximekjaer
-  url: https://uuwani.github.io/
+  url: https://uuwani.github.io
 
 # Your disqus shortname. Entering this will enable commenting on posts by default
 disqus: kjaermaxime
