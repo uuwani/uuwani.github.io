@@ -1,0 +1,8 @@
+I"�<p>I suffer from the most common responsive issue. As my <a href="/travis/">recent</a> <a href="/web-performance-2.0/">post history</a> <a href="/quick-cache-this/">may attest to</a>, performance matters to me. At the same time, though, I also want my images to look great on every screen, and that’s not as trivial as it may sound. For a long time, it’s been impossible to have high quality images of minimal size on every screen. This classic problem is <em>just</em> being solved right now by the <a href="https://www.w3.org/community/respimg/">Responsive Issues Community Group</a>, but the solution isn’t quite ready for prime time yet.</p>
+
+<h2 id="responsive-images-a-relatively-immature-feature">Responsive images, a relatively immature feature</h2>
+<p>Indeed, as of this writing, CSS <code class="highlighter-rouge">image-set</code> only has <a href="http://caniuse.com/#feat=css-image-set">62% browser support</a> and is still very much <a href="https://drafts.csswg.org/css-images-3/#image-set-notation">an editor’s draft</a>. The <code class="highlighter-rouge">srcset</code> attribute isn’t much better, clocking in at <a href="http://caniuse.com/#feat=srcset">67%</a>, and <code class="highlighter-rouge">&lt;picture&gt;</code> is at a dismal <a href="http://caniuse.com/#feat=picture">57%</a>.</p>
+
+<p>Now, these new specifications are backwards-compatible (as in, they won’t break your site), so you could argue that mediocre support is an invalid concern. But support is mainly lacking in the very browsers that actually need this spec. As of right now, <strong>there are no phones out there that support this specification in their default browser</strong>. So why even bother?</p>
+
+:ET

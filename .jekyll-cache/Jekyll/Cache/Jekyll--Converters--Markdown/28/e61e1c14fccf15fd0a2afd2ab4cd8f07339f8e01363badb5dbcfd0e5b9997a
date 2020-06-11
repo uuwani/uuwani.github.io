@@ -1,0 +1,28 @@
+I";<p>I’ve just set up my Jekyll blog using Github Pages! First thoughts? “Huh, well that was easy.” Full instructions are <a href="https://github.com/barryclark/jekyll-now">here</a>, but in a nutshell, here’s how it goes:</p>
+
+<h2 id="1-fork-a-preset-jekyll-repo">1. Fork a preset Jekyll repo</h2>
+
+<p>And once you have your own repo, go to the Settings and rename it to <code class="highlighter-rouge">yourGithubUsername.github.io</code>.</p>
+
+<h2 id="2-edit-a-few-settings">2. Edit a few settings</h2>
+
+<p>You just need to tell Jekyll what your name is, what your blog will be called, give it links to whatever social media that you want to link to… To do that, go through the <code class="highlighter-rouge">_config.yml</code> file, and fill it out like a form.</p>
+
+<!-- More -->
+
+<h2 id="3-write-a-post">3. Write a post</h2>
+
+<p>Go to your <code class="highlighter-rouge">_posts</code> folder and edit the Hello-World file. Don’t touch the text between the 3 dashes (it <em>has</em> to be there), but the rest of that Markdown file is your canvas.</p>
+
+<p>Remember to change the date if you want that to be reflected on your blog. To do so, change the name of the Markdown file to fit the following format:</p>
+
+<figure class="highlight"><pre><code class="language-markdown" data-lang="markdown">    YEAR-MONTH-DAY-Title_goes_here.md</code></pre></figure>
+
+<h2 id="4-enjoy">4. Enjoy!</h2>
+
+<p>Your Github Page is now available over at <code class="highlighter-rouge">yourGithubUsername.github.io</code>!!</p>
+
+<hr />
+
+<p>Next step for me: setting up my own theme. Let’s go!</p>
+:ET

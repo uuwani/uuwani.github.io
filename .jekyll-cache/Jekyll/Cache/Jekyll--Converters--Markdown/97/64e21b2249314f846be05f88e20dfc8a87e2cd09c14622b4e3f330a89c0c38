@@ -1,0 +1,37 @@
+I"‰
+<p>Due to the concavity of the log function, we can apply <a href="https://en.wikipedia.org/wiki/Jensen%27s_inequality">Jensenâ€™s inequality</a> recursively to the cost function to get:</p>
+
+\[\begin{align}
+\log{\left( \sum_{k=1}^K{\pi_k \normal{\vec{x}_n \mid \pmb{\mu}_k, \pmb{\Sigma}_k}} \right)} 
+    &amp; = \log{\left(
+        \sum_{k=1}^K{
+            q_{nk}^{(t)}
+            \frac{
+                \pi_k \normal{\vec{x}_n \mid \pmb{\mu}_k, \pmb{\Sigma}_k}
+            }{
+                q_{nk}^{(t)}
+            }
+        } \right)} \\
+    
+    &amp; \ge \sum_{k=1}^K{
+        q_{nk}^{(t)} 
+        \log{\frac{
+            \pi_k \normal{\vec{x}_n \mid \pmb{\mu}_k, \pmb{\Sigma}_k}
+        }{
+            q_{nk}^{(t)}
+        }}
+    } \\
+\end{align}\]
+
+<p>Just like in the <a href="https://en.wikipedia.org/wiki/Log_sum_inequality">log-sum inequality</a>, we have equality when the terms in the log are equal for all members of the sum. If that is the case, it means that all these terms are the same scalar, and therefore that the numerator and denominator are proportional:</p>
+
+\[q_{nk}^{(t)} \propto \pi_k \normal{\vec{x}_n \mid \pmb{\mu}_k, \pmb{\Sigma}_k}\]
+
+<p>Since $q_{nk}$ is a probability, it must sum up to 1 so we have:</p>
+
+\[q_{nk}^{(t)} = \frac{
+    \pi_k \normal{\vec{x}_n \mid \pmb{\mu}_k, \pmb{\Sigma}_k}
+}{
+    \sum_{k=1}^K{\pi_k \normal{\vec{x}_n \mid \pmb{\mu}_k, \pmb{\Sigma}_k}}
+}\]
+:ET

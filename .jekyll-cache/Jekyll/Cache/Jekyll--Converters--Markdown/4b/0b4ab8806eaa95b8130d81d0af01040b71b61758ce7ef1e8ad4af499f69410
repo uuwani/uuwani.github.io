@@ -1,0 +1,12 @@
+I"
+<p>I’ve just set up my Jekyll blog using Github Pages! First thoughts? “Huh, well that was easy.” Full instructions are <a href="https://github.com/barryclark/jekyll-now">here</a>, but in a nutshell, here’s how it goes:</p>
+
+<h2 id="1-fork-a-preset-jekyll-repo">1. Fork a preset Jekyll repo</h2>
+
+<p>And once you have your own repo, go to the Settings and rename it to <code class="highlighter-rouge">yourGithubUsername.github.io</code>.</p>
+
+<h2 id="2-edit-a-few-settings">2. Edit a few settings</h2>
+
+<p>You just need to tell Jekyll what your name is, what your blog will be called, give it links to whatever social media that you want to link to… To do that, go through the <code class="highlighter-rouge">_config.yml</code> file, and fill it out like a form.</p>
+
+:ET

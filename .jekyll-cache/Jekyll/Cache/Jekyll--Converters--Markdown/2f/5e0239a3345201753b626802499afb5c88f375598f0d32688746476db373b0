@@ -1,0 +1,1743 @@
+I"��<ul id="markdown-toc">
+  <li><a href="#xml" id="markdown-toc-xml">XML</a></li>
+  <li><a href="#xpath" id="markdown-toc-xpath">XPath</a>    <ul>
+      <li><a href="#evaluation" id="markdown-toc-evaluation">Evaluation</a></li>
+    </ul>
+  </li>
+  <li><a href="#xml-schemas" id="markdown-toc-xml-schemas">XML Schemas</a>    <ul>
+      <li><a href="#dtd" id="markdown-toc-dtd">DTD</a></li>
+      <li><a href="#xml-schema" id="markdown-toc-xml-schema">XML Schema</a>        <ul>
+          <li><a href="#criticism" id="markdown-toc-criticism">Criticism</a></li>
+        </ul>
+      </li>
+      <li><a href="#relax-ng" id="markdown-toc-relax-ng">Relax NG</a></li>
+      <li><a href="#schematron" id="markdown-toc-schematron">Schematron</a></li>
+    </ul>
+  </li>
+  <li><a href="#xml-information-set" id="markdown-toc-xml-information-set">XML Information Set</a></li>
+  <li><a href="#xslt" id="markdown-toc-xslt">XSLT</a>    <ul>
+      <li><a href="#motivation" id="markdown-toc-motivation">Motivation</a></li>
+      <li><a href="#default-templates" id="markdown-toc-default-templates">Default templates</a></li>
+      <li><a href="#example" id="markdown-toc-example">Example</a></li>
+    </ul>
+  </li>
+  <li><a href="#xquery" id="markdown-toc-xquery">XQuery</a>    <ul>
+      <li><a href="#syntax" id="markdown-toc-syntax">Syntax</a></li>
+      <li><a href="#creating-xml-content" id="markdown-toc-creating-xml-content">Creating XML content</a></li>
+      <li><a href="#sequences" id="markdown-toc-sequences">Sequences</a></li>
+      <li><a href="#flwor" id="markdown-toc-flwor">FLWOR</a></li>
+      <li><a href="#conditional-expressions" id="markdown-toc-conditional-expressions">Conditional expressions</a></li>
+      <li><a href="#quantified-expressions" id="markdown-toc-quantified-expressions">Quantified expressions</a></li>
+      <li><a href="#functions" id="markdown-toc-functions">Functions</a></li>
+      <li><a href="#modules" id="markdown-toc-modules">Modules</a></li>
+      <li><a href="#updating-xml-content" id="markdown-toc-updating-xml-content">Updating XML Content</a></li>
+      <li><a href="#advanced-features" id="markdown-toc-advanced-features">Advanced features</a></li>
+      <li><a href="#coding-guidelines" id="markdown-toc-coding-guidelines">Coding guidelines</a></li>
+    </ul>
+  </li>
+  <li><a href="#xml-based-webapps" id="markdown-toc-xml-based-webapps">XML Based Webapps</a>    <ul>
+      <li><a href="#xml-databases" id="markdown-toc-xml-databases">XML Databases</a></li>
+      <li><a href="#rest" id="markdown-toc-rest">REST</a></li>
+      <li><a href="#oppidum" id="markdown-toc-oppidum">Oppidum</a></li>
+    </ul>
+  </li>
+  <li><a href="#foundations-of-xml-types" id="markdown-toc-foundations-of-xml-types">Foundations of XML types</a>    <ul>
+      <li><a href="#tree-grammars" id="markdown-toc-tree-grammars">Tree Grammars</a>        <ul>
+          <li><a href="#dtd--local-tree-grammars" id="markdown-toc-dtd--local-tree-grammars">DTD &amp; Local tree grammars</a></li>
+          <li><a href="#xml-schema--single-type-tree-grammars" id="markdown-toc-xml-schema--single-type-tree-grammars">XML Schema &amp; Single-Type tree grammars</a></li>
+          <li><a href="#relax-ng--regular-tree-grammars" id="markdown-toc-relax-ng--regular-tree-grammars">Relax NG &amp; Regular tree grammars</a></li>
+        </ul>
+      </li>
+      <li><a href="#tree-automata" id="markdown-toc-tree-automata">Tree automata</a>        <ul>
+          <li><a href="#definition" id="markdown-toc-definition">Definition</a></li>
+          <li><a href="#example-1" id="markdown-toc-example-1">Example</a></li>
+          <li><a href="#properties" id="markdown-toc-properties">Properties</a></li>
+        </ul>
+      </li>
+      <li><a href="#validation" id="markdown-toc-validation">Validation</a>        <ul>
+          <li><a href="#inclusion" id="markdown-toc-inclusion">Inclusion</a></li>
+          <li><a href="#closure" id="markdown-toc-closure">Closure</a></li>
+          <li><a href="#emptiness" id="markdown-toc-emptiness">Emptiness</a></li>
+          <li><a href="#type-inclusion" id="markdown-toc-type-inclusion">Type inclusion</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#dealing-with-non-textual-content" id="markdown-toc-dealing-with-non-textual-content">Dealing with non-textual content</a>    <ul>
+      <li><a href="#mathml" id="markdown-toc-mathml">MathML</a></li>
+      <li><a href="#tables" id="markdown-toc-tables">Tables</a></li>
+    </ul>
+  </li>
+  <li><a href="#xml-processing" id="markdown-toc-xml-processing">XML Processing</a>    <ul>
+      <li><a href="#dom" id="markdown-toc-dom">DOM</a></li>
+      <li><a href="#sax" id="markdown-toc-sax">SAX</a></li>
+      <li><a href="#dom-and-web-applications" id="markdown-toc-dom-and-web-applications">DOM and web applications</a></li>
+      <li><a href="#xforms-an-alternative-to-html-forms" id="markdown-toc-xforms-an-alternative-to-html-forms">XForms: an alternative to HTML forms</a></li>
+    </ul>
+  </li>
+  <li><a href="#web-services" id="markdown-toc-web-services">Web Services</a>    <ul>
+      <li><a href="#web-service-description-language-wsdl" id="markdown-toc-web-service-description-language-wsdl">Web Service Description Language (WSDL)</a></li>
+      <li><a href="#simple-object-access-protocol-soap" id="markdown-toc-simple-object-access-protocol-soap">Simple Object Access Protocol (SOAP)</a></li>
+      <li><a href="#universal-description-discovery-and-integration-uddi" id="markdown-toc-universal-description-discovery-and-integration-uddi">Universal Description, Discovery and Integration (UDDI)</a></li>
+    </ul>
+  </li>
+</ul>
+
+<!-- More -->
+
+<h2 id="xml">XML</h2>
+<p>Traditional database systems rely on the relational model, which was initially developed in the 1970’s and 1980’s. But the Internet brought new challenges for data management, and provided incentives for developing new storage systems. There has been a movement of NoSQL databases since, exploring a variety of data models (key-value stores with Redis, column stores with Cassandra or Google Cloud Bigtable, graph stores with Neo4j, or document stores with MongoDB or Exist-db).</p>
+
+<p>Many of these were not standardized, and essentially were tied to a specific implementation. This can pose a problem for data that needs to be kept for a long time (in the banking or aeronautical industries, for instance). Indeed, the life cycle of data is often much longer than that of programs.</p>
+
+<p>How can we ensure long-term access to data? How can we ensure that it can still be read in 15 or 50 years? One information representation format that hasn’t changed for 50+ years is ASCII (1963), so for long-term data access, this is probably the best bet.</p>
+
+<p>But we still need a standard format: otherwise, the ASCII encoding of our data is still tied to a particular file parser. This means that data exchange is reduced to a program exchange, which is expensive and doesn’t scale.</p>
+
+<p>This is what XML was originally invented for: to have one language to describe and exchange data. It isn’t the first in its field, though; its ancestor is SGML, invented in 1974 at IBM. Tim Berners-Lee invented HTML in 1989, and and founded the W3C in 1994. XML was first drafted in 1996.</p>
+
+<p>The initial <a href="https://www.w3.org/TR/WD-xml-961114#sec1.1">W3C goals of XML</a> were:</p>
+
+<ol>
+  <li>XML shall be straightforwardly usable over the Internet.</li>
+  <li>XML shall support a wide variety of applications.</li>
+  <li>XML shall be compatible with SGML.</li>
+  <li>It shall be easy to write programs which process XML documents.</li>
+  <li>The number of optional features in XML is to be kept to the absolute minimum, ideally zero.</li>
+  <li>XML documents should be human-legible and reasonably clear.</li>
+  <li>The XML design should be prepared quickly.</li>
+  <li>The design of XML shall be formal and concise.</li>
+  <li>XML documents shall be easy to create.</li>
+  <li>Terseness is of minimal importance.</li>
+</ol>
+
+<p>The last point is perhaps the biggest con about XML: it’s extremely verbose, and has lots of repetitive markup, which makes for large files.</p>
+
+<p>But there are many pros about XML: it’s a long-standing, standardized format, and one of the pillars of the web. If you use XML, you shouldn’t ever have to write a parser.</p>
+
+<p>XML is a meta-language: it makes it possible to create markup languages: concrete implementations of XML are known as “XML dialects”. They describe all the admissible structures (legal element names, how they can be composed, and perhaps even the data types they can contain). To define such a dialect, one must write a schema with DTD, XML Schema or Relax NG — more on this later. Some widespread dialects are XHTML, SVG, SOAP, MathML, WSDL, XForms.</p>
+
+<p>There are therefore two levels of correctness with XML. The first is the minimal requirement that XML files should be well-formed XML. The second is optional and stricter: the XML can conform to a given XML dialect.</p>
+
+<h2 id="xpath">XPath</h2>
+<p>XPath is the <a href="https://www.w3.org/TR/xpath/all/">W3C standard language</a> for traversal and navigation in XML trees.</p>
+
+<p>For navigation, we use the <strong>location path</strong> to identify nodes or content. A location path is a sequence of location steps separated by a <code class="highlighter-rouge">/</code>:</p>
+
+<figure class="highlight"><pre><code class="language-xpath" data-lang="xpath"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="code"><pre><span class="c">(: The following XPath expression has three location paths :)</span><span class="w">
+</span><span class="c">(:     1    :)</span><span class="w"> </span><span class="c">(:       2       :)</span><span class="w"> </span><span class="c">(:   3   :)</span><span class="w">
+</span><span class="k">child</span><span class="o">::</span><span class="nt">chapter</span><span class="o">/</span><span class="k">descendant</span><span class="o">::</span><span class="nt">section</span><span class="o">/</span><span class="k">child</span><span class="o">::</span><span class="nt">para</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Every location step has an axis, <code class="highlighter-rouge">::</code> and then a node test. Starting from a context node, a location returns a node-set. Every selected node in the node-set is used as the context node for the next step.</p>
+
+<p>You can start an XPath expression with <code class="highlighter-rouge">/</code> start from the root, which is known as an <strong>absolute path</strong>.</p>
+
+<p>XPath defines 13 axes allowing navigation, including <code class="highlighter-rouge">self</code>, <code class="highlighter-rouge">parent</code>, <code class="highlighter-rouge">child</code>, <code class="highlighter-rouge">following-sibling</code>, <code class="highlighter-rouge">ancestor-or-self</code>, etc. There is a special <code class="highlighter-rouge">attribute</code> axis to select attributes of the context node, which are not really in the child hierarchy. Similarly, <code class="highlighter-rouge">namespace</code> selects namespace nodes.</p>
+
+<p>A nodetest filters nodes:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Test</th>
+      <th style="text-align: left">Semantics</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">node()</code></td>
+      <td style="text-align: left">let any node pass</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">text()</code></td>
+      <td style="text-align: left">select only text nodes</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">comment()</code></td>
+      <td style="text-align: left">preserve only comment nodes</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">name</code></td>
+      <td style="text-align: left">preserves only <strong>elements/attributes</strong> with that name</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">*</code></td>
+      <td style="text-align: left"><code class="highlighter-rouge">*</code> preserves every <strong>element/attribute</strong></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>At each navigation step, nodes can be filtered using qualifiers. For instance:</p>
+
+<figure class="highlight"><pre><code class="language-xpath" data-lang="xpath"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre><span class="c">(: axis::nodetest[qualifier1] :)</span><span class="w">
+</span><span class="k">following-sibling</span><span class="o">::</span><span class="nt">para</span><span class="p">[</span><span class="nf">position</span><span class="p">()</span><span class="o">=</span><span class="nf">last</span><span class="p">()]</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>A qualifier filters a node-set depending on the axis. Each node in a node-set is kept only if the evaluation of the qualifier returns true.</p>
+
+<p>Qualifiers may include comparisons (<code class="highlighter-rouge">=</code>, <code class="highlighter-rouge">&lt;</code>, <code class="highlighter-rouge">&lt;=</code>, …). When comparing nodes, the comparison is done on the <code class="highlighter-rouge">string-value()</code>, which is the concatenation of all descendant text nodes in <em>document order</em>. But there’s a catch here! Comparison between node-sets is under existential semantics: there only needs to be one pair of nodes for which the comparison is true:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>node-set1 eq node-set2
+iff
+∃n1 ∈ node-set1, ∃n2 ∈ node-set1 | string-value(n1) eq string-value(n2)
+
+where eq ∈ {=, !=, &lt;, &gt;, &lt;=, &gt;=}
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Thus, when negating, we can get universal quantification.</p>
+
+<p>XPaths can be a union of location paths separated by <code class="highlighter-rouge">|</code>. Qualifiers can include boolean expressions (<code class="highlighter-rouge">or</code>, <code class="highlighter-rouge">not</code>, <code class="highlighter-rouge">and</code>, …).</p>
+
+<p>We can use variables <code class="highlighter-rouge">$x</code>, but these cannot be set in XPath; they are constants, set by the host language executing the XPath expression.</p>
+
+<p>There are a few basic functions: <code class="highlighter-rouge">last()</code>, <code class="highlighter-rouge">position()</code>, <code class="highlighter-rouge">count(node-set)</code>, <code class="highlighter-rouge">concat(string, string, ...string</code>), <code class="highlighter-rouge">contains(str1, str2)</code>, etc. These can be used within a qualifier.</p>
+
+<p>XPath also supports abbreviated syntax:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Abbreviated</th>
+      <th style="text-align: left">Full form</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">child::</code></td>
+      <td style="text-align: left">Default axis, can be omitted</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">@</code></td>
+      <td style="text-align: left"><code class="highlighter-rouge">attribute::</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">//</code></td>
+      <td style="text-align: left"><code class="highlighter-rouge">/descendant-or-self::node()</code>/</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">.</code></td>
+      <td style="text-align: left"><code class="highlighter-rouge">self::node()</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">..</code></td>
+      <td style="text-align: left"><code class="highlighter-rouge">parent::node()</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">[4]</code></td>
+      <td style="text-align: left"><code class="highlighter-rouge">[position() = 4]</code><sup id="fnref:pos-one" role="doc-noteref"><a href="#fn:pos-one" class="footnote">1</a></sup></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>XPath is used in XSLT, XQuery, XPointer, XLink, XML Schema, XForms, …</p>
+
+<h3 id="evaluation">Evaluation</h3>
+<p>To evaluate an XPath expression, we have in our state:</p>
+
+<ul>
+  <li>The context node</li>
+  <li>Context size: number of nodes in the node-set</li>
+  <li>Context position: index of the context node in the node-set</li>
+  <li>A set of variable bindings</li>
+</ul>
+
+<h2 id="xml-schemas">XML Schemas</h2>
+<p>There are three classes of languages that constraint XML content:</p>
+
+<ul>
+  <li>Constraints expressed by <strong>a description</strong> of each element, and potentially related attributes (DTD, XML Schema)</li>
+  <li>Constraints expressed by <strong>patterns</strong> defining the admissible elements, attributes and text nodes using regexes (Relax NG)</li>
+  <li>Constraints expressed by <strong>rules</strong> (Schematron)</li>
+</ul>
+
+<h3 id="dtd">DTD</h3>
+
+<p>Document Type Definitions (DTDs) are XML’s native schema system. It allows to define document classes, using a declarative approach to define the logical structure of a document.</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre><span class="cp">&lt;!ELEMENT recipe (title, comment*, item+, picture?, nbPers)&gt;</span>
+<span class="cp">&lt;!ATTLIST recipe difficulty (easy|medium|difficult) #IMPLIED&gt;</span>
+<span class="cp">&lt;!ELEMENT title (#PCDATA)&gt;</span>
+<span class="cp">&lt;!ELEMENT comment (#PCDATA)&gt;</span>
+<span class="cp">&lt;!ELEMENT item (header?,((ingredient+, step+) | (ingredient+, step)+))&gt;</span>
+<span class="cp">&lt;!ELEMENT header (#PCDATA)&gt;</span>
+<span class="cp">&lt;!ELEMENT ingredient (#PCDATA)&gt;</span>
+<span class="cp">&lt;!ELEMENT step (#PCDATA)&gt;</span>
+<span class="cp">&lt;!ELEMENT picture EMPTY&gt;</span>
+<span class="cp">&lt;!ATTLIST picture source CDATA #REQUIRED format (jpeg | png) #IMPLIED &gt;</span>
+<span class="cp">&lt;!ELEMENT nbPers (#PCDATA)&gt;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h3 id="xml-schema">XML Schema</h3>
+
+<p>XML Schemas are a <a href="http://www.w3.org/TR/xmlschema-0/">W3C standard</a> that go beyond the native DTDs. XML Schema descriptions are valid XML documents themselves.</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;xsd:schema</span> <span class="na">xmlns:xsd=</span><span class="s">"http://www.w3.org/2001/XMLSchema"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">"RecipesCollection"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;xsd:complexType&gt;</span>
+            <span class="nt">&lt;xsd:sequence</span> <span class="na">minOccurs=</span><span class="s">"0"</span> <span class="na">maxOccurs=</span><span class="s">"unbounded"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">"Recipe"</span> <span class="na">type=</span><span class="s">"RecipeType"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;/xsd:sequence&gt;</span>
+        <span class="nt">&lt;/xsd:complexType&gt;</span>
+    <span class="nt">&lt;/xsd:element&gt;</span>
+    ...
+<span class="nt">&lt;/xsd:schema&gt;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>To declare an element, we do as follows; by default, the author element as defined below may only contain string values:</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+</pre></td><td class="code"><pre><span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">"author"</span><span class="nt">/&gt;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>But we can define other types of elements, that aren’t just strings. Types include <code class="highlighter-rouge">string</code>, 
+<code class="highlighter-rouge">boolean</code>, <code class="highlighter-rouge">number</code>, <code class="highlighter-rouge">float</code>, <code class="highlighter-rouge">duration</code>, <code class="highlighter-rouge">time</code>, <code class="highlighter-rouge">date</code>, <code class="highlighter-rouge">AnyURI</code>, … The types are still string-encoded and must be extracted by the XML application, but this helps verify the consistency.</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+</pre></td><td class="code"><pre><span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">"year"</span> <span class="na">type=</span><span class="s">"xsd:date"</span><span class="nt">/&gt;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>We can bound the number of occurrences of an element. Below, the <code class="highlighter-rouge">character</code> element may be repeated 0 to ∞ times (this is equivalent to something like <code class="highlighter-rouge">character*</code> in a regex). Absence of <code class="highlighter-rouge">minOccurs</code> and <code class="highlighter-rouge">maxOccurs</code> implies exactly once (like in a regex).</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+</pre></td><td class="code"><pre><span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">"character"</span> <span class="na">minOccurs=</span><span class="s">"0"</span> <span class="na">maxOccurs=</span><span class="s">"unbounded"</span><span class="nt">/&gt;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>We can define more complex types using <strong>type constructors</strong>.</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="code"><pre><span class="nt">&lt;xsd:complexType</span> <span class="na">name=</span><span class="s">"Characters"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;xsd:sequence&gt;</span>
+        <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">"character"</span> <span class="na">minOccurs=</span><span class="s">"1"</span> <span class="na">maxOccurs=</span><span class="s">"unbounded"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/xsd:sequence&gt;</span>
+<span class="nt">&lt;/xsd:complexType&gt;</span>
+<span class="nt">&lt;xsd:complexType</span> <span class="na">name=</span><span class="s">"Prolog"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;xsd:sequence&gt;</span>
+        <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">"series"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">"author"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">"characters"</span> <span class="na">type=</span><span class="s">"Characters"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/xsd:sequence&gt;</span>
+<span class="nt">&lt;/xsd:complexType&gt;</span>
+
+<span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">"prolog"</span> <span class="na">type=</span><span class="s">"Prolog"</span><span class="nt">/&gt;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>This defines a Prolog type containing a sequence of a <code class="highlighter-rouge">series</code>, <code class="highlighter-rouge">author</code>, and <code class="highlighter-rouge">characters</code> of type <code class="highlighter-rouge">Characters</code>, which is defined as a sequence of <code class="highlighter-rouge">character+</code> elements.</p>
+
+<p>Using the <code class="highlighter-rouge">mixed="true"</code> attribute on an <code class="highlighter-rouge">xsd:complexType</code> allows for mixed content: attributes, elements, and text can be mixed (like we know in HTML, where you can do <code class="highlighter-rouge">&lt;p&gt;hello &lt;em&gt;world&lt;/em&gt;!&lt;/p&gt;</code>).</p>
+
+<p>There are more type constructor primitives that allow to do much of what regexes do: <code class="highlighter-rouge">xsd:sequence</code>, which we’ve seen above, but also <code class="highlighter-rouge">xsd:choice</code> (for enumerated elements) and <code class="highlighter-rouge">xsd:all</code> (for unordered elements).</p>
+
+<p>Attributes can also be declared within their owner element:</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">"strip"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;xsd:attribute</span> <span class="na">name=</span><span class="s">"copyright"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;xsd:attribute</span> <span class="na">name=</span><span class="s">"year"</span> <span class="na">type=</span><span class="s">"xsd:gYear"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/xsd:element&gt;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Because writing complex types can be tedious, complex types can be derived by extension or restriction from existing base types:</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre><span class="nt">&lt;xsd:complexType</span> <span class="na">name=</span><span class="s">"BookType"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;xsd:complexContent&gt;</span>
+        <span class="nt">&lt;xsd:extension</span> <span class="na">base=</span><span class="s">"Publication"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;xsd:sequence&gt;</span>
+                <span class="nt">&lt;xsd:element</span> <span class="na">name =</span><span class="s">"ISBN"</span> <span class="na">type=</span><span class="s">"xsd:string"</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;xsd:element</span> <span class="na">name =</span><span class="s">"Publisher"</span> <span class="na">type=</span><span class="s">"xsd:string"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;/xsd:sequence&gt;</span>
+        <span class="nt">&lt;/xsd:extension&gt;</span>
+    <span class="nt">&lt;/xsd:complexContent&gt;</span>
+<span class="nt">&lt;/xsd:complexType&gt;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Additionally, it is possible to define user-defined types:</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="code"><pre><span class="nt">&lt;xsd:simpleType</span> <span class="na">name=</span><span class="s">"Car"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;xsd:restriction</span> <span class="na">base=</span><span class="s">"xsd:string"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;xsd:enumeration</span> <span class="na">value=</span><span class="s">"Audi"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;xsd:enumeration</span> <span class="na">value=</span><span class="s">"BMW"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;xsd:enumeration</span> <span class="na">value=</span><span class="s">"VW"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/xsd:restriction&gt;</span>
+<span class="nt">&lt;/xsd:simpleType&gt;</span>
+
+<span class="nt">&lt;xsd:simpleType</span> <span class="na">name=</span><span class="s">"WeakPasswordType"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;xsd:restriction</span> <span class="na">base=</span><span class="s">"xsd:string"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;xsd:pattern</span> <span class="na">value=</span><span class="s">"[a-z A-Z 0-9{8}]"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/xsd:restriction&gt;</span>
+<span class="nt">&lt;/xsd:simpleType&gt;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h4 id="criticism">Criticism</h4>
+
+<p>There <a href="http://xml.coverpages.org/Clark-Jelliffe-Schemas20020604.html">have been some criticisms</a> addressed to XML Schema:</p>
+
+<ul>
+  <li>The specification is very difficult to understand</li>
+  <li>It requires a high level of expertise to avoid surprises, as there are many complex and unintuitive behaviors</li>
+  <li>The choice between element and attribute is largely a matter of the taste of the designer, but XML Schema provides separate functionality for them, distinguishing them strongly</li>
+  <li>There is only weak support for unordered content. In SGML, there was support for the <code class="highlighter-rouge">&amp;</code> operator. <code class="highlighter-rouge">A &amp; B</code> means that we must have <code class="highlighter-rouge">A</code> followed by <code class="highlighter-rouge">B</code> or vice-versa (order doesn’t matter). But we could enforce <code class="highlighter-rouge">A &amp; B*</code> such that there would have to be a sequence of <code class="highlighter-rouge">B</code> which would have to be grouped. XML Schema is too limited to enforce such things.</li>
+  <li>
+    <p>The datatypes (strings, dates, etc) are tied to <a href="https://www.w3.org/TR/xmlschema-2/">a single collection of datatypes</a>, which can be a little too limited for certain domain-specific datatypes.</p>
+
+    <p>But XML Schema 1.1 addressed this with two new features, co-occurrences constraints and assertions on simple types.</p>
+
+    <p>Co-occurrences are constraints which make the presence of an attribute, element or values allowable for it, depend on the value or presence of other attributes or elements.</p>
+
+    <p>Assertions on simple types introduced a new facet for simple types, called an assertion, to precise constraints using XPath expressions.</p>
+  </li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;xs:schema</span> <span class="na">xmlns:xs=</span><span class="s">"http://www.w3.org/2001/XMLSchema"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;xs:element</span> <span class="na">name=</span><span class="s">"NbOfAttempts"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;xs:complexType&gt;</span>
+            <span class="nt">&lt;xs:attribute</span> <span class="na">name=</span><span class="s">"min"</span> <span class="na">type=</span><span class="s">"xs:int"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;xs:attribute</span> <span class="na">name=</span><span class="s">"max"</span> <span class="na">type=</span><span class="s">"xs:int"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;xs:assert</span> <span class="na">test=</span><span class="s">"@min le @max"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/xs:complexType&gt;</span>
+    <span class="nt">&lt;/xs:element&gt;</span>
+<span class="nt">&lt;/xs:schema&gt;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Therefore, some of the original W3C XML Schema committee have gone on to create alternatives, some of which we will see below.</p>
+
+<h3 id="relax-ng">Relax NG</h3>
+<p>Pronounced “relaxing”. Relax NG’s goals are:</p>
+
+<ul>
+  <li>Be easier to learn and use</li>
+  <li>Provide an XML syntax that is more readable and compact</li>
+  <li>Provide a theoretical sound language (based on tree automata, which we’ll talk about later)</li>
+  <li>The schema follows the structure of the document.</li>
+</ul>
+
+<p>The reference book for Relax NG is <a href="http://books.xmlschemata.org/relaxng/">Relax NG by Eric van der Vlist</a>.</p>
+
+<p>As the example below shows, Relax NG is much more legible:</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre></td><td class="code"><pre><span class="nt">&lt;element</span> <span class="na">name=</span><span class="s">"AddressBook"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;zeroOrMore&gt;</span>
+        <span class="nt">&lt;element</span> <span class="na">name=</span><span class="s">"Card"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;element</span> <span class="na">name=</span><span class="s">"Name"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;text/&gt;</span>
+            <span class="nt">&lt;/element&gt;</span>
+            <span class="nt">&lt;element</span> <span class="na">name=</span><span class="s">"Email"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;text/&gt;</span>
+            <span class="nt">&lt;/element&gt;</span>
+            <span class="nt">&lt;optional&gt;</span>
+                <span class="nt">&lt;element</span> <span class="na">name=</span><span class="s">"Note"</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;text/&gt;</span>
+                <span class="nt">&lt;/element&gt;</span>
+            <span class="nt">&lt;/optional&gt;</span>
+        <span class="nt">&lt;/element&gt;</span>
+    <span class="nt">&lt;/zeroOrMore&gt;</span>
+<span class="nt">&lt;/element&gt;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Another example shows a little more advanced functionality; here, a card can either contain a single <code class="highlighter-rouge">Name</code>, or (exclusive or) both a <code class="highlighter-rouge">GivenName</code> and <code class="highlighter-rouge">FamilyName</code>.</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="code"><pre><span class="nt">&lt;element</span> <span class="na">name=</span><span class="s">"Card"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;choice&gt;</span>
+        <span class="nt">&lt;element</span> <span class="na">name=</span><span class="s">"Name"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;text/&gt;</span>
+        <span class="nt">&lt;/element&gt;</span>
+        <span class="nt">&lt;group&gt;</span>
+            <span class="nt">&lt;element</span> <span class="na">name=</span><span class="s">"GivenName"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;text/&gt;</span>
+            <span class="nt">&lt;/element&gt;</span>
+            <span class="nt">&lt;element</span> <span class="na">name=</span><span class="s">"FamilyName"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;text/&gt;</span>
+            <span class="nt">&lt;/element&gt;</span>
+        <span class="nt">&lt;/group&gt;</span>
+    <span class="nt">&lt;/choice&gt;</span>
+<span class="nt">&lt;/element&gt;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Some other tags include:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">&lt;choice&gt;</code> allows only one of the enumerated children to occur</li>
+  <li><code class="highlighter-rouge">&lt;interleave&gt;</code> allows child elements to occur in any order (like <code class="highlighter-rouge">xsd:all</code> in XML Schema)</li>
+  <li><code class="highlighter-rouge">&lt;attribute&gt;</code> inside an <code class="highlighter-rouge">&lt;element&gt;</code> specifies the schema for attributes. By itself, it’s considered required, but it can be wrapped in an <code class="highlighter-rouge">&lt;optional&gt;</code> too.</li>
+  <li><code class="highlighter-rouge">&lt;group&gt;</code> allows to, as the name implies, logically group elements. This is especially useful inside <code class="highlighter-rouge">&lt;choice&gt;</code> elements, as in the example above.</li>
+</ul>
+
+<p>The Relax NG book has a more detailed overview of these in <a href="http://books.xmlschemata.org/relaxng/relax-CHP-3-SECT-2.html">Chapter 3.2</a></p>
+
+<p>Relax NG allows to reference externally defined datatypes, such as <a href="https://www.w3.org/2001/XMLSchema-datatypes">those defined in XML Schema</a>. To include such a reference, we can specify a <code class="highlighter-rouge">datatypeLibrary</code> attribute on the root <code class="highlighter-rouge">&lt;grammar&gt;</code> element:</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;grammar</span> <span class="na">xmlns=</span><span class="s">"http://relaxng.org/ns/structure/1.0"</span>
+<span class="na">xmlns:a=</span><span class="s">"http://relaxng.org/ns/compatibility/annotations/1.0"</span>
+<span class="na">datatypeLibrary=</span><span class="s">"http://www.w3.org/2001/XMLSchema-datatypes"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;start&gt;</span>
+        ...
+    <span class="nt">&lt;/start&gt;</span>
+<span class="nt">&lt;/grammar&gt;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>In addition to datatypes, we can also express admissible XML <em>content</em> using regexes, but (and this is important!) <strong>we cannot express cardinality constraints or uniqueness constraints</strong>.</p>
+
+<p>If we need to express those, we can make use of Schematron.</p>
+
+<h3 id="schematron">Schematron</h3>
+<p><a href="http://schematron.com">Schematron</a> is an assertion language making use of XPath for node selection and for encoding predicates. It is often used <em>in conjunction</em> with Relax NG to express more complicated constraints, that aren’t easily expressed (or can’t be expressed at all) in Relax NG. The common pattern is to build the structure of the schema in Relax NG, and the business logic in Schematron.</p>
+
+<p>They can be combined in the same file by declaring different namespaces. For instance, the example below allows us to write a Relax NG schema as usual, and some Schematron rules rules under the <code class="highlighter-rouge">sch</code> namespace.</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;grammar</span> <span class="na">xmlns=</span><span class="s">"http://relaxng.org/ns/structure/1.0"</span>
+    <span class="na">xmlns:a=</span><span class="s">"http://relaxng.org/ns/compatibility/annotations/1.0"</span>
+    <span class="na">xmlns:sch=</span><span class="s">"http://purl.oclc.org/dsdl/schematron"</span>
+    <span class="na">datatypeLibrary=</span><span class="s">"http://www.w3.org/2001/XMLSchema-datatypes"</span><span class="nt">&gt;</span>
+    
+    ...
+
+<span class="nt">&lt;/grammar&gt;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>As we can see in the example below, a Schematron schema is built from a series of assertions:</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+</pre></td><td class="code"><pre><span class="nt">&lt;schema</span> <span class="na">xmlns=</span><span class="s">"http://purl.oclc.org/dsdl/schematron"</span> <span class="nt">&gt;</span>
+    <span class="nt">&lt;title&gt;</span>A Schema for Books<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;ns</span> <span class="na">prefix=</span><span class="s">"bk"</span> <span class="na">uri=</span><span class="s">"http://www.example.com/books"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;pattern</span> <span class="na">id=</span><span class="s">"authorTests"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;rule</span> <span class="na">context=</span><span class="s">"bk:book"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;assert</span> <span class="na">test=</span><span class="s">"count(bk:author)!= 0"</span><span class="nt">&gt;</span>
+                A book must have at least one author
+            <span class="nt">&lt;/assert&gt;</span>
+        <span class="nt">&lt;/rule&gt;</span>
+    <span class="nt">&lt;/pattern&gt;</span>
+    <span class="nt">&lt;pattern</span> <span class="na">id=</span><span class="s">"onLoanTests"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;rule</span> <span class="na">context=</span><span class="s">"bk:book"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;report</span> <span class="na">test=</span><span class="s">"@on-loan and not(@return-date)"</span><span class="nt">&gt;</span>
+                Every book that is on loan must have a return date
+            <span class="nt">&lt;/report&gt;</span>
+        <span class="nt">&lt;/rule&gt;</span>
+    <span class="nt">&lt;/pattern&gt;</span>
+<span class="nt">&lt;/schema&gt;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>A short description of the different Schematron elements follows:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">&lt;ns&gt;</code>: specifies to which namespace a prefix is bound. In the above example, the <code class="highlighter-rouge">bk</code> prefix, used as <code class="highlighter-rouge">bk:book</code>, is bound to <code class="highlighter-rouge">http://www.example.com/books</code>. This prefix is used by XPath in the elements below.</li>
+  <li><code class="highlighter-rouge">&lt;pattern&gt;</code>: a pattern contains a list of rules, and is used to group similar assertions. This isn’t just for better code organization, but also allows to execute groups at different stages in the validation</li>
+  <li><code class="highlighter-rouge">&lt;rule&gt;</code>: a rule contains <code class="highlighter-rouge">&lt;assert&gt;</code> and <code class="highlighter-rouge">&lt;report&gt;</code> elements. It has a <code class="highlighter-rouge">context</code> attribute, which is an XPath specifying the element on which we’re operating; all nodes matching the XPath expression are tested for all the assertions and reports of a rule</li>
+  <li><code class="highlighter-rouge">&lt;assert&gt;</code>: provides a mechanism to check if an assertion is true. If it isn’t, a validation error occurs</li>
+  <li><code class="highlighter-rouge">&lt;report&gt;</code>: same as an assertion, but the validation doesn’t fail; instead, a warning is issued.</li>
+</ul>
+
+<h2 id="xml-information-set">XML Information Set</h2>
+<p>The purpose of <a href="https://msdn.microsoft.com/en-us/library/aa468561.aspx">XML Information Set</a>, or Infoset, is to “provide a consistent set of definitions for use in other specifications that need to refer to the information in a well-formed XML document”<sup id="fnref:infoset-spec" role="doc-noteref"><a href="#fn:infoset-spec" class="footnote">2</a></sup>.</p>
+
+<p>It specifies a standardized, abstract model to represent the properties of XML trees. The goal is to provide a standardized viewpoint for the implementation and description of various XML technologies.</p>
+
+<p>It functions like an AST for XML documents. It’s abstract in the sense that it abstract away from the concrete encoding of data, and just retains the meaning. For instance, it doesn’t distinguish between the two forms of the empty element; the following are considered equivalent (pairwise):</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="nt">&lt;element&gt;&lt;/element&gt;</span>
+<span class="nt">&lt;element/&gt;</span>
+
+<span class="nt">&lt;element</span> <span class="na">attr=</span><span class="s">"example"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;element</span> <span class="na">attr=</span><span class="s">'example'</span><span class="nt">/&gt;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>The Information Set is described as a tree of information items, which are simply blocks of information about a node in the tree; every information item is an abstract representation of a component in an XML document.</p>
+
+<p>As such, at the root we have a document information item, which, most importantly, contains a list of children, which is a list of information items, in document order. Information items for elements contain a local name, the name of the namespace, a list of attribute information items, which contain the key and value of the attribute, etc.</p>
+
+<h2 id="xslt">XSLT</h2>
+
+<h3 id="motivation">Motivation</h3>
+<p>XSLT is part of a more general language, XSL. The hierarchy is as follows:</p>
+
+<ul>
+  <li><strong>XSL</strong>: eXtensible Stylesheet Language
+    <ul>
+      <li><strong>XSLT</strong>: XSL Transformation</li>
+      <li><strong>XLS-FO</strong>: XSL Formatting Objects</li>
+    </ul>
+  </li>
+</ul>
+
+<p>An XSLT Stylesheet allows us to transform XML input into other formats. An XSLT Processor takes an XML input, and an XSLT stylesheet and produces a result, either in XML, XHTML, LaTeX, …</p>
+
+<p>XSLT is a <strong>declarative</strong> and <strong>functional</strong> language, which uses XML and XPath. It’s a <a href="https://www.w3.org/TR/xslt/all/">W3C recommendation</a>, often used for generating HTML views of XML content.</p>
+
+<p>The XSLT Stylesheet consists of a set of templates. Each of them matches specific elements in the XML input, and participates to the generation of data in the resulting output.</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;xsl:stylesheet</span> <span class="na">xmlns:xsl=</span><span class="s">"http://www.w3.org/1999/XSL/Transform"</span> <span class="na">xmlns:xd=</span><span class="s">"http://oxygenxml.com/ns/doc/xsl"</span> <span class="na">version=</span><span class="s">"1.0"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;xsl:template</span> <span class="na">match=</span><span class="s">"a"</span><span class="nt">&gt;</span>...<span class="nt">&lt;/xsl:template&gt;</span>
+    <span class="nt">&lt;xsl:template</span> <span class="na">match=</span><span class="s">"b"</span><span class="nt">&gt;</span>...<span class="nt">&lt;/xsl:template&gt;</span>
+    <span class="nt">&lt;xsl:template</span> <span class="na">match=</span><span class="s">"c"</span><span class="nt">&gt;</span>...<span class="nt">&lt;/xsl:template&gt;</span>
+    <span class="nt">&lt;xsl:template</span> <span class="na">match=</span><span class="s">"d"</span><span class="nt">&gt;</span>...<span class="nt">&lt;/xsl:template&gt;</span>
+<span class="nt">&lt;/xsl:stylesheet&gt;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Let’s take a look at an individual XSLT template:</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="nt">&lt;xsl:template</span> <span class="na">match=</span><span class="s">"e"</span><span class="nt">&gt;</span>
+    <span class="c">&lt;!-- Template body goes here --&gt;</span>
+    <span class="nt">&lt;xsl:apply-templates/&gt;</span>
+<span class="nt">&lt;/xsl:template&gt;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<ul>
+  <li><code class="highlighter-rouge">e</code> is an XPath expression that selects the nodes the XSLT processor will apply the template to</li>
+  <li>The body of the <code class="highlighter-rouge">xsl:template</code> specifies the content to be produces in the output for each node selected by <code class="highlighter-rouge">e</code></li>
+  <li><code class="highlighter-rouge">xsl:apply-templates</code> indicates that templates are to be applied on the selected nodes, in document order; to select nodes, it may have a <code class="highlighter-rouge">select</code> attribute, which is an XPath expression defaulting to <code class="highlighter-rouge">child::node()</code>.</li>
+</ul>
+
+<p>The XSLT execution is roughly as follows:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre><span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
+    <span class="n">find</span> <span class="n">most</span> <span class="n">specific</span> <span class="n">pattern</span>
+    <span class="c1"># instantiate template:
+</span>    <span class="n">create</span> <span class="n">result</span> <span class="n">fragment</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">instruction</span> <span class="n">selecting</span> <span class="n">other</span> <span class="n">nodes</span><span class="p">)</span> <span class="ow">in</span> <span class="n">template</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">new_node</span> <span class="ow">in</span> <span class="n">instruction</span><span class="p">:</span>
+            <span class="n">process</span><span class="p">(</span><span class="n">new_node</span><span class="p">)</span>
+
+<span class="n">process</span><span class="p">(</span><span class="n">xml</span><span class="p">.</span><span class="n">root</span><span class="p">)</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Recursion stops when no more source nodes are selected.</p>
+
+<h3 id="default-templates">Default templates</h3>
+<p>XSLT Stylesheets contain <strong>default templates</strong>:</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="code"><pre><span class="nt">&lt;xsl:template</span> <span class="na">match=</span><span class="s">"/ | *"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;xsl:apply-templates/&gt;</span>
+<span class="nt">&lt;/xsl:template&gt;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>This recursively drives the matching process, starting from the root node. If templates are associated to the root node, then this default template is overridden; if the overridden version doesn’t contain any <code class="highlighter-rouge">&lt;xml: &gt;</code> elements, then the matching process is stopped.</p>
+
+<p>Another default template is:</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="code"><pre><span class="nt">&lt;xsl:template</span> <span class="na">match=</span><span class="s">"text()|@*"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;xsl:value-of</span> <span class="na">select=</span><span class="s">"self::node()"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/xsl:template&gt;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>This copies text and attribute nodes in the output.</p>
+
+<p>A third default is:</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+</pre></td><td class="code"><pre><span class="nt">&lt;xsl:template</span> <span class="na">match=</span><span class="s">"processing-instruction()|comment()"</span><span class="nt">/&gt;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>This is a template that specifically matches processing instructions and comments; it is empty, so it does not generate anything for them.</p>
+
+<h3 id="example">Example</h3>
+<p>To get an idea of what XSLT could do, let’s consider the following example of XML data representing a catalog of books and CDs:</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+</pre></td><td class="code"><pre><span class="nt">&lt;Catalog&gt;</span>
+    <span class="c">&lt;!-- Book Sample --&gt;</span>
+    <span class="nt">&lt;Product&gt;</span>
+        <span class="nt">&lt;ProductNo&gt;</span>bk-005<span class="nt">&lt;/ProductNo&gt;</span>
+        <span class="nt">&lt;Book</span> <span class="na">Language=</span><span class="s">"FR"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;Price&gt;</span>
+                <span class="nt">&lt;Value&gt;</span>19<span class="nt">&lt;/Value&gt;</span>
+                <span class="nt">&lt;Currency&gt;</span>EUR<span class="nt">&lt;/Currency&gt;</span>
+            <span class="nt">&lt;/Price&gt;</span>
+            <span class="nt">&lt;Title&gt;</span>Profecie<span class="nt">&lt;/Title&gt;</span>
+            <span class="nt">&lt;Authors&gt;</span>
+                <span class="nt">&lt;Author&gt;</span>
+                    <span class="nt">&lt;FirstName&gt;</span>Jonathan<span class="nt">&lt;/FirstName&gt;</span>
+                    <span class="nt">&lt;LastName&gt;</span>Zimmermann<span class="nt">&lt;/LastName&gt;</span>
+                <span class="nt">&lt;/Author&gt;</span>
+            <span class="nt">&lt;/Authors&gt;</span>
+            <span class="nt">&lt;Year&gt;</span>2015<span class="nt">&lt;/Year&gt;</span>
+            <span class="nt">&lt;Cover&gt;</span>profecie<span class="nt">&lt;/Cover&gt;</span>
+        <span class="nt">&lt;/Book&gt;</span>
+    <span class="nt">&lt;/Product&gt;</span>
+
+    <span class="c">&lt;!-- CD sample --&gt;</span>
+    <span class="nt">&lt;Product&gt;</span>
+        <span class="nt">&lt;ProductNo&gt;</span>cd-003<span class="nt">&lt;/ProductNo&gt;</span>
+        <span class="nt">&lt;CD&gt;</span>
+            <span class="nt">&lt;Price&gt;</span>
+                <span class="nt">&lt;Value&gt;</span>18.90<span class="nt">&lt;/Value&gt;</span>
+                <span class="nt">&lt;Currency&gt;</span>EUR<span class="nt">&lt;/Currency&gt;</span>
+            <span class="nt">&lt;/Price&gt;</span>
+            <span class="nt">&lt;Title&gt;</span>Witloof Bay<span class="nt">&lt;/Title&gt;</span>
+            <span class="nt">&lt;Interpret&gt;</span>Witloof Bay<span class="nt">&lt;/Interpret&gt;</span>
+            <span class="nt">&lt;Year&gt;</span>2010<span class="nt">&lt;/Year&gt;</span>
+            <span class="nt">&lt;Sleeve&gt;</span>witloof<span class="nt">&lt;/Sleeve&gt;</span>
+            <span class="nt">&lt;Opinion&gt;</span>
+                <span class="nt">&lt;Parag&gt;</span>Original ce groupe belge.<span class="nt">&lt;/Parag&gt;</span>
+                <span class="nt">&lt;Parag&gt;</span>Une véritable prouesse technique.<span class="nt">&lt;/Parag&gt;</span>
+            <span class="nt">&lt;/Opinion&gt;</span>
+        <span class="nt">&lt;/CD&gt;</span>
+    <span class="nt">&lt;/Product&gt;</span>
+<span class="nt">&lt;/Catalog&gt;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>For our example of books and CDs, we can create the following template:</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+</pre></td><td class="code"><pre><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;xsl:stylesheet</span> <span class="na">xmlns:xsl=</span><span class="s">"http://www.w3.org/1999/XSL/Transform"</span>
+<span class="na">xmlns:xs=</span><span class="s">"http://www.w3.org/2001/XMLSchema"</span>
+<span class="na">exclude-result-prefixes=</span><span class="s">"xs"</span>
+<span class="na">version=</span><span class="s">"2.0"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;xsl:output</span> <span class="na">method=</span><span class="s">"html"</span><span class="nt">/&gt;</span>
+
+    <span class="nt">&lt;xsl:template</span> <span class="na">match=</span><span class="s">"/"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;html&gt;</span>
+        <span class="nt">&lt;head&gt;</span>...<span class="nt">&lt;/head&gt;</span>
+        <span class="nt">&lt;body&gt;</span>
+            <span class="nt">&lt;h2&gt;</span>Welcome to our catalog<span class="nt">&lt;/h2&gt;</span>
+            <span class="nt">&lt;h3&gt;</span>Books<span class="nt">&lt;/h3&gt;</span>
+            <span class="nt">&lt;ul&gt;</span>
+                <span class="nt">&lt;xsl:apply-templates</span> <span class="na">select=</span><span class="s">"Catalog/Product/Book/Title"</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;xsl:sort</span> <span class="na">select=</span><span class="s">"."</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;/xsl:apply-templates&gt;</span>
+            <span class="nt">&lt;/ul&gt;</span>
+        <span class="nt">&lt;/body&gt;</span>
+        <span class="nt">&lt;/html&gt;</span>
+    <span class="nt">&lt;/xsl:template&gt;</span>
+
+    <span class="nt">&lt;xsl:template</span> <span class="na">match=</span><span class="s">"Title"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;li&gt;</span>
+            <span class="nt">&lt;xsl:value-of</span> <span class="na">select=</span><span class="s">"."</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/li&gt;</span>
+    <span class="nt">&lt;/xsl:template&gt;</span>
+<span class="nt">&lt;/xsl:stylesheet&gt;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>In the above, the <code class="highlighter-rouge">xsl:sort</code> element has the following possible attributes:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">select</code>: here, the attribute is <code class="highlighter-rouge">.</code>, which refers to the title in this context</li>
+  <li><code class="highlighter-rouge">data-type</code>: gives the kind of order (e.g. text or number)</li>
+  <li><code class="highlighter-rouge">order</code>: <code class="highlighter-rouge">ascending</code> or <code class="highlighter-rouge">descending</code></li>
+</ul>
+
+<h2 id="xquery">XQuery</h2>
+<p>XQuery is a <strong>strongly typed</strong> and <strong>functional</strong> language that offers features to operate on XML input for searching, selecting, filtering, transforming, restructuring information, etc. It is an SQL-like language for XML. It wasn’t defined with the same goals as XSLT, but has some overlap that we’ll discuss later.</p>
+
+<p>It does not use the XML syntax. Instead, it offers a general purpose (Turing-complete) language that can be used for developing XML based applications.</p>
+
+<p>XQuery is a <a href="https://www.w3.org/TR/xquery/all/">W3C Recommendation</a>, and is therefore closely linked to <a href="#xml-schema">XML Schema</a>, as it uses the XML Schema type system. Note that for now, there is no support for XQuery with Relax NG or other non-W3C schema languages. A nice book on XQuery is <a href="http://shop.oreilly.com/product/0636920035589.do">available at O’Reily</a>.</p>
+
+<h3 id="syntax">Syntax</h3>
+<p>A query is made up of three parts:</p>
+
+<figure class="highlight"><pre><code class="language-xquery" data-lang="xquery"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre><span class="c">(: Comments are written in these smiley-like delimiters :)</span><span class="w">
+
+</span><span class="c">(: 1. Optional version declaration :)</span><span class="w">
+</span><span class="k">xquery</span><span class="w"> </span><span class="k">version</span><span class="w"> </span><span class="s">"3.0"</span><span class="p">;</span><span class="w"> 
+
+</span><span class="c">(: 2. Optional query prolog :)</span><span class="w">
+</span><span class="c">(: This contains declarations such as namespaces, variables, etc. :)</span><span class="w">
+</span><span class="k">declare</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">html</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"http://www.w3.org/1999/xhtml"</span><span class="p">;</span><span class="w"> 
+
+</span><span class="c">(: 3. Query body :)</span><span class="w">
+</span><span class="nf">substring</span><span class="p">(</span><span class="s">"Welcome to the world of XML"</span><span class="o">,</span><span class="w"> </span><span class="m">1</span><span class="o">,</span><span class="w"> </span><span class="m">7</span><span class="p">)</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>A query takes some kind of XML content: an XML file, an XML fragment retrieved online, a native XML database, etc. The output is a sequence of values, which are often XML elements (this is important: not a document, but elements). But it could also be an XML Schema type, such as a string, a list of integers, etc.</p>
+
+<p>The output can be serialized to a document, or just kept in-memory in the application for further processing.</p>
+
+<p>Queries are evaluated by an XQuery processor, which works in two phases. First, the analysis phase may raise errors (that do not depend on the input, only on the query). Then, there is an evaluation phase, which may raise dynamic errors (e.g. missing input).</p>
+
+<p>A query consists of one or more comma-separated <strong>XQuery expressions</strong>, which are composed of the following:</p>
+
+<ul>
+  <li>Primary expressions (literals, variables, function calls, etc)</li>
+  <li>Arithmetic expressions</li>
+  <li>Logical expressions</li>
+  <li>XPath (with <code class="highlighter-rouge">collection</code> and <code class="highlighter-rouge">doc</code> functions used to access resources)</li>
+  <li>XML constructors</li>
+  <li>Sequence constructors</li>
+  <li><a href="https://en.wikipedia.org/wiki/FLWOR">FLWOR statements</a> (pronounced “flower”: for, let, where, order by, return).</li>
+  <li>Conditional expressions</li>
+  <li>Quantified expressions</li>
+</ul>
+
+<h3 id="creating-xml-content">Creating XML content</h3>
+<p>To build XML content, we can embed “escaped” XQuery code using curly brackets, within our template file, as follows:</p>
+
+<figure class="highlight"><pre><code class="language-xquery" data-lang="xquery"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="code"><pre><span class="nt">&lt;report</span><span class="w"> </span><span class="na">year=</span><span class="s">"2018"</span><span class="nt">&gt;</span><span class="w">
+    </span>The<span class="w"> </span>value<span class="w"> </span>is<span class="w"> </span><span class="p">{</span><span class="nf">round</span><span class="w"> </span><span class="p">(</span><span class="mf">3.14</span><span class="p">)}</span><span class="w">
+</span><span class="nt">&lt;/report&gt;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h3 id="sequences">Sequences</h3>
+<p>A sequence is an ordered collection of items, which may be of any type (atomic value, node, etc). Duplicates are allowed. A sequence can contain zero (empty), one (singleton) or many items. Sequences are comma-separated. We can add parentheses for clarity, but not for nesting; a sequence is always flat (even if we nest parentheses):</p>
+
+<figure class="highlight"><pre><code class="language-xquery" data-lang="xquery"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre><span class="m">1</span><span class="o">,</span><span class="w"> </span><span class="m">2</span><span class="o">,</span><span class="w"> </span><span class="nt">&lt;example/&gt;</span><span class="w">
+</span><span class="p">(</span><span class="m">1</span><span class="o">,</span><span class="w"> </span><span class="m">2</span><span class="o">,</span><span class="w"> </span><span class="nt">&lt;example/&gt;</span><span class="p">)</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h3 id="flwor">FLWOR</h3>
+<p>A FLWOR expression is constructed as follows:</p>
+
+<figure class="highlight"><pre><code class="language-antlr" data-lang="antlr"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+</pre></td><td class="code"><pre>flwor ::=  ((for | let) expr)+ (where expr)? (order by expr)? return expr
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>For instance:</p>
+
+<p>XQuery also has support for for variables, denoted <code class="highlighter-rouge">$x</code> (which are more like constants):</p>
+
+<figure class="highlight"><pre><code class="language-xquery" data-lang="xquery"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="k">let</span><span class="w"> </span><span class="nv">$FREvents</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">/</span><span class="nt">RAS</span><span class="o">/</span><span class="nt">Events</span><span class="o">/</span><span class="nt">Event</span><span class="p">[</span><span class="nt">Canton</span><span class="o">/</span><span class="k">text</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"FR"</span><span class="p">]</span><span class="o">,</span><span class="w">
+    </span><span class="nv">$FRTopics</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nv">$FREvents</span><span class="o">/</span><span class="nt">TopicRef</span><span class="o">/</span><span class="k">text</span><span class="p">()</span><span class="w"> 
+
+</span><span class="k">return</span><span class="w"> </span><span class="o">/</span><span class="nt">RAS</span><span class="o">/</span><span class="nt">Members</span><span class="o">/</span><span class="nt">Member</span><span class="p">[</span><span class="nt">Topics</span><span class="o">/</span><span class="nt">TopicRef</span><span class="o">/</span><span class="k">text</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">$FRTopics</span><span class="p">]</span><span class="o">/</span><span class="nt">Email</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<blockquote>
+  <p>👉 This gives us the email addresses of reporters who may deal with events in the canton of Fribourg. See exercises 01 for more context.</p>
+</blockquote>
+
+<p>Let’s take a look at another XQuery expression:</p>
+
+<figure class="highlight"><pre><code class="language-xquery" data-lang="xquery"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre><span class="k">for</span><span class="w"> </span><span class="nv">$book</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="o">/</span><span class="nt">Catalog</span><span class="o">/</span><span class="nt">Product</span><span class="o">/</span><span class="nt">Book</span><span class="w">
+</span><span class="k">where</span><span class="w"> </span><span class="nv">$book</span><span class="o">/</span><span class="na">@Language</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"EN"</span><span class="w">
+</span><span class="k">return</span><span class="w"> </span><span class="nv">$book</span><span class="o">/</span><span class="nt">Title</span><span class="w">
+
+</span><span class="c">(: equivalently written as :)</span><span class="w">
+
+</span><span class="k">for</span><span class="w"> </span><span class="nv">$book</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="o">/</span><span class="nt">Catalog</span><span class="o">/</span><span class="nt">Product</span><span class="o">/</span><span class="nt">Book</span><span class="p">[</span><span class="na">@Language</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"EN"</span><span class="p">]</span><span class="w">
+</span><span class="k">return</span><span class="w"> </span><span class="nv">$book</span><span class="o">/</span><span class="nt">Title</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>This returns the book titles in the document:</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="code"><pre><span class="nt">&lt;Title&gt;</span>XSLT<span class="nt">&lt;/Title&gt;</span>
+<span class="nt">&lt;Title&gt;</span>Electronic Publishing<span class="nt">&lt;/Title&gt;</span>
+<span class="nt">&lt;Title&gt;</span>Making Sense of NoSQL<span class="nt">&lt;/Title&gt;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>As we can see above, there is some overlap between XQuery and XPath; the <code class="highlighter-rouge">where</code> condition can also be written as an XPath selection condition. Which to use is a question of style; there is no difference in performance.</p>
+
+<p>The <code class="highlighter-rouge">order by</code> and <code class="highlighter-rouge">where</code> keywords work just like in SQL, so I won’t go into details here.</p>
+
+<h3 id="conditional-expressions">Conditional expressions</h3>
+<p>Like in any templating language, we can create conditional statements. It is mandatory to specify an <code class="highlighter-rouge">else</code> to every <code class="highlighter-rouge">if</code>, but if we do not want to return anything, we can return the empty sequence <code class="highlighter-rouge">()</code>.</p>
+
+<p>The condition of an <code class="highlighter-rouge">if</code> must be a boolean or a sequence. Empty sequences are falsey, and sequences of one or more elements are truthy.</p>
+
+<figure class="highlight"><pre><code class="language-xquery" data-lang="xquery"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre><span class="k">for</span><span class="w"> </span><span class="nv">$book</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="o">/</span><span class="nt">catalog</span><span class="o">/</span><span class="nt">product</span><span class="o">/</span><span class="nt">book</span><span class="w">
+</span><span class="k">order</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="nv">$book</span><span class="o">/</span><span class="nt">title</span><span class="w">
+</span><span class="k">return</span><span class="w">
+    </span><span class="nt">&lt;title&gt;</span><span class="w">
+        </span><span class="p">{</span><span class="nv">$book</span><span class="o">/</span><span class="nt">title</span><span class="o">/</span><span class="k">text</span><span class="p">()}</span><span class="w">
+        </span><span class="p">{</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nv">$book</span><span class="o">/</span><span class="na">@Language</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">'EN'</span><span class="p">)</span><span class="w"> </span><span class="k">then</span><span class="w"> </span><span class="s">'[English]'</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">()}</span><span class="w">
+    </span><span class="nt">&lt;/title&gt;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>This returns:</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="nt">&lt;title&gt;</span>Electronic Publishing [English]<span class="nt">&lt;/title&gt;</span>
+<span class="nt">&lt;title&gt;</span>Making Sense of NoSQL [English]<span class="nt">&lt;/title&gt;</span>
+<span class="nt">&lt;title&gt;</span>Profecie<span class="nt">&lt;/title&gt;</span>
+<span class="nt">&lt;title&gt;</span>XML - le langage et ses applications<span class="nt">&lt;/title&gt;</span>
+<span class="nt">&lt;title&gt;</span>XSLT [English]<span class="nt">&lt;/title&gt;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h3 id="quantified-expressions">Quantified expressions</h3>
+<p>A quantified expression allows us to express universal or existential quantifiers using <code class="highlighter-rouge">some</code> and <code class="highlighter-rouge">every</code>. The predicate is given with the keyword <code class="highlighter-rouge">satisfies</code>, as below:</p>
+
+<figure class="highlight"><pre><code class="language-xquery" data-lang="xquery"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre><span class="k">some</span><span class="w"> </span><span class="nv">$dept</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="nf">doc</span><span class="p">(</span><span class="s">"catalog.xml"</span><span class="p">)</span><span class="o">//</span><span class="nt">product</span><span class="o">/</span><span class="na">@dept</span><span class="w">
+</span><span class="k">satisfies</span><span class="w"> </span><span class="p">(</span><span class="nv">$dept</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"ACC"</span><span class="p">)</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h3 id="functions">Functions</h3>
+<p>User defined functions can be declared as follows:</p>
+
+<figure class="highlight"><pre><code class="language-xquery" data-lang="xquery"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre><span class="k">declare</span><span class="w"> </span><span class="k">function</span><span class="w"> </span><span class="nf">local:discountPrice</span><span class="p">(</span><span class="w">
+    </span><span class="nv">$price</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">xs:decimal</span><span class="o">?,</span><span class="w">
+    </span><span class="nv">$discount</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">xs:decimal</span><span class="o">?,</span><span class="w">
+    </span><span class="nv">$maxDiscountPct</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">xs:integer</span><span class="o">?</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">xs:decimal</span><span class="o">?</span><span class="w"> 
+</span><span class="p">{</span><span class="w">
+    </span><span class="k">let</span><span class="w"> </span><span class="nv">$maxDiscount</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="p">(</span><span class="nv">$price</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nv">$maxDiscountPct</span><span class="p">)</span><span class="w"> </span><span class="ow">div</span><span class="w"> </span><span class="m">100</span><span class="w">
+    </span><span class="k">let</span><span class="w"> </span><span class="nv">$actualDiscount</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nf">min</span><span class="p">((</span><span class="nv">$maxDiscount</span><span class="o">,</span><span class="w"> </span><span class="nv">$discount</span><span class="p">))</span><span class="w">
+    </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="nv">$price</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nv">$actualDiscount</span><span class="p">)</span><span class="w">
+</span><span class="p">};</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>The types are sequence types, with both the number and types of items. For instance, <code class="highlighter-rouge">xs:string?</code> means a sequence of zero or one string. The return type is optional, but is strongly encouraged for readability, error checking and optimization.</p>
+
+<p>Functions can be overloaded with a different number of parameters.</p>
+
+<p>The body is enclosed in curly braces. It does not have to contain a <code class="highlighter-rouge">return</code> clause, it just needs to be an XQuery expression.</p>
+
+<h3 id="modules">Modules</h3>
+<p>Functions can be grouped into modules, which declare the target namespace and bind it to a prefix (here, the <code class="highlighter-rouge">strings</code> prefix):</p>
+
+<figure class="highlight"><pre><code class="language-xquery" data-lang="xquery"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+</pre></td><td class="code"><pre><span class="k">module</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">strings</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"https://example.com/strings"</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Anything declared under that prefix can be accessed from the outside, when importing the module.</p>
+
+<p>Modules can be imported at a location using the <code class="highlighter-rouge">at</code> clause:</p>
+
+<figure class="highlight"><pre><code class="language-xquery" data-lang="xquery"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+</pre></td><td class="code"><pre><span class="k">import</span><span class="w"> </span><span class="k">module</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">search</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"https://example.com/search"</span><span class="w"> </span><span class="k">at</span><span class="w"> </span><span class="s">"search.xqm"</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h3 id="updating-xml-content">Updating XML Content</h3>
+<p>Unlike SQL, standard XQuery only offers ways of querying data, and not of inserting, deleting or updating data. That’s why the W3C developed an extension to XQuery called the <a href="https://www.w3.org/TR/xquery-update-10/">XQuery Update Facility</a>.</p>
+
+<p>Like SQL, the implementation of this Update Facility is often tied to specific database systems. In this course, we will use the <a href="http://exist-db.org/exist/apps/homepage/index.html">eXist-db</a> variant. Updates are executed by specifying the <code class="highlighter-rouge">update</code> keyword in the <code class="highlighter-rouge">return</code> clause.</p>
+
+<figure class="highlight"><pre><code class="language-xquery" data-lang="xquery"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="k">let</span><span class="w"> </span><span class="nv">$catalog</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nf">doc</span><span class="p">(</span><span class="s">'db/catalog.xml'</span><span class="p">)</span><span class="w">
+
+</span><span class="k">return</span><span class="w"> </span><span class="nt">update</span><span class="w"> </span><span class="nt">insert</span><span class="w">
+    </span><span class="nt">&lt;product&gt;</span>...<span class="nt">&lt;/product&gt;</span><span class="w">
+</span><span class="nt">into</span><span class="w"> </span><span class="nv">$catalog</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>The keyword <code class="highlighter-rouge">into</code> places content after the last child of the element. We can also use <code class="highlighter-rouge">following</code>, placing it as the next sibling, or <code class="highlighter-rouge">preceding</code> to place it as the previous sibling.</p>
+
+<p>Instead of <code class="highlighter-rouge">update insert</code>, we can also do an <code class="highlighter-rouge">update delete</code>, or a <code class="highlighter-rouge">update replace XPATH with ELEMENT</code>.</p>
+
+<p>Updates can be chained as a sequence:</p>
+
+<figure class="highlight"><pre><code class="language-xquery" data-lang="xquery"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="k">let</span><span class="w"> </span><span class="nv">$cd</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nf">doc</span><span class="p">(</span><span class="s">'db/catalog.xml'</span><span class="p">)</span><span class="o">/</span><span class="nt">Product</span><span class="p">[</span><span class="nt">ProductNo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">$no</span><span class="p">]</span><span class="o">/</span><span class="nt">CD</span><span class="w">
+</span><span class="k">return</span><span class="w">
+</span><span class="p">(</span><span class="w">
+    </span><span class="nt">update</span><span class="w"> </span><span class="nt">replace</span><span class="w"> </span><span class="nv">$cd</span><span class="o">/</span><span class="nt">Price</span><span class="o">/</span><span class="nt">Value</span><span class="w"> </span><span class="nt">with</span><span class="w"> </span><span class="nt">&lt;value&gt;</span>18<span class="nt">&lt;/value&gt;</span><span class="o">,</span><span class="w">
+    </span><span class="nt">update</span><span class="w"> </span><span class="nt">replace</span><span class="w"> </span><span class="nv">$cd</span><span class="o">/</span><span class="nt">Year</span><span class="w"> </span><span class="nt">with</span><span class="w"> </span><span class="nt">&lt;year&gt;</span>2010<span class="nt">&lt;/year&gt;</span><span class="w">
+</span><span class="p">)</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h3 id="advanced-features">Advanced features</h3>
+<p>As we mentionned earlier, XQuery is Turing complete. You can define your own functions, which may be grouped into modules, and may be higher-order functions.</p>
+
+<p>Schema awareness is an optional feature; if it is supported, the <code class="highlighter-rouge">validate</code> expression may be used, which is useful for optimization and error checking. However, as we mentioned earlier, there is only support for W3C standardized schemas, not Relax NG.</p>
+
+<p>While XQuery is mainly associated with XML, it is possible in newer versions to deal with text documents (like CSV, name/value config files, etc. since 3.0) and even JSON (since 3.1).</p>
+
+<h3 id="coding-guidelines">Coding guidelines</h3>
+<p>MarkLogic has some <a href="https://developer.marklogic.com/blog/xquery-coding-guidelines">XQuery coding guidelines</a> that are good to follow.</p>
+
+<p>For robustness, it is important to handle missing values (empty sequences) and data variations.</p>
+
+<h2 id="xml-based-webapps">XML Based Webapps</h2>
+<p>We’ve now learned to model (with schemas), transform (with XSLT), and query and process (with XQuery). How can we develop an XML based webapp combining these?</p>
+
+<p>We will take a look at the <a href="https://github.com/ssire/oppidum">Oppidum framework</a>, which targets the development of XML-REST-XQuery (XRX) applications, using the eXist-db XML database.</p>
+
+<h3 id="xml-databases">XML Databases</h3>
+<p>An XML database looks quite a lot like a normal database; for instance, it uses a traditional, B-tree based indexing system, has a querying language, etc. The main difference is simply that data is XML instead of a table, and that we use XQuery instead of SQL.</p>
+
+<h3 id="rest">REST</h3>
+<p>REST stands for REpresentational State Transfer. It’s an architectural style created by Roy Fielding in <a href="https://www.ics.uci.edu/~fielding/">his PhD thesis</a></p>
+
+<p>In REST, we have resources, located by a URL on Web-based REST, that may be processed by a client. A collection is simply a set of resources. Interaction with a REST API happens with classical CRUD (Create, Read, Update, Delete) on URLs, which in HTTP are the <code class="highlighter-rouge">POST</code>, <code class="highlighter-rouge">GET</code>, <code class="highlighter-rouge">PUT</code> and <code class="highlighter-rouge">DELETE</code> requests.</p>
+
+<h3 id="oppidum">Oppidum</h3>
+<p><a href="https://github.com/ssire/oppidum">Oppidum</a> is an open source framework to build XML Web-based applications with an MVC approach. The <a href="https://ssire.github.io/oppidum/docs/fr/guide.html">documentation</a> is only in French, but the core idea is as follows: HTTP requests are handed to Oppidum by eXist. The application logic is then detailed in a pipeline consisting of:</p>
+
+<ul>
+  <li><strong>Model</strong>: XQuery script (<code class="highlighter-rouge">*.xql</code>) returning relevant XML content</li>
+  <li><strong>View</strong>: XSLT transformation (<code class="highlighter-rouge">*.xsl</code>)</li>
+  <li><strong>Epilogue</strong>: XQuery script (<code class="highlighter-rouge">epilogue.xql</code>) for templating common content in HTML pages; this works using tags with the <code class="highlighter-rouge">site</code> namespace</li>
+</ul>
+
+<p>To specify the REST architecture, Oppidum has a DSL that allows us to define the set of resources and actions, determine the URLs and associated HTTP verbs (<code class="highlighter-rouge">GET</code>, <code class="highlighter-rouge">POST</code>, etc) recognized by the application, and so on.</p>
+
+<p>Oppidum has its own DSL to specify the REST architecture of a webapp:</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+</pre></td><td class="code"><pre><span class="nt">&lt;site&gt;</span>
+    <span class="nt">&lt;item</span> <span class="na">name=</span><span class="s">"contact"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;item</span> <span class="na">name=</span><span class="s">"home"</span> <span class="na">epilogue=</span><span class="s">"standard"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;model</span> <span class="na">src=</span><span class="s">"modules/home/home.xql"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;view</span> <span class="na">src=</span><span class="s">"modules/home/home.xsl"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/item&gt;</span>
+    <span class="nt">&lt;item</span> <span class="na">name=</span><span class="s">"books"</span> <span class="na">epilogue=</span><span class="s">"standard"</span>
+        <span class="na">collection=</span><span class="s">"topics/home"</span> <span class="na">resource=</span><span class="s">"home.xml"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;collection</span> <span class="na">name=</span><span class="s">"workspaces"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;item</span> <span class="na">name=</span><span class="s">"foo"</span><span class="nt">&gt;</span>
+            ...
+        <span class="nt">&lt;/item&gt;</span>
+    <span class="nt">&lt;/collection&gt;</span>
+    <span class="nt">&lt;collection</span> <span class="na">name=</span><span class="s">"projects"</span> <span class="na">supported=</span><span class="s">"search create"</span>
+        <span class="na">method=</span><span class="s">"POST"</span> <span class="na">epilogue=</span><span class="s">"standard"</span>
+        <span class="na">collection=</span><span class="s">"workspaces/$2"</span> <span class="na">resource=</span><span class="s">"projcets.xml"</span><span class="nt">&gt;</span>
+        ...
+    <span class="nt">&lt;/collection&gt;</span>
+<span class="nt">&lt;/site&gt;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>The <code class="highlighter-rouge">item</code> elements refer to a single resource, with the <code class="highlighter-rouge">name</code> attribute indicating an URL segment pointing to the resource. We can associate HTTP verbs to the URLs; <code class="highlighter-rouge">GET</code> is the default.</p>
+
+<p>Longer URLs can be constructed by <code class="highlighter-rouge">collection</code> elements. In the above, we have a <code class="highlighter-rouge">workspaces/foo</code> item.</p>
+
+<p>Oppidum also allows us to associate models and views to items, as well as an epilogue (which serves as the template in which we should serve the view). A shortcut is to, instead of defining an XQuery model, just bind the item directly to the XPath of the information we want to send back, as in the <code class="highlighter-rouge">books</code> element</p>
+
+<p>The <code class="highlighter-rouge">projects</code> collection shows a more complete example of the fields that can be used for a collection. The positional variable <code class="highlighter-rouge">$2</code> will be replaced by the 2<sup>nd</sup> segment of the URL.</p>
+
+<p>An epilogue may look like this:</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre><span class="nt">&lt;html&gt;</span>
+    <span class="nt">&lt;head&gt;</span> ... <span class="nt">&lt;/head&gt;</span>
+    <span class="nt">&lt;body&gt;</span>
+        <span class="nt">&lt;site:navigation&gt;</span>NAVIGATION<span class="nt">&lt;/site:navigation&gt;</span>
+        <span class="nt">&lt;site:content&gt;</span>RESULT OF TRANSFORMATION<span class="nt">&lt;/site:content&gt;</span>
+    <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>All elements in the <code class="highlighter-rouge">site:X</code> namespace are inserted into the generated page.</p>
+
+<h2 id="foundations-of-xml-types">Foundations of XML types</h2>
+<p>We’ve seen seen XML tools for validation (DTD, XML Schema, Relax NG), navigation and extraction (XPath) and transformation (XQuery, XSLT).</p>
+
+<p>Some essential questions about these tools are:</p>
+
+<ul>
+  <li><strong>Expressive power</strong>: can I express requirement X using XML type language Y?</li>
+  <li><strong>Operations over XML types</strong>: can I check forward-compatibility when my XML file format evolves? Type inclusion?</li>
+  <li><strong>Static type-checking</strong>: can we make my XML manipulating programs will never output an invalid document?</li>
+</ul>
+
+<p>To answer this, we must know more about XML types, and dive into the theoretical foundations of XML types.</p>
+
+<h3 id="tree-grammars">Tree Grammars</h3>
+<p>XML documents can be modelled by finite, ordered, labeled trees of unbounded depth and arity. To describe a tree, we use a tree language, which can be specified by a tree grammar:</p>
+
+<figure class="highlight"><pre><code class="language-antlr" data-lang="antlr"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre>Person = person[Name, Gender, Children?]
+Name = name[String]
+Gender = gender[Male | Female]
+Male = male[]
+Female = female[]
+Children = children[Person+]
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>By convention, capitalized variables are <strong>type variables</strong> (non-terminals), and non-capitalized are terminals.</p>
+
+<p>A tree grammar defines a set of legal trees. As any grammar, tree grammars are defined within an alphabet $\Sigma$, with a set of type variables $E := \left\{X_1 ::= T_1, \dots, X_n ::= T_n\right\}$. A tree grammar is defined by the pair $(E, X)$, where $X$ represents the starting type variable in $E$. Each $T_i$ is a tree type expression:</p>
+
+<figure class="highlight"><pre><code class="language-antlr" data-lang="antlr"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre>T ::=
+      l[T]     // l ∈ Σ with content model T
+    | ()       // empty sequence
+    | T1, T2   // concatenation
+    | T1 | T2  // choice
+    | X        // reference
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>The usual regex operators <code class="highlighter-rouge">?</code>, <code class="highlighter-rouge">+</code> and <code class="highlighter-rouge">*</code> are syntactic sugar.</p>
+
+<p>To ensure that our tree grammar remains regular, we must introduce a syntactic restriction: every recursive use of a type variable $X$ (unless it is within the content model) must be in the tail. For instance, the following grammars are not acceptable:</p>
+
+\[\left\{ X = a, X, b \right\} \\
+\left\{ X = a, Y, b; \quad Y = X \right\} \\\]
+
+<p>But the following are fine:</p>
+
+\[\left\{ X = a, c[X], b \right\} \\
+\left\{ X = a, Y; \quad Y = b, X | \epsilon \right\} \\\]
+
+<p>A small reminder on regular vs. context-free grammars: regular grammars are decidable (we can check for inclusion with a DFA), while context-free grammars may be undecidable (we cannot check for inclusion in $a^n b^n$ with a DFA, for instance).</p>
+
+<p>Note that regular grammars are a subset of context-free grammars; checking whether a context-free grammar is regular is undecidable.</p>
+
+<p>Within the class of regular grammars, there are three subclasses of interest. Therefore, we have four classes, which are, in order of increasing specificity (each of these is a subset of the classes above):</p>
+
+<ol>
+  <li>Context-free</li>
+  <li>Regular</li>
+  <li>Single Type</li>
+  <li>Local</li>
+</ol>
+
+<p>Each subclass is defined by additional restrictions compared to its parent. The more restrictions we add, the more expressive power we lose. It turns out that these classes correspond to different XML technologies:</p>
+
+<ol>
+  <li><strong>Context-free</strong>: None</li>
+  <li><strong>Regular</strong>: Relax NG</li>
+  <li><strong>Single Type</strong>: XML Schema</li>
+  <li><strong>Local</strong>: DTD</li>
+</ol>
+
+<h4 id="dtd--local-tree-grammars">DTD &amp; Local tree grammars</h4>
+<p>As we said previously, the expressive power of a grammar class is defined by which restriction have been imposed. In DTD, the restriction is that each element name is associated with a regex. This means that for each $a[T_1]$ and $a[T_1]$ occuring in $E$, the content models are identical: $T_1 = T_2$.</p>
+
+<p>In other words, in DTDs, the content of an XML tag cannot depend on the context of the tag. This removes some expressive power.</p>
+
+<p>To construct a DTD validator, we just use a word automaton associated with each terminal. This automaton is a DFA, as DTD requires regular expressions to be deterministic. That is, the matched regexp must be able to be determined without lookahead to the next symbol. <code class="highlighter-rouge">a(bc | bb)</code> is not deterministic, but <code class="highlighter-rouge">ab(c | b)</code> is.</p>
+
+<p>As a corollary, the union of two DTDs may not be a DTD. Indeed, the two DTDs could define different content models for the same terminal, which would be illegal. We say that the class is not closed composition (here, we showed that it isn’t closed under union).</p>
+
+<h4 id="xml-schema--single-type-tree-grammars">XML Schema &amp; Single-Type tree grammars</h4>
+<p>In XML Schema, it is possible to have different content models for elements of the same name when they are in different contexts (unlike for DTD). But still, for each $a[T_1]$ and $a[T_2]$ occuring <em>under the same parent</em>, the content models must be identical ($T_1 = T_2$).</p>
+
+<p>Still, this bring us more expressive power, so we have $\mathcal{L}_{\text{DTD}} \subset \mathcal{L}_{\text{xmlschema}}$. This inclusion is strict, as we can construct grammars that are single-type (and not local) in XML Schema:</p>
+
+<figure class="highlight"><pre><code class="language-antlr" data-lang="antlr"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre>Dealer = dealer[Used, New]
+Used = used[UsedCar]
+New = new[NewCar]
+UsedCar = car[Model, Year] // here, car can have different content models
+NewCar  = car[Model]       // this is allowed as they have different parents
+...
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>But XML schemas also have weaknesses: we cannot encode more advanced restrictions in it. For instance, with our car dealership example, we cannot encode something like “at least one car has a discount”, as it is not a <em>single-type</em>; we would require two different content models for a car within the same parent.</p>
+
+<p>Consequently, this class is still not closed under union.</p>
+
+<h4 id="relax-ng--regular-tree-grammars">Relax NG &amp; Regular tree grammars</h4>
+<p>Relax NG does not have any of the previously discussed restrictions. The content model does not have to depend on the label of the parent; it can also depend on the ancestor’s siblings, for instance. This allows us to have much more expressive power. Relax NG places itself in the class of regular tree grammars, and $\mathcal{L}_{\text{xmlschema}} \subset \mathcal{L}_{\text{r}}$.</p>
+
+<p>For instance, we can now encode what we couldn’t with XML Schema:</p>
+
+<figure class="highlight"><pre><code class="language-antlr" data-lang="antlr"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre>Dealer = dealer[Used, New]
+Used = used[UsedCar]
+New = new[NewCar, DNewCar]
+UsedCar = car[Model, Year]
+NewCar  = car[Model]  // the same terminal used within 'new'
+DNewCar = car[Model, Discount] // but with different content models
+...
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Regular tree grammars are more robust (closed under set operations like union and intersection), give us high expressive power, while still remaining simply defined and well-characterized (inclusion can still be verified in linear time by DFA).</p>
+
+<h3 id="tree-automata">Tree automata</h3>
+
+<h4 id="definition">Definition</h4>
+<p>A tree automaton (plural automata) is a state machine dealing with tree structure instead of strings (like a word automaton would). Introducing these will allow us to provide a general framework for XML type languages by giving us a tool with which we can reason about regular tree languages.</p>
+
+<p>A ranked tree can be thought of as the AST representation of a function call. For instance, <code class="highlighter-rouge">f(a, b)</code> can be represented as a tree with parent node <code class="highlighter-rouge">f</code> and two children <code class="highlighter-rouge">a</code> and <code class="highlighter-rouge">b</code> (in that order). We can also represent more complex trees with these notations (<code class="highlighter-rouge">f(g(a, b, c), h(i))</code> gives us the full structure of a tree, for instance).</p>
+
+<p>We define a ranked alphabet symbol as a formalization of a function call. It is a symbol $a$, associated with an integer representing the number of children, $\text{arity}(a)$. We write $a^{(k)}$ for the symbol $a$ with $\text{arity}(a) = k$.</p>
+
+<p>This allows us to fix an arity to different tree symbols. Our alphabet could then be, for instance, $\left\{ a^{(2)}, b^{(2)}, c^{(3)}, \sharp^{(0)} \right\}$. In this alphabet, <code class="highlighter-rouge">#</code> would always be the leaves.</p>
+
+<p>A ranked tree automaton A consists of:</p>
+
+<ul>
+  <li>$F$, a finite ranked alphabet of symbols</li>
+  <li>$Q$, a finite set of states</li>
+  <li>$\Delta$, a finite set of transition rules</li>
+  <li>$Q_f \subseteq Q$, a finite set of final states</li>
+</ul>
+
+<p>In a word automaton, we write transitions as $\text{even} \overset{1}{\rightarrow} \text{odd}$. In a (bottom-up) tree automaton, the transitions are from the children’s state to the parents’ state. If a tree node has arity 2, a transition could be $(q_0, q_1) \overset{a}{\rightarrow} q_0$. If the arity is $k=0$, we write $\epsilon \overset{a^{(0)}}{\rightarrow} q$.</p>
+
+<h4 id="example-1">Example</h4>
+<p>As an example, we can think of a tree of boolean expressions. Let’s consider the following:</p>
+
+\[((0 \land 1) \lor (1 \lor 0)) \land ((0 \lor 1) \land (1 \land 1))\]
+
+<p>We can construct this as a binary tree by treating the logical operators as infix notation of a function call:</p>
+
+\[\land(\lor(\land(0, 1), \lor(1, 0)), \land(\lor(0, 1), \land(1, 1)))\]
+
+<p>In this case, our alphabet is $F = \left\{\land, \lor, 0, 1\right\}$. Our states are $Q = \left\{ q_0, q_1\right\}$ (either true or false). The accepting state is $Q_f = \left\{ q_1 \right\}$. Our transition rules are:</p>
+
+\[\begin{align}
+\epsilon   \overset{0}{\rightarrow}     q_0 &amp; \quad &amp; \epsilon   \overset{1}{\rightarrow} q_0 \\
+(q_1, q_1) \overset{\land}{\rightarrow} q_1 &amp; \quad &amp; (q_1, q_1) \overset{\lor}{\rightarrow} q_1 \\
+(q_0, q_1) \overset{\land}{\rightarrow} q_0 &amp; \quad &amp; (q_0, q_1) \overset{\lor}{\rightarrow} q_1 \\
+(q_1, q_0) \overset{\land}{\rightarrow} q_0 &amp; \quad &amp; (q_1, q_0) \overset{\lor}{\rightarrow} q_1 \\
+(q_0, q_0) \overset{\land}{\rightarrow} q_0 &amp; \quad &amp; (q_0, q_0) \overset{\lor}{\rightarrow} q_0 \\
+\\
+\end{align}\]
+
+<p>With these rules in place, we can evaluate binary expressions with a tree automaton.</p>
+
+<h4 id="properties">Properties</h4>
+<p>The language of A is the set of trees accepted by A. For a tree automaton, the language is a <strong>regular tree language</strong>.</p>
+
+<p>A tree automaton is <strong>deterministic</strong> as long as there aren’t too rules pointing us to different states:</p>
+
+\[(q_1, \dots q_k) \overset{a^{(k)}}{\rightarrow} q, \quad
+(q_1, \dots q_k) \overset{a^{(k)}}{\rightarrow} q'
+\qquad q \ne q'\]
+
+<p>With word automata, we know that we can build a DFA from any NFA. The same applies to tree automata: from a given non-deterministic (bottom-up) tree automaton, we can build a deterministic tree automaton.</p>
+
+<p>As a corollary, this tells us that non-deterministic tree automata do not give us more expressive power; deterministic and non-deterministic automata recognize the same languages. However, non-deterministic automata tend to allow us to represent languages more compactly (conversion can turn a non-deterministic tree automaton of size $N$ into a deterministic tree automaton of size $\mathcal{O}(2^N$), so we’ll use those freely.</p>
+
+<h3 id="validation">Validation</h3>
+
+<h4 id="inclusion">Inclusion</h4>
+<p>Given a tree automaton A and a tree t, how do we check $t\in\text{Language}(A)$?</p>
+
+<p>What we do is to just mechanically apply the transition rules. If the automaton is non-deterministic, we can keep track of the set of possible states, and see if the root of the tree contains a finishing state.</p>
+
+<p>This mechanism of membership checking is linear in the size of the tree.</p>
+
+<h4 id="closure">Closure</h4>
+<p>Tree automata are closed under set theoretic operations (we can just compute the union/intersection/product of the tuples defining the trees).</p>
+
+<h4 id="emptiness">Emptiness</h4>
+<p>We can also do emptiness checking with tree automata (that is, checking if $\text{Language}(A) = \emptyset$). To do so, we compute the set of reachable states, and see if any of them are in $Q_f$. This process is linear in the size of the automaton.</p>
+
+<h4 id="type-inclusion">Type inclusion</h4>
+<p>Given two automata $A_1$ and $A_2$, how can we check $\text{Language}(A_1) \subseteq \text{Language}(A_2)$?</p>
+
+<p>Containment of a non-deterministic automata can be decided in exponential time. We do this by checking whether $\text{Language}(A_1 \cap \bar{A_2}) = \emptyset$. For this, we must make $A_2$ deterministic (which is an exponential process).</p>
+
+<h2 id="dealing-with-non-textual-content">Dealing with non-textual content</h2>
+<p>So far, we’ve just been dealing with text. In the following, we’ll see how we can deal with images, graphics, sound, video, animations, etc. For these types of data, semi-structured tree data is commonly used for its flexibility, while retaining rigorous structures and data typing.</p>
+
+<p>For instance, there are many application-specific markup languages (MathML, CML for chemistry, GraphML, SVG tables, etc).</p>
+
+<h3 id="mathml">MathML</h3>
+<p>MathML actually has two possible structures: a presentation structure, telling us how to display math, and a mathematical structure, telling us how to apply or compute the result of a mathematical expression. It’s possible to go from mathematical to presentation structure, but not the other way (the other way is too ambiguous, it’s not a bijection).</p>
+
+<h3 id="tables">Tables</h3>
+<p>This distinction between content and presentation also exists within tables. For instance, creating the presentation and layout of a calendar, or of a complex table, is quite difficult because of the discrepancy between the presentation and structural forms.</p>
+
+<p>The main issues with tables are:</p>
+
+<ul>
+  <li>How can we model it in such a way that variations in presentation only depends on values of the formatting attributes?</li>
+  <li>How can we edit a table? (How do we modify the structure and update the backing content?)</li>
+</ul>
+
+<p>From a logical point of view, we can view a table as a d-dimensional space. A simple row-column table is 2D, but we can “add dimensions” by adding subdivision headers. Each cell in the table is described by a d-dimensional tuple of coordinates. How can we use a tree model to represent this?</p>
+
+<p>We can use tree of height d, but more efficiently (or at least, flatly), we could encode each dimension as a direct child of the root, and link each data point to the relevant axes.</p>
+
+<p>This is what HTML 4 proposes:</p>
+
+<figure class="highlight"><pre><code class="language-html" data-lang="html"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+</pre></td><td class="code"><pre><span class="nt">&lt;tr&gt;</span>
+    <span class="nt">&lt;th&gt;&lt;/th&gt;</span>
+    <span class="nt">&lt;th</span> <span class="na">id=</span><span class="s">"a2"</span> <span class="na">axis=</span><span class="s">"expenses"</span><span class="nt">&gt;</span>Meals<span class="nt">&lt;/th&gt;</span>
+    <span class="nt">&lt;th</span> <span class="na">id=</span><span class="s">"a3"</span> <span class="na">axis=</span><span class="s">"expenses"</span><span class="nt">&gt;</span>Hotels<span class="nt">&lt;/th&gt;</span>
+    <span class="nt">&lt;th</span> <span class="na">id=</span><span class="s">"a4"</span> <span class="na">axis=</span><span class="s">"expenses"</span><span class="nt">&gt;</span>Transport<span class="nt">&lt;/th&gt;</span>
+    <span class="nt">&lt;td&gt;</span>subtotals<span class="nt">&lt;/td&gt;</span>
+<span class="nt">&lt;/tr&gt;</span>
+<span class="nt">&lt;tr&gt;</span>
+    <span class="nt">&lt;th</span> <span class="na">id=</span><span class="s">"a6"</span> <span class="na">axis=</span><span class="s">"location"</span><span class="nt">&gt;</span>San Jose<span class="nt">&lt;/th&gt;</span>
+    <span class="nt">&lt;th&gt;&lt;/th&gt;</span>
+    <span class="nt">&lt;th&gt;&lt;/th&gt;</span>
+    <span class="nt">&lt;th&gt;&lt;/th&gt;</span>
+    <span class="nt">&lt;td&gt;&lt;/td&gt;</span>
+<span class="nt">&lt;/tr&gt;</span>
+<span class="nt">&lt;tr&gt;</span>
+    <span class="nt">&lt;td</span> <span class="na">id=</span><span class="s">"a7"</span> <span class="na">axis=</span><span class="s">"date"</span><span class="nt">&gt;</span>25-Aug-97<span class="nt">&lt;/td&gt;</span>
+    <span class="nt">&lt;td</span> <span class="na">headers=</span><span class="s">"a6 a7 a2"</span><span class="nt">&gt;</span>37.74<span class="nt">&lt;/td&gt;</span>
+    <span class="nt">&lt;td</span> <span class="na">headers=</span><span class="s">"a6 a7 a3"</span><span class="nt">&gt;</span>112.00<span class="nt">&lt;/td&gt;</span>
+    <span class="nt">&lt;td</span> <span class="na">headers=</span><span class="s">"a6 a7 a4"</span><span class="nt">&gt;</span>45.00<span class="nt">&lt;/td&gt;</span>
+    <span class="nt">&lt;td&gt;&lt;/td&gt;</span>
+<span class="nt">&lt;/tr&gt;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h2 id="xml-processing">XML Processing</h2>
+<p>When working with XML, there’s no need to write a parser. General-purpose XML parsers are widely available (e.g. Apache Xerces). Incidentally, an XML parser can be validating or non-validating.</p>
+
+<p>XML parsers can communicate the XML tree structure to applications using it; there are two approaches for this:</p>
+
+<ul>
+  <li>DOM: the parser stores the XML input to a fixed data structure, and exposes an API</li>
+  <li>SAX: parser trigger events. The input isn’t stored, the application must specify how to store and process events triggered by the parser.</li>
+</ul>
+
+<h3 id="dom">DOM</h3>
+<p>DOM (Document Object Model) is a W3C standard. An application generates DOM library calls to manipulate the parsed XML input. There are multiple DOM levels, that have been introduced successively to expand the capabilities of DOM.</p>
+
+<ul>
+  <li>DOM Level 1 provided basic API to access and manipulate tree structures (<code class="highlighter-rouge">getParentNode()</code>, <code class="highlighter-rouge">getFirstChild()</code>, <code class="highlighter-rouge">insertBefore()</code>, <code class="highlighter-rouge">replaceChild()</code>, …)</li>
+  <li>DOM Level 2 introduces specialized interfaces dedicated to XM Land namespace-related methods, dynamic access and update of the content of style sheets, an event system, …</li>
+  <li>DOM Level 3 introduces the ability to dynamically load the content of an XML document into a DOM document, serialize DOM into XML, dynamically update the content while ensureing validation, access the DOM using XPath, …</li>
+</ul>
+
+<p>DOM allows us to abstract away from the syntactical details of the XML structure, and allows us to ensure well-formedness (no missing tags, non-matching tags, etc). Thanks to that, document manipulation is considerably simplified.</p>
+
+<p>However, the DOM approach is not without its flaws. The main disadvantage is that we must maintain a data structure representing the whole XML input, which can be problematic for big documents. To remedy this situation, we can preprocess to filter the document, reducing its overall size, but that only takes us so far. Alternatively, we can use a different approach for XML processing: SAX.</p>
+
+<h3 id="sax">SAX</h3>
+<p>SAX, the <a href="http://www.saxproject.org/">Simple API for XML</a> is not a W3C standard; it’s more of a de facto standard that started out as a Java-only API.</p>
+
+<p>It’s very efficient, using only constant space, regardless of the XML input size. However, it means that we must also write more code. Indeed, we must specify callbacks for certain events, write our own code to store what we need, etc.</p>
+
+<p>The SAX processor reads the input sequentially (while the DOM afforded us with random access), and once only. It sends events like <code class="highlighter-rouge">startDocument</code>, <code class="highlighter-rouge">startElement</code>, <code class="highlighter-rouge">characters</code>, etc. White spaces and tabs are reported too, so this also potentially means more code to write.</p>
+
+<h3 id="dom-and-web-applications">DOM and web applications</h3>
+<p>DOM is language and platform independent, with DOM APIs for all major programming languages. Most common though, is the DOM API used with JavaScript.</p>
+
+<h3 id="xforms-an-alternative-to-html-forms">XForms: an alternative to HTML forms</h3>
+<p>XForms give us a declarative approach to capture information from the user, and place it into XML documents, with constraint checking. XForms are a W3C standard, but are not implemented in the browsers.</p>
+
+<h2 id="web-services">Web Services</h2>
+<p>Service oriented applications (SOA) is an architectural pattern in software design, in which each component provides services to other components via communication protocols. XML has an answer to this:</p>
+
+<h3 id="web-service-description-language-wsdl">Web Service Description Language (WSDL)</h3>
+<p>WSDL is a language to create descriptions of a web service. That is, describe the operations it can perform, the structure of its messages, communication mechanisms it understands, etc. This is a <a href="https://www.w3.org/TR/2007/REC-wsdl20-20070626/">W3C recommendation</a> since 2007.</p>
+
+<p>Inside a <code class="highlighter-rouge">&lt;wsdl:description&gt;</code> tag, we can use:</p>
+
+<ul>
+  <li>Optional documentation (<code class="highlighter-rouge">&lt;wsdl:documentation/&gt;</code>), with a human readable description of the web service</li>
+  <li>Definition of data types (<code class="highlighter-rouge">&lt;wsdl:types/&gt;</code>) exchanged between client and web service</li>
+  <li>Description of the interface (<code class="highlighter-rouge">&lt;wsdl:interface/&gt;</code>), i.e. what operations and messages are defined</li>
+  <li>Binding (<code class="highlighter-rouge">&lt;wsdl:binding/&gt;</code>) describing how the web service is accessed over the network</li>
+  <li>Service tag (<code class="highlighter-rouge">&lt;wsdl:service</code>) describing where the service can be accessed</li>
+</ul>
+
+<p>Here’s an example from IBM:</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre><span class="nt">&lt;application</span> <span class="na">xmlns=</span><span class="s">"http://wadl.dev.java.net/2009/02"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;resources</span> <span class="na">base=</span><span class="s">"http://example.com/api"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;resource</span> <span class="na">path=</span><span class="s">"books"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;method</span> <span class="na">name=</span><span class="s">"GET"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;resource</span> <span class="na">path=</span><span class="s">"{bookId}"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;param</span> <span class="na">required=</span><span class="s">"true"</span> <span class="na">style=</span><span class="s">"template"</span> <span class="na">name=</span><span class="s">"bookId"</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;method</span> <span class="na">name=</span><span class="s">"GET"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;/resource&gt;</span>
+        <span class="nt">&lt;/resource&gt;</span>
+    <span class="nt">&lt;/resources&gt;</span>
+<span class="nt">&lt;/application&gt;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h3 id="simple-object-access-protocol-soap">Simple Object Access Protocol (SOAP)</h3>
+<p>SOAP is a W3C standard protocolSOAP is a W3C standard protocol, with strict rules and advanced security features. However, it comes with substantial complexity, leading to slow page load times.</p>
+
+<figure class="highlight"><pre><code class="language-plain" data-lang="plain"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="code"><pre>POST /Quotation HTTP/1.0
+Host: www.xyz.org
+Content-Type: text/xml; charset = utf-8
+Content-Length: nnn
+
+&lt;?xml version = "1.0"?&gt;
+&lt;SOAP-ENV:Envelope
+    xmlns:SOAP-ENV = "http://www.w3.org/2001/12/soap-envelope"
+    SOAP-ENV:encodingStyle = "http://www.w3.org/2001/12/soap-encoding"&gt;
+        &lt;SOAP-ENV:Body xmlns:m = "http://www.xyz.org/quotations"&gt;
+            &lt;m:GetQuotation&gt;
+                &lt;m:QuotationsName&gt;MiscroSoft&lt;/m:QuotationsName&gt;
+            &lt;/m:GetQuotation&gt;
+        &lt;/SOAP-ENV:Body&gt;
+&lt;/SOAP-ENV:Envelope&gt;
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Note that while REST is an architectural style, and SOAP is a protocol. REST allows using any format (HTML, JSON, XML, plain text, …), while SOAP explicitly only allows XML.</p>
+
+<p>In the days of web apps (instead of web services), the idea of WDSL may be a little outdated. But WADL (Web <strong>Application</strong> Description Language) may be an answer to WSDL; this is a more concise language, with support for Relax NG, but which also has a slightly different goal. <a href="https://www.openapis.org/">Open API</a> is another contender in this field, specifying a way to describe web services in JSON or YAML, with documentation in Markdown.</p>
+
+<h3 id="universal-description-discovery-and-integration-uddi">Universal Description, Discovery and Integration (UDDI)</h3>
+<p>UDDI defines a standard method for <strong>publishing</strong> and <strong>discovering</strong> the software components of a service-oriented architecture. This mechanism still exists, although it never had the success people had been hoping for. Nowadays, it’s mostly just used internally for some XML based applications, instead of in public UDDI repositories of components.</p>
+<div class="footnotes" role="doc-endnotes">
+  <ol>
+    <li id="fn:pos-one" role="doc-endnote">
+      <p>Note that positions start at 1 <a href="#fnref:pos-one" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+    </li>
+    <li id="fn:infoset-spec" role="doc-endnote">
+      <p><a href="https://www.w3.org/TR/xml-infoset/#intro">XML Information Set specification</a>, W3C Recommendation <a href="#fnref:infoset-spec" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+:ET

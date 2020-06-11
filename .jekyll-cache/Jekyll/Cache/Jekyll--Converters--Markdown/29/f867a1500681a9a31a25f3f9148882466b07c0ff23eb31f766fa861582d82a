@@ -1,0 +1,885 @@
+I"/�<p>When working on a Web project, I find it to be <em>really hard</em> to get the tooling configuration right: there are so many tools doing different things, so many options and alternatives to choose from, and oh-so-many ways that things can go wrong. This article is meant as an in-depth, step-by-step guide to a configuration that works really well.</p>
+
+<p>Configuration is a matter of both personal taste and of the needs of the project. The setup that I will show won’t work for everybody, and that’s fine! That is exactly the reason I wrote this article. Rather than just make a GitHub repo of my arbitrary choices, I wanted to write about the reasoning leading this configuration, discuss alternative options, show some common pitfalls, and share lessons learned the hard way from working on <a href="https://github.com/hashml/hashml">HashML</a>, over the summer.</p>
+
+<!-- More -->
+
+<p>Still, If you’d just like to see the resulting code, I did also make <a href="https://github.com/MaximeKjaer/npm-ts-template">a GitHub repo</a>.</p>
+
+<ul id="markdown-toc">
+  <li><a href="#guiding-principles" id="markdown-toc-guiding-principles">Guiding principles</a></li>
+  <li><a href="#directory-structure" id="markdown-toc-directory-structure">Directory structure</a></li>
+  <li><a href="#git" id="markdown-toc-git">Git</a></li>
+  <li><a href="#package-manager" id="markdown-toc-package-manager">Package manager</a></li>
+  <li><a href="#packagejson" id="markdown-toc-packagejson"><code class="highlighter-rouge">package.json</code></a>    <ul>
+      <li><a href="#basics" id="markdown-toc-basics">Basics</a></li>
+      <li><a href="#publishing-configuration" id="markdown-toc-publishing-configuration">Publishing configuration</a></li>
+      <li><a href="#scripts" id="markdown-toc-scripts">Scripts</a></li>
+      <li><a href="#additional-information" id="markdown-toc-additional-information">Additional information</a></li>
+    </ul>
+  </li>
+  <li><a href="#typescript" id="markdown-toc-typescript">TypeScript</a></li>
+  <li><a href="#testing" id="markdown-toc-testing">Testing</a>    <ul>
+      <li><a href="#testing-with-typescript" id="markdown-toc-testing-with-typescript">Testing with TypeScript</a></li>
+      <li><a href="#configuring-the-tests" id="markdown-toc-configuring-the-tests">Configuring the tests</a></li>
+      <li><a href="#assertion-library" id="markdown-toc-assertion-library">Assertion library</a></li>
+      <li><a href="#putting-it-all-together" id="markdown-toc-putting-it-all-together">Putting it all together</a></li>
+    </ul>
+  </li>
+  <li><a href="#formatting" id="markdown-toc-formatting">Formatting</a></li>
+  <li><a href="#linting" id="markdown-toc-linting">Linting</a></li>
+  <li><a href="#continuous-integration" id="markdown-toc-continuous-integration">Continuous Integration</a></li>
+  <li><a href="#conclusion" id="markdown-toc-conclusion">Conclusion</a></li>
+</ul>
+
+<h2 id="guiding-principles">Guiding principles</h2>
+
+<p>We should always choose tools that (1) do something we actually need, (2) are widely used and actively maintained, and (3) require the <a href="https://en.wikipedia.org/wiki/Convention_over_configuration">least amount of configuration</a>.</p>
+
+<p>Things should work cross-platform, if possible. This means on any developer’s machine (Linux, Windows or macOS), in any language (TypeScript or JavaScript) and in any runtime environment (Node.js or browsers).</p>
+
+<p>Generally, we won’t care too much about the size and number of <code class="highlighter-rouge">devDependencies</code>. These are only installed by contributors to the code, take a fraction of a second to install, and largely make up for it in gained productivity.</p>
+
+<p>However, we should care a lot about keeping few <code class="highlighter-rouge">dependencies</code>: these are also installed by projects depending on your code, not just by developers contributing to it. Having too many of these adds to your bundle size and <a href="https://medium.com/intrinsic/common-node-js-attack-vectors-the-dangers-of-malicious-modules-863ae949e7e8">poses security risks</a>.</p>
+
+<p>Many development tools can be configured either with command line flags, or through a configuration file. A configuration file is always preferable, as it enables IDEs to pick up and understand the configuration options.</p>
+
+<h2 id="directory-structure">Directory structure</h2>
+<p>We’ll aim for the following directory structure:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>├── dist/                &lt;- Build output folder
+|   └── ...
+├── src/
+|   ├── hello.ts         &lt;- File containing our code
+|   └── index.ts
+├── test/
+|   └── hello.test.ts    &lt;- Test of src/hello.ts
+├── README.md
+├── .gitignore
+└── package.json
+</code></pre></div></div>
+
+<h2 id="git">Git</h2>
+<p>In this article, we’ll use <a href="https://github.com/">GitHub</a>, but you could also use <a href="https://about.gitlab.com/">GitLab</a> or <a href="https://bitbucket.org/product">BitBucket</a>, or whatever else your heart desires. We’ll first create a new repo on GitHub by going to <a href="https://github.com/new">this page</a>: we can check the box to initialize the repo with a README, and select the Node <code class="highlighter-rouge">.gitignore</code>. Once the repo is created, we can grab the URL to clone it:</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span>git clone &lt;REPO_URL&gt;
+<span class="gp">$</span><span class="w"> </span><span class="nb">cd</span> &lt;REPO_DIR&gt;
+</code></pre></div></div>
+
+<p>With the repo on our machine, we can already make our first edit: we don’t want to track the output of the build, so we can add <code class="highlighter-rouge">/dist</code> to the <code class="highlighter-rouge">.gitignore</code>.</p>
+
+<h2 id="package-manager">Package manager</h2>
+<p>The most commonly used package managers are:</p>
+
+<ul>
+  <li><a href="https://www.npmjs.com/get-npm">NPM</a></li>
+  <li><a href="https://yarnpkg.com/lang/en/">Yarn</a></li>
+</ul>
+
+<p>Yarn was created <a href="https://blog.npmjs.org/post/151660845210/hello-yarn">by Facebook in 2016</a> to solve some of the problems that NPM had back then. Since then, NPM has adopted the technical changes that Yarn pioneered, and has achieved feature and performance parity; nowadays, there is <a href="https://iamturns.com/yarn-vs-npm-2018/">no good reason to pick Yarn anymore</a>. Instead, it is best to go for the more popular option, NPM. People are more likely to be familiar with it, which makes contributing easier.</p>
+
+<h2 id="packagejson"><code class="highlighter-rouge">package.json</code></h2>
+<h3 id="basics">Basics</h3>
+<p>Let’s start by configuring the basics. We’ll need to create a <code class="highlighter-rouge">package.json</code> file, which we can do by running:</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span>npm init
+</code></pre></div></div>
+
+<p>This will ask us a bunch of question, to which we can reply as follows:</p>
+
+<ul>
+  <li>
+    <p><strong>Package name</strong>: <code class="highlighter-rouge">my-package-name</code></p>
+
+    <p>This is the name that people will type when doing an <code class="highlighter-rouge">npm install</code> for our package. If you are publishing as an organization, you should name the package <code class="highlighter-rouge">@my-organization/my-package-name</code>.</p>
+  </li>
+  <li>
+    <p><strong>Version</strong>: <code class="highlighter-rouge">0.0.0</code></p>
+
+    <p>According to Semver 2.0.0, the <a href="https://semver.org/#how-should-i-deal-with-revisions-in-the-0yz-initial-development-phase">0.y.z versions are for the initial development phase</a>, which is probably the phase brand new modules are in.</p>
+  </li>
+  <li>
+    <p><strong>Description</strong>: <code class="highlighter-rouge">A short description of my package</code></p>
+
+    <p>This is used for <code class="highlighter-rouge">npm search</code>. Keep it short and sweet.</p>
+  </li>
+  <li>
+    <p><strong>Entry point</strong>: <code class="highlighter-rouge">dist/index.js</code></p>
+
+    <p>We’ll be compiling to JavaScript files, in a folder named <code class="highlighter-rouge">dist</code>. The <code class="highlighter-rouge">index.js</code> file is the compiled version of the TypeScript “barrel” file, which we’ll talk about in <a href="#typescript">the TypeScript section</a>.</p>
+  </li>
+  <li>
+    <p><strong>Test command</strong>: Let’s leave this blank for now. We’ll talk about this in the <a href="#testing">section on testing</a>.</p>
+  </li>
+  <li>
+    <p><strong>Author</strong>: <code class="highlighter-rouge">Firstname Lastname &lt;firstname.lastname@example.com&gt;</code></p>
+
+    <p>The package registry uses this information to display a small badge with your name and picture on the package’s page.</p>
+  </li>
+  <li>
+    <p><strong>License</strong>: <code class="highlighter-rouge">MIT</code></p>
+
+    <p>The default option is the ISC license, which is legally equivalent to MIT, but with a slightly shorter text. You can read more about different licenses on <a href="https://choosealicense.com/">choosealicense.com</a>.</p>
+  </li>
+</ul>
+
+<p>This creates a very basic <code class="highlighter-rouge">package.json</code> file; we’ll need to add a few fields to it.</p>
+
+<h3 id="publishing-configuration">Publishing configuration</h3>
+<p>We’ll be publishing the package publicly on <a href="https://www.npmjs.com/">npmjs.com</a>, but you could also <a href="https://docs.npmjs.com/creating-and-publishing-private-packages">publish privately</a>, or to <a href="https://verdaccio.org/en/">your own NPM registry</a>. To enable publishing publicly, we must add the following to <code class="highlighter-rouge">package.json</code>:</p>
+
+<figure class="highlight"><pre><code class="language-json-doc" data-lang="json-doc"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="p">{</span><span class="w">
+  </span><span class="c1">...</span><span class="w">
+  </span><span class="nl">"publishConfig"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"access"</span><span class="p">:</span><span class="w"> </span><span class="s2">"public"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>We also need to declare which files should be published in our package. While we only want source files on Git, we only want build output on NPM. There are two ways of stating which files should go on NPM:</p>
+
+<ul>
+  <li>Blacklisting files through a <code class="highlighter-rouge">.npmignore</code> file, or</li>
+  <li>whitelisting files through a <code class="highlighter-rouge">"files"</code> key in <code class="highlighter-rouge">package.json</code>.</li>
+</ul>
+
+<p>The blacklist approach takes more work and involves <a href="https://medium.com/@jdxcode/for-the-love-of-god-dont-use-npmignore-f93c08909d8d">security risks</a>, so we should always pick the whitelist approach for this. When writing this whitelist, we only need to list our <code class="highlighter-rouge">dist</code> folder, as all other files NPM needs are <a href="https://docs.npmjs.com/files/package.json#files">automatically included</a>.</p>
+
+<figure class="highlight"><pre><code class="language-json-doc" data-lang="json-doc"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="p">{</span><span class="w">
+  </span><span class="c1">...</span><span class="w">
+  </span><span class="nl">"files"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"/dist"</span><span class="p">],</span><span class="w">
+</span><span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>We prefix the path with <code class="highlighter-rouge">/</code> to make sure that we refer to the one at the root of the project. Otherwise, a folder named <code class="highlighter-rouge">./src/dist</code> would also be included.</p>
+
+<p>To see what is being distributed, we can run <code class="highlighter-rouge">npm pack</code>, which produces the following cute output:</p>
+
+<figure class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span><span class="w"> </span>npm pack
+<span class="go">📦  npm-ts-template@0.0.0
+=== Tarball Contents === 
+1.1kB LICENSE        
+180B  dist/hello.js  
+237B  dist/index.js  
+1.8kB package.json   
+3.3kB README.md      
+41B   dist/hello.d.ts
+25B   dist/index.d.ts
+=== Tarball Details === 
+name:          npm-ts-template                   
+version:       0.0.0                                   
+filename:      npm-ts-template-0.0.0.tgz         
+package size:  2.9 kB                                  
+unpacked size: 6.7 kB                                  
+shasum:        759c73c63738523eb1e4747d7da0e825d3663156
+integrity:     sha512-aqG6pPIjMsEVc[...]pz40qqkd3XiUw==
+total files:   7                                       </span></code></pre></figure>
+
+<h3 id="scripts">Scripts</h3>
+
+<p>NPM scripts allow us to abstract over the exact choice of tool, and provide simple commands for common tasks. To keep things standardized, organized and simple, we’ll use <a href="https://github.com/voorhoede/npm-style-guide#use-standard-script-names">standard NPM task names</a>, <a href="https://github.com/voorhoede/npm-style-guide#group-related-scripts-by-prefix">grouped by prefix</a> as folllows:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">build</code>: build the production version of the project
+    <ul>
+      <li><code class="highlighter-rouge">ts</code>: build TypeScript files</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">clean</code>: delete build artifacts</li>
+  <li><code class="highlighter-rouge">test</code>: run all tests
+    <ul>
+      <li><code class="highlighter-rouge">format</code>: test for formatting errors</li>
+      <li><code class="highlighter-rouge">lint</code>: test for linting errors</li>
+      <li><code class="highlighter-rouge">package</code>: test for errors in <code class="highlighter-rouge">package.json</code></li>
+      <li><code class="highlighter-rouge">unit</code>: run unit tests</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">fix</code>: run all fixes
+    <ul>
+      <li><code class="highlighter-rouge">format</code>: fix files for formatting errors</li>
+      <li><code class="highlighter-rouge">lint</code>: fix files for linting errors</li>
+    </ul>
+  </li>
+</ul>
+
+<p>That way, if we want to fix formatting, we can run <code class="highlighter-rouge">npm run fix:format</code>. To run all fixes, we can run <code class="highlighter-rouge">npm run fix</code>. Having organized the scripts by prefix means that we can run all the scripts with the same prefix using <a href="https://www.npmjs.com/package/npm-run-all">npm-run-all</a>. With this tool, we can write shorter top-level scripts that do not need to be updated when subscripts are added; a small gain, but a welcome one.</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span>npm <span class="nb">install</span> <span class="nt">--save-dev</span> npm-run-all
+</code></pre></div></div>
+
+<p>A little catch when writing the <code class="highlighter-rouge">clean</code> script is that <code class="highlighter-rouge">rm -rf</code> won’t work on Windows. To ensure that things work cross-platform, most UNIX commands have <a href="https://github.com/voorhoede/npm-style-guide#use-npm-modules-for-system-tasks">Node module equivalents</a>. So instead of <code class="highlighter-rouge">rm -rf</code>,  we can use the <a href="https://www.npmjs.com/package/rimraf">rimraf package</a>.</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span>npm <span class="nb">install</span> <span class="nt">--save-dev</span> rimraf
+</code></pre></div></div>
+
+<p>We can now write the following scripts field in <code class="highlighter-rouge">package.json</code>:</p>
+
+<figure class="highlight"><pre><code class="language-json-doc" data-lang="json-doc"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+</pre></td><td class="code"><pre><span class="p">{</span><span class="w">
+  </span><span class="c1">...</span><span class="w">
+  </span><span class="nl">"scripts"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"build"</span><span class="p">:</span><span class="w"> </span><span class="s2">"npm-run-all build:*"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"build:ts"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+
+    </span><span class="nl">"clean"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rimraf dist"</span><span class="p">,</span><span class="w">
+    
+    </span><span class="nl">"test"</span><span class="p">:</span><span class="w"> </span><span class="s2">"npm-run-all test:*"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"test:format"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"test:lint"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"test:package"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"test:unit"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+        
+    </span><span class="nl">"fix"</span><span class="p">:</span><span class="w"> </span><span class="s2">"npm-run-all fix:lint fix:format"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"fix:format"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"fix:lint"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+        
+    </span><span class="nl">"preversion"</span><span class="p">:</span><span class="w"> </span><span class="s2">"npm-run-all clean build test"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"postversion"</span><span class="p">:</span><span class="w"> </span><span class="s2">"git push &amp;&amp; git push --tags"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>I’ve left some scripts empty for now, because we’ll talk about each of them in more detail later on.</p>
+
+<p>We use a <a href="https://github.com/mysticatea/npm-run-all/blob/master/docs/npm-run-all.md#glob-like-pattern-matching-for-script-names">star notation</a> (e.g. <code class="highlighter-rouge">npm-run-all test:*</code>) for all top-level scripts, <em>except for</em> <code class="highlighter-rouge">fix</code>. For this script, it’s very important that linting mistakes be fixed before formatting mistakes, as fixing linting mistakes may reintroduce formatting mistakes.</p>
+
+<p>The <code class="highlighter-rouge">preversion</code> and <code class="highlighter-rouge">postversion</code> scripts say what should happen when we release a new version of our package using <code class="highlighter-rouge">npm version</code>. Before the version is updated (<code class="highlighter-rouge">preversion</code>), we want to make sure everything is fine by running a clean build and tests. If that works, the version number can be updated, and we push everything to GitHub (<code class="highlighter-rouge">postversion</code>).</p>
+
+<h3 id="additional-information">Additional information</h3>
+<p>We can put more information about the package in <code class="highlighter-rouge">package.json</code> by adding some <a href="https://docs.npmjs.com/files/package.json">descriptive fields</a>. This is useful for people searching for the package, and for the package to be displayed nicely on the package registry:</p>
+
+<figure class="highlight"><pre><code class="language-json-doc" data-lang="json-doc"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="code"><pre><span class="p">{</span><span class="w">
+  </span><span class="c1">...</span><span class="w">
+  </span><span class="nl">"repository"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"git"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"git+https://github.com/GITHUB-USERNAME/REPO-NAME.git"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"homepage"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://github.com/GITHUB-USERNAME/REPO-NAME#readme"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"bugs"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://github.com/GITHUB-USERNAME/REPO-NAME/issues"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"keywords"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"typescript"</span><span class="p">,</span><span class="w">
+    </span><span class="c1">...</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h2 id="typescript">TypeScript</h2>
+<p>We’ll be writing TypeScript code, so we must obviously install the TypeScript compiler:</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span>npm <span class="nb">install</span> <span class="nt">--save-dev</span> typescript
+</code></pre></div></div>
+
+<p>With TypeScript installed, we’ll need to configure the build options for our project by defining a <a href="https://www.typescriptlang.org/docs/handbook/tsconfig-json.html"><code class="highlighter-rouge">tsconfig.json</code> file</a>.</p>
+
+<p>There’s a small trick that comes into play at this point though: we will actually be defining two <code class="highlighter-rouge">tsconfig</code> files. The reason for this is that we don’t want to output the compiled tests to the production build, but we still want the compiler options to apply to all files, including tests.</p>
+
+<p>Therefore, the first file we define is <code class="highlighter-rouge">tsconfig.json</code>, as usual. This file holds all the compiler options, and applies to all TypeScript files, built or not. However, in this case, its sole purpose is to be picked up by the IDE (say, VS Code or IntelliJ). This allows the IDE to underline errors correctly across all files, built or not.</p>
+
+<figure class="highlight"><pre><code class="language-json" data-lang="json"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+</pre></td><td class="code"><pre><span class="p">{</span><span class="w">
+  </span><span class="nl">"compilerOptions"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"noEmit"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"target"</span><span class="p">:</span><span class="w"> </span><span class="s2">"esnext"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"module"</span><span class="p">:</span><span class="w"> </span><span class="s2">"commonjs"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"sourceMap"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"declaration"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"strict"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"noUnusedLocals"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"jsx"</span><span class="p">:</span><span class="w"> </span><span class="s2">"react"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"resolveJsonModule"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"removeComments"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"include"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"src"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"test"</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>The second file is <code class="highlighter-rouge">tsconfig.build.json</code>, which extends the base <code class="highlighter-rouge">tsconfig.json</code> to inherit all the same compiler options, but adds the build instructions.</p>
+
+<figure class="highlight"><pre><code class="language-json" data-lang="json"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre><span class="p">{</span><span class="w">
+  </span><span class="nl">"extends"</span><span class="p">:</span><span class="w"> </span><span class="s2">"./tsconfig.json"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"compilerOptions"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"outDir"</span><span class="p">:</span><span class="w"> </span><span class="s2">"./dist"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"noEmit"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"include"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"src"</span><span class="p">]</span><span class="w">
+</span><span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Let’s go a step back and discuss some of the options in <code class="highlighter-rouge">tsconfig.json</code>:</p>
+
+<ul>
+  <li>
+    <p><code class="highlighter-rouge">"noEmit": true</code></p>
+
+    <p>The goal of the <code class="highlighter-rouge">tsconfig.json</code> is not to emit files, but just to be picked up by the IDE. Setting this ensures that we don’t accidentally compile with <code class="highlighter-rouge">tsconfig.json</code> instead of <code class="highlighter-rouge">tsconfig.build.json</code>, which overrides this option to <code class="highlighter-rouge">false</code>.</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">"module": "commonjs"</code></p>
+
+    <p>A long time ago, in a galaxy far, far away, opposing module systems fought a great big battle.</p>
+
+    <p>CommonJS was the first module system, and was most widely used on Node.js. If you’ve ever written <code class="highlighter-rouge">const add = require('./add.js')</code> or <code class="highlighter-rouge">module.exports = { add }</code>, then that is CommonJS.</p>
+
+    <p>CommonJS became popular, but had some drawbacks. Alternative proposals came up: AMD proposed better tree-shaking, UMD tried to bridge the gap between AMD and CommonJS, and eventually, ECMAScript proposed the ESM standard. This is the one where you write your imports as <code class="highlighter-rouge">import { add } from "./add"</code> and your exports as <code class="highlighter-rouge">export function add(a, b) { ... }</code>.</p>
+
+    <p>In TypeScript, you can (and should) use the standard ESM syntax. But perhaps the users of your module are writing plain JavaScript with CommonJS (<em>gasp!</em> 😱). Or perhaps they’re targeting Node.js, where ESM is <a href="https://nodejs.org/api/esm.html#esm_ecmascript_modules">still experimental</a> (<em>double gasp!</em> 😱). Long story short, you should just set this option to <code class="highlighter-rouge">"commonjs"</code> to make sure everybody can use your package, whether they’re using TypeScript or JavaScript, and are targeting Node.js or the Web.</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">"declaration": true</code></p>
+
+    <p>Since we’re emitting and distributing plain JavaScript code, we also need to emit the TypeScript <code class="highlighter-rouge">.d.ts</code> declaration files for TypeScript users.</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">"sourceMap": true</code></p>
+
+    <p>This is useful for debugging. However, seeing that we’re not distributing <code class="highlighter-rouge">.ts</code> source files, the source maps should not be distributed either, as they would point to a source file that doesn’t exist. We can exclude them from the distribution by adding <code class="highlighter-rouge">"!/dist/**/*.js.map"</code> to the <code class="highlighter-rouge">"files"</code> key of <code class="highlighter-rouge">package.json</code>.</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">"resolveJsonModule": true</code></p>
+
+    <p>This allows you to <code class="highlighter-rouge">import</code> JSON files, which can be convenient. But watch out with this feature, there’s a trap!</p>
+
+    <p>Say you want to <code class="highlighter-rouge">import { version } from '../package.json'</code>. Seeing that TypeScript needs to place the imported JSON file in <code class="highlighter-rouge">dist</code>, it will now have to place <code class="highlighter-rouge">dist/index.js</code> in <code class="highlighter-rouge">dist/src/index.js</code> to make this relative import possible. Doing so makes the entry point <a href="#basics">we defined earlier</a> invalid.</p>
+
+    <p>The <a href="https://www.npmjs.com/package/pkg-ok">pkg-ok</a> package can help us catch this type of error: it checks that the build actually matches the information in <code class="highlighter-rouge">package.json</code>. We can add this as an NPM script, which we’ll name <code class="highlighter-rouge">test:package</code>. If the structure of <code class="highlighter-rouge">dist</code> changes, this will come up as an error during tests.</p>
+
+    <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span>npm <span class="nb">install</span> <span class="nt">--save-dev</span> pkg-ok
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p>Phew, that’s quite a few decisions! But with all this in place, we can finally write our contribution to the world, in <code class="highlighter-rouge">src/hello.ts</code>:</p>
+
+<figure class="highlight"><pre><code class="language-ts" data-lang="ts"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="code"><pre><span class="k">export</span> <span class="kd">function</span> <span class="nx">hello</span><span class="p">():</span> <span class="nx">string</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="dl">"</span><span class="s2">hello world</span><span class="dl">"</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>People using the package should be able to <code class="highlighter-rouge">import { hello } from "my-package-name"</code>. But as things currently stand, we need to do <code class="highlighter-rouge">import { hello } from "my-package-name/hello"</code>, which is not as pretty. To fix this, we need to write a so-called “<a href="https://basarat.gitbooks.io/typescript/docs/tips/barrel.html">barrel</a>”. This is a file called <code class="highlighter-rouge">src/index.ts</code> that re-exports everything at the top scope:</p>
+
+<figure class="highlight"><pre><code class="language-ts" data-lang="ts"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+</pre></td><td class="code"><pre><span class="k">export</span> <span class="o">*</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">./hello</span><span class="dl">"</span><span class="p">;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h2 id="testing">Testing</h2>
+<p>Having written this hello world function, we’d like to test if it actually greets us properly. The most popular JS test frameworks are:</p>
+
+<ul>
+  <li><a href="https://jestjs.io/">Jest</a></li>
+  <li><a href="https://mochajs.org/">Mocha</a></li>
+  <li><a href="https://jasmine.github.io/">Jasmine</a></li>
+</ul>
+
+<p>Jest seems to be slightly more popular than Mocha and Jasmine nowadays. Generally, Jest comes with more things built in (an assertion library, code coverage, snapshot testing, …), but they all require the same amount of setup to work with TypeScript.</p>
+
+<p>They’re all great libraries, so it doesn’t really matter which one you choose. I’ll pick Mocha here, just for the sake of choosing one of them.</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span>npm <span class="nb">install</span> <span class="nt">--save-dev</span> mocha
+</code></pre></div></div>
+
+<h3 id="testing-with-typescript">Testing with TypeScript</h3>
+<p>Since we’re writing our code in TypeScript, it makes a lot of sense to also write the tests in TypeScript. We’ll need the Mocha type definitions for this:</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span>npm <span class="nb">install</span> <span class="nt">--save-dev</span> @types/mocha
+</code></pre></div></div>
+
+<p>But we’re not interested in producing a compiled version of our tests: we just want to run them. For this, we can use <a href="https://github.com/TypeStrong/ts-node">ts-node</a>, a wrapper around Node that allows us to run TypeScript files directly.</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span>npm <span class="nb">install</span> <span class="nt">--save-dev</span> ts-node
+</code></pre></div></div>
+
+<h3 id="configuring-the-tests">Configuring the tests</h3>
+<p>Since Mocha 6.0.0, we can configure the tests with a <code class="highlighter-rouge">.mocharc.json</code> file:</p>
+
+<figure class="highlight"><pre><code class="language-json-doc" data-lang="json-doc"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="p">{</span><span class="w">
+    </span><span class="nl">"require"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ts-node/register"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"spec"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test/**/*.test.ts"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"watch-files"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"test/**"</span><span class="p">,</span><span class="w"> </span><span class="s2">"src/**"</span><span class="p">]</span><span class="w">
+</span><span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>We can now add the unit test script to <code class="highlighter-rouge">package.json</code>:</p>
+
+<figure class="highlight"><pre><code class="language-json-doc" data-lang="json-doc"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre><span class="p">{</span><span class="w">
+  </span><span class="c1">...</span><span class="w">
+  </span><span class="nl">"scripts"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="c1">...</span><span class="w">
+    </span><span class="nl">"test:unit"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mocha"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>That’s all there is to it!</p>
+
+<h3 id="assertion-library">Assertion library</h3>
+<p>Out of the box, we can use <a href="https://nodejs.org/api/assert.html">Node’s assertion module</a>. However, seeing that this API easily gets a little limited, Mocha <a href="https://mochajs.org/#assertions">supports and encourages</a> using <em>assertion libraries</em>, which offer different API styles:</p>
+
+<figure class="highlight"><pre><code class="language-ts" data-lang="ts"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre><span class="c1">// Should style:</span>
+<span class="nx">foo</span><span class="p">.</span><span class="nx">should</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="dl">'</span><span class="s1">bar</span><span class="dl">'</span><span class="p">);</span>
+
+<span class="c1">// Expect style:</span>
+<span class="nx">expect</span><span class="p">(</span><span class="nx">foo</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="dl">'</span><span class="s1">bar</span><span class="dl">'</span><span class="p">);</span>
+
+<span class="c1">// Assert style:</span>
+<span class="nx">assert</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="nx">foo</span><span class="p">,</span> <span class="dl">'</span><span class="s1">bar</span><span class="dl">'</span><span class="p">);</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>I find the first two to be cute, but at the end of the day, it makes more sense to me to write plain assertions. Yes, they’re boring. But we don’t write normal code as English sentences either, so why should our tests be written in a different style? Choosing normal assertions over an arbitrary DSL makes it one less thing to learn for your contributors, so I find that to be a nicer choice.</p>
+
+<p>The most complete assertion library is Chai. It includes the plain and boring assert style assertions, so we’ll use that:</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span>npm <span class="nb">install</span> <span class="nt">--save-dev</span> chai @types/chai
+</code></pre></div></div>
+
+<h3 id="putting-it-all-together">Putting it all together</h3>
+<p>If we want to test a certain part of our code, we just need to create a <code class="highlighter-rouge">test/hello.test.ts</code> file:</p>
+
+<figure class="highlight"><pre><code class="language-ts" data-lang="ts"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre><span class="k">import</span> <span class="p">{</span> <span class="nx">assert</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">chai</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">hello</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">../src</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="nx">describe</span><span class="p">(</span><span class="dl">"</span><span class="s2">hello</span><span class="dl">"</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">it</span><span class="p">(</span><span class="dl">"</span><span class="s2">says hello</span><span class="dl">"</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">assert</span><span class="p">.</span><span class="nx">strictEqual</span><span class="p">(</span><span class="nx">hello</span><span class="p">(),</span> <span class="dl">"</span><span class="s2">hello world</span><span class="dl">"</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h2 id="formatting">Formatting</h2>
+<p>We now have code, and we have tests for it, so it may even be correct code. But is it pretty code? To help us with that, we can use a formatter. The most popular options seem to be:</p>
+
+<ul>
+  <li><a href="https://eslint.org/">ESLint</a></li>
+  <li><a href="https://standardjs.com/">Standard JS</a></li>
+  <li><a href="https://prettier.io/">Prettier</a></li>
+</ul>
+
+<p>ESLint is a bit of a workhorse. Its name suggest that it’s just for linting, but it also has support for formatting options. <em>Everything</em> is configurable in ESLint. Really, I counted 299 rules on <a href="https://eslint.org/docs/rules/">the rules list</a><sup id="fnref:count" role="doc-noteref"><a href="#fn:count" class="footnote">1</a></sup>!</p>
+
+<p>That might actually be too many options for a formatter. We can bikeshed on tabs vs spaces forever, but I learned to stop worrying and to love more opinionated formatters, like Standard JS or Prettier. They have sensible defaults, and <a href="https://standardjs.com/#i-disagree-with-rule-x-can-you-change-it">don’t let you mess with things</a> (or <a href="https://prettier.io/docs/en/options.html">not too much</a>, anyway).</p>
+
+<p>While Standard JS requires <a href="https://standardjs.com/#typescript">some configuration</a> to work with TypeScript, Prettier works out of the box, so we’ll use that.</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span>npm <span class="nb">install</span> <span class="nt">--save-dev</span> prettier
+</code></pre></div></div>
+
+<p>We’ll add some NPM scripts to run Prettier on all supported files in the project directory. Since Prettier 2.0, we can simply add the following to <code class="highlighter-rouge">package.json</code>:</p>
+
+<figure class="highlight"><pre><code class="language-json-doc" data-lang="json-doc"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre><span class="p">{</span><span class="w">
+  </span><span class="c1">...</span><span class="w">
+  </span><span class="nl">"scripts"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"test:formatting"</span><span class="p">:</span><span class="w"> </span><span class="s2">"prettier --write ."</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"fix:formatting"</span><span class="p">:</span><span class="w"> </span><span class="s2">"prettier --check ."</span><span class="p">,</span><span class="w">
+    </span><span class="c1">...</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>To avoid formatting compiled files, we can add a <code class="highlighter-rouge">.prettierignore</code> file containing paths to ignore:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+</pre></td><td class="code"><pre>dist
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h2 id="linting">Linting</h2>
+<p>With compilation, testing and formatting in place, we have working, tested, pretty code. Still, some things could go wrong; we can still shoot ourselves in the foot (albeit with a lot of style). A linter can help avoid some simple anti-patterns, and enforce some code style rules. The popular linters for TypeScript are:</p>
+
+<ul>
+  <li><a href="https://palantir.github.io/tslint/">TSLint</a></li>
+  <li><a href="https://eslint.org/">ESLint</a></li>
+</ul>
+
+<p>TSLint has long been the de-facto linter for TypeScript. However, the maintainers <a href="https://github.com/palantir/tslint/issues/4534">are deprecating TSLint in 2019</a>, and migrating all their linting rules to ESLint. Since ESLint is the linter that will be maintained going forward, we’ll go with that.</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span>npm <span class="nb">install</span> <span class="nt">--save-dev</span> eslint
+</code></pre></div></div>
+
+<p>We can add ESLint as an NPM script by adding the following to <code class="highlighter-rouge">package.json</code>:</p>
+
+<figure class="highlight"><pre><code class="language-json-doc" data-lang="json-doc"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre><span class="p">{</span><span class="w">
+  </span><span class="c1">...</span><span class="w">
+  </span><span class="nl">"scripts"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"test:lint"</span><span class="p">:</span><span class="w"> </span><span class="s2">"eslint --ext .js,.ts ."</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"fix:lint"</span><span class="p">:</span><span class="w"> </span><span class="s2">"eslint --ext .js,.ts --fix ."</span><span class="p">,</span><span class="w">
+    </span><span class="c1">...</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>ESLint needs some plugins to work with TypeScript, namely <code class="highlighter-rouge">@typescript-eslint/eslint-plugin</code> and <code class="highlighter-rouge">@typescript-eslint/parser</code>. I also like to have the <code class="highlighter-rouge">eslint-plugin-import</code> plugin in order to have linting of imports.</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span>npm <span class="nb">install</span> <span class="nt">--save-dev</span> eslint-plugin-import @typescript-eslint/eslint-plugin @typescript-eslint/parser 
+</code></pre></div></div>
+
+<p>Additionally, some of the rules that ESLint can enforce may clash with Prettier. To avoid writing conflicting rules, we can use <a href="https://www.npmjs.com/package/eslint-config-prettier">eslint-config-prettier</a>, which disables all possibly problematic rules.</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span>npm <span class="nb">install</span> <span class="nt">--save-dev</span> eslint-config-prettier
+</code></pre></div></div>
+
+<p>We’ll write our linting rules in a <code class="highlighter-rouge">.eslintrc.json</code> file. Unfortunately, it seems like there’s no getting around a little verbosity here; the file below loads all of the above plugins, adds setup for TypeScript, and sets a few rules that I find reasonable:</p>
+
+<figure class="highlight"><pre><code class="language-jsonc" data-lang="jsonc"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+</pre></td><td class="code"><pre><span class="p">{</span><span class="w">
+  </span><span class="nl">"root"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"env"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"browser"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"es6"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"node"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"parser"</span><span class="p">:</span><span class="w"> </span><span class="s2">"@typescript-eslint/parser"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"parserOptions"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"project"</span><span class="p">:</span><span class="w"> </span><span class="s2">"tsconfig.json"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"sourceType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"module"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"plugins"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"@typescript-eslint"</span><span class="p">,</span><span class="w"> </span><span class="s2">"import"</span><span class="p">],</span><span class="w">
+  </span><span class="nl">"extends"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="c1">// Recommended defaults for ESLint:</span><span class="w">
+    </span><span class="s2">"eslint:recommended"</span><span class="p">,</span><span class="w">
+    </span><span class="c1">// Turn off what's checked by TS compiler:</span><span class="w">
+    </span><span class="s2">"plugin:@typescript-eslint/eslint-recommended"</span><span class="p">,</span><span class="w">
+    </span><span class="c1">// Turn on recommended TS-specific rules:</span><span class="w">
+    </span><span class="s2">"plugin:@typescript-eslint/recommended"</span><span class="p">,</span><span class="w">
+    </span><span class="c1">// Turn on extra rules that require type-checking:</span><span class="w">
+    </span><span class="s2">"plugin:@typescript-eslint/recommended-requiring-type-checking"</span><span class="p">,</span><span class="w">
+    </span><span class="c1">// Turn on rules for imports:</span><span class="w">
+    </span><span class="s2">"plugin:import/typescript"</span><span class="p">,</span><span class="w">
+    </span><span class="c1">// Turn off rules conflicting with Prettier:</span><span class="w">
+    </span><span class="s2">"prettier"</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="nl">"ignorePatterns"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"node_modules"</span><span class="p">,</span><span class="w"> </span><span class="s2">"dist"</span><span class="p">,</span><span class="w"> </span><span class="s2">"coverage"</span><span class="p">],</span><span class="w">
+  </span><span class="nl">"rules"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="c1">// This is already checked by Typescript's "noUnusedLocals" setting</span><span class="w">
+    </span><span class="nl">"@typescript-eslint/no-unused-vars"</span><span class="p">:</span><span class="w"> </span><span class="s2">"off"</span><span class="p">,</span><span class="w">
+
+    </span><span class="c1">// No reason to disallow</span><span class="w">
+    </span><span class="nl">"@typescript-eslint/no-inferrable-types"</span><span class="p">:</span><span class="w"> </span><span class="s2">"off"</span><span class="p">,</span><span class="w">
+
+    </span><span class="c1">// Optimize code for legibility, not for ease of parsing</span><span class="w">
+    </span><span class="nl">"@typescript-eslint/no-use-before-define"</span><span class="p">:</span><span class="w"> </span><span class="s2">"off"</span><span class="p">,</span><span class="w">
+
+    </span><span class="c1">// Allow all interface names</span><span class="w">
+    </span><span class="nl">"@typescript-eslint/interface-name-prefix"</span><span class="p">:</span><span class="w"> </span><span class="s2">"off"</span><span class="p">,</span><span class="w">
+
+    </span><span class="c1">// Require type annotations for return types, with some exceptions</span><span class="w">
+    </span><span class="nl">"@typescript-eslint/explicit-function-return-type"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="s2">"warn"</span><span class="p">,</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"allowExpressions"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"allowTypedFunctionExpressions"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"allowHigherOrderFunctions"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+
+    </span><span class="c1">// Disallow default exports; only allow named exports</span><span class="w">
+    </span><span class="nl">"import/no-default-export"</span><span class="p">:</span><span class="w"> </span><span class="s2">"error"</span><span class="p">,</span><span class="w">
+
+    </span><span class="c1">// Impose alphabetically ordered imports</span><span class="w">
+    </span><span class="nl">"import/order"</span><span class="p">:</span><span class="w"> </span><span class="s2">"error"</span><span class="p">,</span><span class="w">
+
+    </span><span class="c1">// Standardize usage of array types (`T[]` or `Array&lt;T&gt;`)</span><span class="w">
+    </span><span class="nl">"@typescript-eslint/array-type"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="s2">"error"</span><span class="p">,</span><span class="w">
+      </span><span class="p">{</span><span class="w"> </span><span class="nl">"default"</span><span class="p">:</span><span class="w"> </span><span class="s2">"array-simple"</span><span class="p">,</span><span class="w"> </span><span class="nl">"readonly"</span><span class="p">:</span><span class="w"> </span><span class="s2">"generic"</span><span class="w"> </span><span class="p">}</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+
+    </span><span class="c1">// Disallow variable names conflicting with deprecated globals</span><span class="w">
+    </span><span class="nl">"no-restricted-globals"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="s2">"error"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"event"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"external"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"orientation"</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+
+    </span><span class="c1">// Disallow use of `console`</span><span class="w">
+    </span><span class="nl">"no-console"</span><span class="p">:</span><span class="w"> </span><span class="s2">"error"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Most of these are fairly straightforward, and are somewhat a matter of preference. However, there are two that can actually prevent serious problems:</p>
+
+<ul>
+  <li>
+    <p><code class="highlighter-rouge">no-default-export</code></p>
+
+    <p>Using <code class="highlighter-rouge">default export</code> is problematic <a href="https://humanwhocodes.com/blog/2019/01/stop-using-default-exports-javascript-module/">for a number of reasons</a>, so we enforce the <code class="highlighter-rouge">no-default-export</code> rule to prevent it.</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">no-restricted-globals</code></p>
+
+    <p>For some variable names (<code class="highlighter-rouge">event</code>, <code class="highlighter-rouge">name</code>, <code class="highlighter-rouge">external</code> or <code class="highlighter-rouge">orientation</code>), using an undeclared variable actually type-checks in TypeScript. For instance, <code class="highlighter-rouge">console.log(event)</code> type-checks even when <code class="highlighter-rouge">event</code> isn’t defined, because TypeScript understands <code class="highlighter-rouge">event</code> as a reference to the global <code class="highlighter-rouge">event</code> variable that used to be available in Internet Explorer. You can see this in action by <a href="https://www.typescriptlang.org/play?#code/MYewdgziA2CmB00QHMAUAiWA3WYAuAXAAToA0R2ueAlANwBQokMCSa6YAhgLazFlEuvOo3BQ4iFBlgAPPLABOXaP3Kz5SztBFNxrKehAKAllU55j4VUSOn85y2DpA">compiling and running this snippet</a>. Odds are that you don’t ever want to refer to long-deprecated global variables, and that any such references are actually errors. Using the <code class="highlighter-rouge">no-restricted-globals</code> rule in ESLint can help catch these cases.</p>
+  </li>
+</ul>
+
+<h2 id="continuous-integration">Continuous Integration</h2>
+<p>With Continuous Integration (CI), we can catch errors early by running all tests on every commit and PR. It’s also quite convenient to have a service do deployments for us. Many CI providers exist:</p>
+
+<ul>
+  <li><a href="https://travis-ci.org/">Travis CI</a></li>
+  <li><a href="https://circleci.com/">Circle CI</a></li>
+  <li><a href="https://www.appveyor.com/">AppVeyor</a></li>
+  <li><a href="https://docs.gitlab.com/ee/ci/">GitLab CI</a> (if using GitLab)</li>
+</ul>
+
+<p>All of these are free for open source projects. There’s not much difference between them, so for the sake of choosing one, we’ll use Travis CI.</p>
+
+<p>We want the CI to run tests on every commit, and to do deployments to npmjs.com when we release a new version. To have it do that, we can add the following <code class="highlighter-rouge">.travis.yml</code> file:</p>
+
+<figure class="highlight"><pre><code class="language-yml" data-lang="yml"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+</pre></td><td class="code"><pre><span class="na">language</span><span class="pi">:</span> <span class="s">node_js</span>
+<span class="na">node_js</span><span class="pi">:</span>
+<span class="pi">-</span> <span class="s">node</span> <span class="c1"># Use the latest stable release of node</span>
+<span class="na">cache</span><span class="pi">:</span>
+  <span class="na">directories</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s">node_modules</span> <span class="c1"># Cache node_modules to speed up installation</span>
+<span class="na">notifications</span><span class="pi">:</span>
+  <span class="na">email</span><span class="pi">:</span> <span class="no">false</span>
+<span class="na">script</span><span class="pi">:</span>
+<span class="pi">-</span> <span class="s">npm run build</span>
+<span class="pi">-</span> <span class="s">npm run test</span>
+<span class="na">deploy</span><span class="pi">:</span>
+<span class="pi">-</span> <span class="na">provider</span><span class="pi">:</span> <span class="s">npm</span>
+  <span class="na">skip_cleanup</span><span class="pi">:</span> <span class="no">true</span> <span class="c1"># Do not delete dist before deployment</span>
+  <span class="na">email</span><span class="pi">:</span> <span class="s">firstname.lastname@example.com</span> <span class="c1"># npmjs.com account email</span>
+  <span class="na">on</span><span class="pi">:</span>
+    <span class="na">tags</span><span class="pi">:</span> <span class="no">true</span>
+    <span class="na">repo</span><span class="pi">:</span> <span class="s">YOUR-GITHUB-USERNAME/YOUR-REPO-NAME</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>The last thing we need to do is to add an encrypted access token so that Travis CI can deploy for us. The <a href="https://docs.travis-ci.com/user/deployment/npm/#npm-auth-token">Travis docs</a> has us covered, and is worth a read if you’re following along at home. We’ll need to install and run the Travis CLI<sup id="fnref:install-gem" role="doc-noteref"><a href="#fn:install-gem" class="footnote">2</a></sup> to add an encrypted auth token to Travis:</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span>gem <span class="nb">install </span>travis
+<span class="gp">$</span><span class="w"> </span>travis encrypt YOUR_AUTH_TOKEN <span class="nt">--add</span> deploy.api_key
+<span class="gp">$</span><span class="w"> </span>npm run fix:format  <span class="c"># reformat .travis.yml</span>
+</code></pre></div></div>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>As you can see, this was all a lot of work, and we saw many examples of how things can go wrong. Hopefully, the configuration I showed can help you set up a stellar development environment from day 1, or at least save you some headaches down the road.</p>
+
+<p>There’s a <a href="https://github.com/MaximeKjaer/npm-ts-template">GitHub repo</a> with all of the above code, and a few bonus explanations about small catches I encountered while coding it. It’s a template repo, so you can generate a new repo with the same files and folders from it. Happy coding!</p>
+<div class="footnotes" role="doc-endnotes">
+  <ol>
+    <li id="fn:count" role="doc-endnote">
+      <p>I took me an hour to count those by hand. Or perhaps I ran <code class="highlighter-rouge">document.querySelectorAll(".rule-list tr").length</code> in a console, who knows. <a href="#fnref:count" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+    </li>
+    <li id="fn:install-gem" role="doc-endnote">
+      <p>The CLI is installed with the Ruby package manager, <code class="highlighter-rouge">gem</code>. This is indeed a little annoying if you don’t have <code class="highlighter-rouge">gem</code> installed. You can run <code class="highlighter-rouge">sudo apt install rubygems</code> on Ubuntu, or if you’re in a good mood, you can set up <a href="https://github.com/rbenv/rbenv">rbenv</a>, a Ruby version manager. If not, this might be enough reason to look into other CIs 🤷‍♂️ <a href="#fnref:install-gem" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+:ET

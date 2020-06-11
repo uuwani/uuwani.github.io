@@ -1,0 +1,78 @@
+I"h
+<p>We had previously let $q_{nk}$ be an abstract, undefined distribution. We now freeze the $q_n^{(t)}$ assignments, and optimize over $\pmb{\theta}$.</p>
+
+<p>In the E step, we derived a lower bound for the cost function. In general, the lower bound is not equal to the original cost. We can however carefully choose $q_{nk}$ to achieve equality. And since we want to maximize the original cost function, it makes sense to maximize this lower bound. Thus, we’ll work under this locked assignment of $q_{nk}$ (thus achieving equality for the lower bound). Seeing that we have equality, our objective function (which we want to maximize) is:</p>
+
+\[\prod_{n=1}^N \sum_{k=1}^K{
+    q_{nk}^{(t)} 
+    \log{\frac{
+        \pi_k \normal{\vec{x}_n \mid \pmb{\mu}_k, \pmb{\Sigma}_k}
+    }{
+        q_{nk}^{(t)}
+    }}
+}\]
+
+<p>This leads us to maximizing the expression:</p>
+
+\[\sum_{n=1}^N{\sum_{k=1}^K}{
+    q_{nk}^{(t)} \left[
+        \log{\pi_k} - \log{q_{nk}^{(t)}} + \log{\normal{\vec{x}_n \mid \pmb{\mu}_k, \pmb{\Sigma}_k}}
+    \right]
+}\]
+
+<p>The $\pi_k$ should sum up to one, so we’re dealing with a constrained optimization problem. We therefore add a term to turn it into an unconstrained problem. We therefore want to maximize the following over $\pmb{\theta}$:</p>
+
+\[\sum_{n=1}^N{\sum_{k=1}^K}{
+    q_{nk}^{(t)} \left[
+        \log{\pi_k} - \log{q_{nk}^{(t)}} + \log{\normal{\vec{x}_n \mid \pmb{\mu}_k, \pmb{\Sigma}_k}}
+    \right] + \lambda \sum_{k=1}^K{\pi_k}
+}\]
+
+<p>Differentiating with respect to $\pi_k$, and setting the result to 0 yields:</p>
+
+\[\sum_{n=1}^N{q_{nk}^{(t)} \frac{1}{\pi_k} + \lambda} = 0\]
+
+<p>Solving for $\pi_k$ gives us:</p>
+
+\[\pi_k = -\frac{1}{\lambda} \sum_{n=1}^N{q_{nk}^{(t)}}\]
+
+<p>We can choose $\lambda$ so that this leads to a proper normalization ($\pi_k$ summing up to 1); this leads us to $\lambda = -N$. Hence, we have:</p>
+
+\[\pi_k^{(t+1)} := \frac{1}{N}\sum_{n=1}^N {q_{nk}^{(t)}}\]
+
+<p>This is our first update rule. Let’s see how to derive the others. The term $\log{\normal{\vec{x}_n \mid \pmb{\mu}_k, \pmb{\Sigma}_k}}$ has the form:</p>
+
+\[-\frac{D}{2}\log{(2\pi)}
++\frac{1}{2}\log{\abs{\pmb{\Sigma}^{-1}}}
+-\frac{1}{2}(\vec{x} - \pmb{\mu}_k)^T\pmb{\Sigma}^{-1}(\vec{x} - \pmb{\mu}_k)\]
+
+<p>We used the fact that for an invertible matrix, $\abs{\pmb{\Sigma}} = 1/\abs{\pmb{\Sigma}^{-1}}$. Differentiating the cost function with respect to $\pmb{\mu}_k$ and setting the result to 0 yields:</p>
+
+\[\sum_{n=1}^N {q_{nk}^{(t)} \pmb{\Sigma}^{-1}(\vec{x}_n - \pmb{\mu}_k)} = 0\]
+
+<p>We can multiply this by $\pmb{\Sigma}$ on the left to get rid of the $\pmb{\Sigma}^{-1}$, and solve for $\pmb{\mu}_k$ to get:</p>
+
+\[\pmb{\mu}_k^{(t+1)} := \frac{
+    \sum_n q_{nk}^{(t)}\vec{x}_n
+}{
+    \sum_n{q_{nk}^{(t)}}
+}\]
+
+<p>Finally, for the $\pmb{\Sigma}$ update rule, we take the derivative with respect to $\pmb{\Sigma}_k^{-1}$ and set the result to 0, yielding:</p>
+
+\[\sum_{n=1}^N{q_{nk}^{(t)} \frac{1}{2} \pmb{\Sigma}^T_k}
+- \frac{1}{2}\sum_{n=1}^N{q_{nk}^{(t)}(\vec{x}_n - \pmb{\mu}_k)(\vec{x}_n - \pmb{\mu}_k)^T}
+= 0\]
+
+<p>Solving for $\pmb{\Sigma}$ yields:</p>
+
+\[\pmb{\Sigma}_k^{(t+1)} := \frac{
+    \sum_n{q_{nk}^{(t)} (\vec{x}_n - \pmb{\mu}_k^{(t+1)}) (\vec{x}_n - \pmb{\mu}_k^{(t+1)})^T}
+}{
+    \sum_n{q_{nk}^{(t)}}
+}\]
+
+<p>We’re using the following fact, which I won’t go into details to prove:</p>
+
+\[\frac{\partial}{\partial \vec{A}} \log{\abs{\vec{A}}} = \vec{A}^{-T}\]
+:ET

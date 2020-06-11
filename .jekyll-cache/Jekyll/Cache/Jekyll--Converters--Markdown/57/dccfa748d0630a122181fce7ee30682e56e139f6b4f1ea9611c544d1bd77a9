@@ -1,0 +1,199 @@
+I"�P<div class="block note">
+  <p><span class="header">Note</span></p>
+
+  <p>This article assumes a little knowledge of Scala, notably of <code class="highlighter-rouge">Option</code>, <code class="highlighter-rouge">map</code> and <code class="highlighter-rouge">flatMap</code>. However, these concepts are also found in many other languages, so my hope is that it should also be fairly accessible to people who do not know Scala in particular.</p>
+
+</div>
+
+<p>I’ve been a teaching assistant at <abbr title="Swiss Federal Institute of Technology, Lausanne">EPFL</abbr> for various Scala courses for about a year and a half. In this job, I’ve gotten to read and grade a lot of code written by other students; I get to see what people understand well, and what’s causing difficulties.</p>
+
+<p>The most common thing I’ve seen is a tendency for novice Scala programmers to use <code class="highlighter-rouge">Option</code>s quite awkwardly. I think the root of that problem is an incomplete understanding of what monads really are, and what they’re useful for.</p>
+
+<p>And I don’t blame them; monads <em>are</em> something that took a while to click in my head, too. The click came from a piece of advice from Martin Odersky, who said something to the effect of<sup id="fnref:paraphrasing" role="doc-noteref"><a href="#fn:paraphrasing" class="footnote">1</a></sup>:</p>
+
+<blockquote>
+  <p>There are articles online that try to explain monads as being sort of like a burrito, because they wrap values. Disregard those. Here’s what a monad really is: a parametric type with a <code class="highlighter-rouge">flatMap</code> and a <code class="highlighter-rouge">unit</code> method.</p>
+</blockquote>
+
+<!-- More -->
+
+<p>The burrito is an unhelpful metaphor, because it says nothing about how to recognize or use monads. Alternatively, other online explanations require good knowledge of Haskell, or are comically complex (“a monad is just a monoid in the category of endofunctors, what’s the problem?”<sup id="fnref:monoid-in-the-category-of-endofunctors" role="doc-noteref"><a href="#fn:monoid-in-the-category-of-endofunctors" class="footnote">2</a></sup>).</p>
+
+<p>I think that’s a shame.</p>
+
+<p>A better understanding of monads would go a long way to improve the style of a lot of code I’ve read. It’s the one thing I’d like to teach all these Scala students I’ve had, and that’s what this article is for.</p>
+
+<h2 id="so-what-is-a-monad-anyway">So what is a monad, anyway?</h2>
+<p>Let’s repeat the definition of a monad: “a parametric type with a <code class="highlighter-rouge">flatMap</code> and a <code class="highlighter-rouge">unit</code> method”. This gives us three criteria defining a monad:</p>
+
+<ol>
+  <li>A parametric type</li>
+  <li>with a <code class="highlighter-rouge">flatMap</code> method</li>
+  <li>and a <code class="highlighter-rouge">unit</code> method.</li>
+</ol>
+
+<p>In Scala, we’d write this as:</p>
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="k">trait</span> <span class="nc">Monad</span><span class="o">[</span><span class="kt">T</span><span class="o">]</span> <span class="o">{</span>
+    <span class="k">def</span> <span class="nf">flatMap</span><span class="o">[</span><span class="kt">U</span><span class="o">](</span><span class="n">f</span><span class="k">:</span> <span class="kt">T</span> <span class="o">=&gt;</span> <span class="nc">Monad</span><span class="o">[</span><span class="kt">U</span><span class="o">])</span><span class="k">:</span> <span class="kt">Monad</span><span class="o">[</span><span class="kt">U</span><span class="o">]</span>
+<span class="o">}</span>
+
+<span class="k">def</span> <span class="nf">unit</span><span class="o">[</span><span class="kt">T</span><span class="o">](</span><span class="n">x</span><span class="k">:</span> <span class="kt">T</span><span class="o">)</span><span class="k">:</span> <span class="kt">Monad</span><span class="o">[</span><span class="kt">T</span><span class="o">]</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p><code class="highlighter-rouge">Monad</code> is a parametric (or <em>generic</em>) type, in that it takes a type parameter <code class="highlighter-rouge">T</code>.</p>
+
+<p>We already know <code class="highlighter-rouge">flatMap</code> from lists: it applies a function to all elements of the list and its sublists, and returns a flat list of results.</p>
+
+<p>The second method, <code class="highlighter-rouge">unit</code>, works as a constructor of monads: it takes a value <code class="highlighter-rouge">x</code> of type <code class="highlighter-rouge">T</code> and returns a <code class="highlighter-rouge">Monad[T]</code> containing <code class="highlighter-rouge">x</code>. To discuss the theory, we call it <code class="highlighter-rouge">unit</code>, but in Scala implementations, we typically define it as <code class="highlighter-rouge">apply</code>, the constructor method, on the companion object.</p>
+
+<p>To be a little more formal about what these methods should do, we can quickly mention the three <em>monadic laws</em>. Let <code class="highlighter-rouge">f</code> and <code class="highlighter-rouge">g</code> be functions that create a monad from some value, <code class="highlighter-rouge">x</code> be some value, and <code class="highlighter-rouge">m</code> be an instance of the monad. We want the following properties to always hold:</p>
+
+<ol>
+  <li><strong>Associativity</strong>: <code class="highlighter-rouge">m.flatMap(f).flatMap(g) == m.flatMap(x =&gt; f(x).flatMap(g))</code></li>
+  <li><strong>Left identity</strong>: <code class="highlighter-rouge">unit(x).flatMap(f) == f(x)</code></li>
+  <li><strong>Right identity</strong>: <code class="highlighter-rouge">m.flatMap(unit) == m</code></li>
+</ol>
+
+<p>In English, these mean:</p>
+
+<ol>
+  <li><strong>Associativity</strong>: if we have a chain of <code class="highlighter-rouge">flatMap</code> applications, it doesn’t matter how they’re nested</li>
+  <li><strong>Left identity</strong>: constructing a monad with <code class="highlighter-rouge">x</code> and then doing a <code class="highlighter-rouge">flatMap(f)</code> is the same as calling <code class="highlighter-rouge">f</code> on <code class="highlighter-rouge">x</code> directly, because <code class="highlighter-rouge">flatMap</code> flattens results</li>
+  <li><strong>Right identity</strong>: calling <code class="highlighter-rouge">flatMap(unit)</code> changes nothing, because <code class="highlighter-rouge">flatMap</code> flattens results</li>
+</ol>
+
+<p>If all of the above are satisfied, we have a monad!  That’s all good and well, but what can we use this for?</p>
+
+<h2 id="monads-huh-what-are-they-good-for">Monads, <em>huh</em>, what are they good for?</h2>
+<p>It turns out that many things have secretly been monads all along:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">Option</code> is a monad</li>
+  <li><code class="highlighter-rouge">Set</code> is a monad</li>
+  <li><code class="highlighter-rouge">List</code> is a monad</li>
+</ul>
+
+<p><code class="highlighter-rouge">Option</code>s are somewhat of a canonical example for monads, so let’s stick to the tradition here and use them to see what monads bring to the table. As an example, let’s write a small and oddly specific library to read numbers from the standard input.</p>
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+</pre></td><td class="code"><pre><span class="k">def</span> <span class="nf">readInt</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="o">...</span>
+
+<span class="k">def</span> <span class="nf">readAndAddOne</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="n">readInt</span> <span class="k">match</span> <span class="o">{</span>
+    <span class="k">case</span> <span class="nc">Some</span><span class="o">(</span><span class="n">x</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nc">Some</span><span class="o">(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span>
+    <span class="k">case</span> <span class="nc">None</span> <span class="k">=&gt;</span> <span class="nc">None</span>
+<span class="o">}</span>
+
+<span class="k">def</span> <span class="nf">readPositiveInt</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="n">readInt</span> <span class="k">match</span> <span class="o">{</span>
+    <span class="k">case</span> <span class="nc">Some</span><span class="o">(</span><span class="n">x</span><span class="o">)</span> <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="k">=&gt;</span> <span class="nc">Some</span><span class="o">(</span><span class="n">x</span><span class="o">)</span>
+    <span class="k">case</span> <span class="nc">None</span> <span class="k">=&gt;</span> <span class="nc">None</span>
+<span class="o">}</span>
+
+<span class="k">def</span> <span class="nf">readAndSum</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="n">readInt</span> <span class="k">match</span> <span class="o">{</span>
+    <span class="k">case</span> <span class="nc">Some</span><span class="o">(</span><span class="n">x</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">readInt</span> <span class="k">match</span> <span class="o">{</span>
+        <span class="k">case</span> <span class="nc">Some</span><span class="o">(</span><span class="n">y</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nc">Some</span><span class="o">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="o">)</span>
+        <span class="k">case</span> <span class="nc">None</span> <span class="k">=&gt;</span> <span class="nc">None</span>
+    <span class="o">}</span>
+    <span class="k">case</span> <span class="nc">None</span> <span class="k">=&gt;</span> <span class="nc">None</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>This code uses a lot of pattern matching, but I’ve also seen a lot of code written in a more imperative style, like so:</p>
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="k">def</span> <span class="nf">readPositiveInt</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="nv">value</span> <span class="k">=</span> <span class="n">readInt</span>
+    <span class="nf">if</span> <span class="o">(</span><span class="nv">value</span><span class="o">.</span><span class="py">isDefined</span> <span class="o">&amp;&amp;</span> <span class="nv">value</span><span class="o">.</span><span class="py">get</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="o">)</span> <span class="n">value</span>
+    <span class="k">else</span> <span class="nc">None</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>All of this is a little clumsy. So many lines are spent managing the <code class="highlighter-rouge">Option</code> that we don’t clearly see the logic of what the functions are meant to do anymore.</p>
+
+<p>How can we improve this? A very common trick in computer science is that when we see a repeated pattern, we abstract it out into a definition. Here, the pattern is differentiating the <code class="highlighter-rouge">Some</code> and <code class="highlighter-rouge">None</code> cases, and doing something with the value in the <code class="highlighter-rouge">Some</code> case.</p>
+
+<p>Perhaps we could write some function so that we don’t repeat ourselves so much? Well, that’s exactly what <code class="highlighter-rouge">Option.flatMap</code> is! This process of abstracting away boilerplate code is what monads are for in the first place.</p>
+
+<p>The <code class="highlighter-rouge">flatMap</code> function applies a function to the value, if there is one; if the value is nested (e.g. <code class="highlighter-rouge">Some(Some(1))</code>), <code class="highlighter-rouge">flatMap</code> ignores the nested structure in order to work with the actual value (in this case, <code class="highlighter-rouge">1</code>). Remember, that’s exactly the functionality we wanted to abstract away.</p>
+
+<p>If you find it counter-intuitive to think of a <code class="highlighter-rouge">flatMap</code> on something that has a single value (at best!), you can think of an <code class="highlighter-rouge">Option</code> as being a kind of list, except that it may only contain zero or one value. With this in mind, we can just think of <code class="highlighter-rouge">flatMap</code> as doing what it does on lists: applying a given function to the value, if there is one.</p>
+
+<p>We implement it as <code class="highlighter-rouge">flatMap</code> instead of <code class="highlighter-rouge">map</code> because it’s more general: we can always implement <code class="highlighter-rouge">map</code> with <code class="highlighter-rouge">flatMap</code> and <code class="highlighter-rouge">unit</code> if we need to.</p>
+
+<p>Speaking of which, monads in the Scala collection usually offer a host of useful methods in addition to <code class="highlighter-rouge">flatMap</code> and <code class="highlighter-rouge">unit</code>. Let’s see how we can use these to improve our example code:</p>
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="k">def</span> <span class="nf">readAndAddOne</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nv">readInt</span><span class="o">.</span><span class="py">map</span><span class="o">(</span><span class="k">_</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span>
+<span class="k">def</span> <span class="nf">readPositiveInt</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nv">readInt</span><span class="o">.</span><span class="py">filter</span><span class="o">(</span><span class="k">_</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="o">)</span>
+<span class="k">def</span> <span class="nf">readAndSum</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> 
+    <span class="nv">readInt</span><span class="o">.</span><span class="py">flatMap</span><span class="o">(</span><span class="n">x</span> <span class="k">=&gt;</span> <span class="nv">readInt</span><span class="o">.</span><span class="py">map</span><span class="o">(</span><span class="n">y</span> <span class="k">=&gt;</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="o">))</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Using these methods allows us to dramatically reduce the number of lines of code, and more importantly, to reduce the implementation to the core logic; all boilerplate is gone.</p>
+
+<p>Again, if you’re not familiar with what these methods do on an <code class="highlighter-rouge">Option</code>, it’s useful to think of what they do on lists.</p>
+
+<p>Perhaps <code class="highlighter-rouge">readAndAddSum</code> is still a little complex. To solve this, Scala has for-comprehensions, which are syntactic sugar for <code class="highlighter-rouge">flatMap</code> and <code class="highlighter-rouge">unit</code>. This allows us to rewrite the function in a more legible way:</p>
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="k">def</span> <span class="nf">readAndSum</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="k">for</span> <span class="o">{</span>
+  <span class="n">a</span> <span class="k">&lt;-</span> <span class="n">readInt</span>
+  <span class="n">b</span> <span class="k">&lt;-</span> <span class="n">readInt</span>
+<span class="o">}</span> <span class="k">yield</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h2 id="the-power-of-monads">The power of monads™</h2>
+<p>As the example above shows, understanding monads can help us write short, legible, <a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself">DRY</a> code that respects the <a href="http://www.lihaoyi.com/post/StrategicScalaStylePrincipleofLeastPower.html">principle of least power</a>. In other words: better code. My advice to people who are new to functional programming or Scala is therefore two-fold:</p>
+
+<p><strong>Know what a monad is</strong>. A monad is a parametric type with a <code class="highlighter-rouge">flatMap</code> and a <code class="highlighter-rouge">unit</code> method. This sentence may sound complicated at first, but it succinctly outlines three simple requirements. In Scala, the following types fit the bill: <code class="highlighter-rouge">List</code>, <code class="highlighter-rouge">Set</code>, <code class="highlighter-rouge">Option</code>, <code class="highlighter-rouge">Either</code>, <code class="highlighter-rouge">Try</code> and <code class="highlighter-rouge">Future</code><sup id="fnref:almost-monad" role="doc-noteref"><a href="#fn:almost-monad" class="footnote">3</a></sup>.</p>
+
+<p><strong>Use monadic functions</strong>. Instead of writing complex, custom control flow or pattern matching, use <code class="highlighter-rouge">flatMap</code>, <code class="highlighter-rouge">filter</code>, <code class="highlighter-rouge">orElse</code>, or whatever else is available; build pipelines of monadic functions instead of nested logic. If you need to do complex things, use for-comprehensions.</p>
+
+<p>Hopefully, an understanding of monads that goes just a bit further than “🌯” will improve your code.</p>
+<div class="footnotes" role="doc-endnotes">
+  <ol>
+    <li id="fn:paraphrasing" role="doc-endnote">
+      <p>I’m heavily paraphrasing here, because this was said in a Scala programming class three years ago, and I don’t remember the exact words. <a href="#fnref:paraphrasing" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+    </li>
+    <li id="fn:monoid-in-the-category-of-endofunctors" role="doc-endnote">
+      <p>This quote is from the brilliant <a href="https://james-iry.blogspot.com/2009/05/brief-incomplete-and-mostly-wrong.html">Brief, Incomplete and Mostly Wrong History of Programming Languages</a>. There’s a good discussion of it on <a href="https://stackoverflow.com/q/3870088/918389">this StackOverflow post</a>, if ever. <a href="#fnref:monoid-in-the-category-of-endofunctors" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+    </li>
+    <li id="fn:almost-monad" role="doc-endnote">
+      <p><code class="highlighter-rouge">Future</code> and <code class="highlighter-rouge">Try</code> may not strictly be monads because they break referential transparency or monadic laws in subtle ways, but for the sake of this post, I think we can safely consider them “almost-monads”. <a href="#fnref:almost-monad" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+:ET

@@ -1,0 +1,5 @@
+I"4
+<p>Edmonds-Kart terminates in $\mathcal{O}(V\cdot E)$ iterations. An edge <em>(u, v)</em> is said to be <strong>critical</strong> if its capacity is smallest on the augmenting path.</p>
+
+<p>Every edge in G becomes critical $\mathcal{O}(V)$ times (a critical edge is removed, but it can reappear later).</p>
+:ET

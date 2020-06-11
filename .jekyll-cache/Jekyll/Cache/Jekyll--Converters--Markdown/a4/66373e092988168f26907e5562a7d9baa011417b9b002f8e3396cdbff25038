@@ -1,0 +1,27 @@
+I"%
+<p>We have $T(n) =$ runtime of <code class="highlighter-rouge">inorder_tree_walk</code> on a tree with $n$ nodes.</p>
+
+\[T(n)\leq (c+d)n + c, \qquad c, d &gt; 0\]
+
+<p><strong>Base</strong>: $n = 0, \quad T(0) = c$</p>
+
+<p><strong>Induction</strong>: Suppose that the tree rooted at $x$ has $k$ nodes in its left subtree, and $n-k-1$ nodes in the right.</p>
+
+\[\begin{align}
+T(n)     &amp; \leq T(k) + T(n-k-1) + c  \\
+T(k)     &amp; \leq (c+d)k + c \\
+T(n-k-1) &amp; \leq (c+d)(n-k-1) + c \\
+\end{align}\]
+
+<p>Therefore:</p>
+
+\[\begin{align}
+T(n) &amp; \leq (c+d)k + c + (c+d)(n-k-1) + c + d
+     &amp; = (c+d)n + c - (c+d) + 2c
+     &amp; \leq (c+d)n + c + (c -d) \leq (c+d)n + c
+\end{align}\]
+
+<p>Therefore, we do indeed have $\Theta(n)$.</p>
+
+<p>Preorder and postorder follow a very similar idea.</p>
+:ET

@@ -1,0 +1,12 @@
+I"�<p>A friend and I decided to take part in the IEEEXtreme 8.0 24-hour programming challenge a few weeks ago. Optimistic as it may have been for two freshmen undergrads, I think that we did alright!</p>
+
+<p>The hard part wasn’t even the lack of sleep. I still felt good Saturday evening, after almost 50 hours without sleep. It was a learning experience, for sure. I wanted to write down what I had drawn from it.</p>
+
+<p>You may code up the craziest hacks, but in the end, having specific knowledge of different algorithms is what will make you win sweet points. I’ve been meaning to read a book called <a href="http://www.astro.sunysb.edu/steinkirch/reviews/algorithms_in_python.pdf">Algorithms in Python</a>, but haven’t had the time to do so until now.</p>
+
+<p>At some point, I got stuck for good. But just explaining the problem to my teammate made it clear to me, and I figured it out on my own (that’s also why I’m writing this post - what I’ve learned from the competition suddenly becomes more concrete).</p>
+
+<p>A lot of our problems were caused by the input. Though it was specified that all input exactly would match the description, we found out that that should be taken with a grain of salt. I wasn’t checking the input at all (that’s a no-no!) because I had been told that it wold be perfect, but they were actually adding a newline and a space at the end of their input, which messed with my script. I didn’t have access to the error codes, so I really had to solve that blindly.</p>
+
+<p>But all in all, it was a lot of fun, and I think that it will get even better as I gain more knowledge about the algorithms that I need to implement versions of. I’ll be there next year!</p>
+:ET

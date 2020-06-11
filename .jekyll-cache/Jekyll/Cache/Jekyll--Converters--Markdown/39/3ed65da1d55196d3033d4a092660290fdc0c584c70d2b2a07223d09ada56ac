@@ -1,0 +1,192 @@
+I"6:
+<h2 id="guest-lecture-1-mathematically-robust-distributed-systems">Guest Lecture 1: Mathematically robust distributed systems</h2>
+<p>Some bugs in distributed systems can be very difficult to catch (it could involve long and costly simulation; with $n$ computers, it takes time $2^n$ to simulate all possible cases), and can be very costly when it happens.</p>
+
+<p>The only way to be sure that there are no bugs is to <em>prove</em> it formally and mathematically.</p>
+
+<h3 id="definition-of-the-distributed-system-graph">Definition of the distributed system graph</h3>
+
+<p>Let $G(V, E)$ be a graph, where $V$ is the set of process nodes, and $E$ is the set of channel edges connecting the processes.</p>
+
+<p>Two nodes $p$ and $q$ are <strong>neighbors</strong> if and only if there is an edge $\left\{ p, q \right\} \in E$.</p>
+
+<p>Let $X \subseteq V$ be the set of <strong>crashed nodes</strong>. The other nodes are <strong>correct nodes</strong>.</p>
+
+<p>We’ll define the <strong>path</strong> as the sequence of nodes $(p_1, p_2, \dots, p_n)$ such that $\forall i \in \left\{i, \dots, n-1\right\}$, $p_i$ and $p_{i+1}$ are neighbors.</p>
+
+<p>Two nodes $p$ and $q$ are <strong>connected</strong> if we have a path $(p_1, p_2, \dots, p_n)$ such that $p_1 = p$ and $p_2 = q$.</p>
+
+<p>They are <strong>n-connected</strong> if there are $n$ disjoint paths connecting them; two paths $A = \left\{ p_1, \dots, p_n \right\}$ and $B = \left\{ p_1, \dots, p_n \right\}$ are disjoint if $A \cap B = \left\{ p, q \right\}$ (i.e. $p$ and $q$ are the two only nodes in common in the path).</p>
+
+<p>The graph is <strong>k-connected</strong> if, $\forall \left\{ p, q \right\} \subseteq V$ there are $k$ disjoint paths between $p$ and $q$.</p>
+
+<h3 id="example-on-a-simple-algorithm">Example on a simple algorithm</h3>
+
+<p>Each node $p$ holds a message $m_p$ and a set $p.R$. The goal is for two nodes $p$ and $q$ to have $(p, m_p) \in q.R$ and $(q, m_q) \in p.R$; that is, they want to exchange messages, to <em>communicate reliably</em>. The algorithm is as follows:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre><span class="k">for</span> <span class="n">each</span> <span class="n">node</span> <span class="n">p</span><span class="p">:</span>
+  <span class="n">initially</span><span class="p">:</span>
+    <span class="n">send</span> <span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">m</span><span class="p">(</span><span class="n">p</span><span class="p">))</span> <span class="n">to</span> <span class="nb">all</span> <span class="n">neighbors</span>
+
+  <span class="n">upon</span> <span class="n">reception</span> <span class="n">of</span> <span class="n">of</span> <span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">m</span><span class="p">):</span>
+    <span class="n">add</span> <span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span> <span class="n">to</span> <span class="n">p</span><span class="p">.</span><span class="n">R</span>
+    <span class="n">send</span> <span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span> <span class="n">to</span> <span class="nb">all</span> <span class="n">neighbors</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h4 id="reliable-communication">Reliable communication</h4>
+
+<p>Now, let’s prove that if two nodes $p$ and $q$ are connected, then they communicate reliably. We’ll do this by induction; formally, we’d like to prove that the proposition $\mathcal{P}_k$, defined as “$p_k \text{ receives } (p, m_p)$”, is true for $k\in \left\{ 1, \dots, n \right\}$.</p>
+
+<ul>
+  <li>
+    <p><strong>Base case</strong></p>
+
+    <p>According to the algorithm, $p=p_1$ initially sends $(p, m_p)$ to $p_2$. So $p_2$ receives $(p, m_p)$ from $p_1$, and $\mathcal{P}_2$ is true.</p>
+  </li>
+  <li>
+    <p><strong>Induction step</strong></p>
+
+    <p>Suppose that the induction hypothesis $\mathcal{P}$ is true for $k \in \left\{2, \dots, n-1 \right\}$.</p>
+
+    <p>Then, according to the algorithm, $p_k$ sends $(p, m_p)$ to $p_{k+1}$, meaning that $p_{k+1}$ receives $(p, m_p)$ from $p_k$, which means that $\mathcal{P}_{k+1}$ is true.</p>
+  </li>
+</ul>
+
+<p>Thus $\mathcal{P}_k$ is true.</p>
+
+<h3 id="robustness-property">Robustness property</h3>
+<p>If at most $k$ nodes are crashed, and the graph is $(k+1)$-connected, then all correct nodes <strong>communicate reliably</strong>.</p>
+
+<p>We prove this by contradiction. We want to prove $\mathcal{P}$, so let’s suppose that the opposite, $\bar{\mathcal{P}}$ is true; to prove this, we must be able to conclude that the graph is $(k+1)$-connected, but there are 2 correct nodes $p$ and $q$ that <em>do not</em> communicate reliably. Hopefully, doing so will lead us to a paradoxical conclusion that allows us to assert $\mathcal{P}$.</p>
+
+<p>As we are $(k+1)$-connected, there exists $k+1$ paths $(P_1, P_2, \dots, P_{k+1})$ paths connecting any two nodes $p$ and $q$. We want to prove that $p$ and $q$ do not communicate reliably, meaning that all paths between them are “cut” by at least one crashed node. As the paths are disjoint, this requires at least $k+1$ crashed nodes to cut them all.</p>
+
+<p>This is a contradiction: we were working under the assumption that $k$ nodse were crashed, and proved that $k+1$ nodes were crashed. This disproves $\bar{\mathcal{P}}$ and proves $\mathcal{P}$.</p>
+
+<h3 id="random-failures">Random failures</h3>
+<p>Let’s assume that $p$ and $q$ are connected by a single path of length 1, only separated by a node $n$. If each node has a probability $f$ of crashing, then the probability of communicating reliably is $1-f$.</p>
+
+<p>Now, suppose that the path is of length $n$; the probability of communicating reliably is the probability that none of the nodes crashing; individually, that is $1-f$, so for the whole chain, the probability is $(1-f)^n$.</p>
+
+<p>However, if we have $n$ paths of length 1 (that is, instead of setting them up serially like previously, we set them up in parallel), the probability of not communicating reliably is that of all intermediary nodes crashing, which is $f^n$; thus, the probability of actually communicating reliably is $1-f^n$.</p>
+
+<p>If our nodes are connecting by $n$ paths of length $m$, the probability of not communicating reliably is that of all lines being cut. The probability of a single line being cut is $1 - (1 - f)^m$. The probability of any line being cut is one minus the probability of no line being cut, so the final probability is $1 - (1 - (1 - f)^m)^n$.</p>
+
+<h3 id="example-proof">Example proof</h3>
+<p>Assume an infinite 2D grid of nodes. Nodes $p$ and $q$ are connected, with the distance in the shortest path being $D$. What is the probability of communicating reliably when this distance tends to infinity?</p>
+
+\[\lim_{D \rightarrow \infty} = \dots\]
+
+<p>First, let’s define a sequence of grids $G_k$. $G_0$ is a single node, $G_{k+1}$ is built from 9 grids $G_k$.</p>
+
+<p>$G_{k+1}$ is <strong>correct</strong> if at least 8 of its 9 grids are correct.</p>
+
+<p>We’ll introduce the concept of a “meta-correct” node; this is not really anything official, just something we’re making up for the purpose of this proof. Consider a grid $G_n$. A node $p$ is “meta-correct” if:</p>
+
+<ul>
+  <li>It is in a correct grid $G_n$, and</li>
+  <li>It is in a correct grid $G_{n-1}$, and</li>
+  <li>It is in a correct grid $G_{n-2}$, …</li>
+</ul>
+
+<p>For the sake of this proof, let’s just admit that all meta-correct nodes are connected; if you take two nodes $p$ and $q$ that are both meta-correct, there will be a path of nodes connecting them.</p>
+
+<h4 id="step-1">Step 1</h4>
+<p>If $x$ is the probability that $G_k$ is correct, what is the probability $P(x)$ that $G_{k+1}$ is correct?</p>
+
+<p>$G_{k+1}$ is built up of 9 subgrids $G_k$. Let $P_i$ be the probability of $i$ nodes failing; the probability of $G_k$ being correct is the probability at most one subgrid being incorrect.</p>
+
+\[\begin{align}
+P_0 &amp; = x^9 \\
+P_1 &amp; = 9(1-x)x^8 \\
+P(x) &amp; = P_0 + P_1 = x^9 + 9(1-x)x^8 \\
+\end{align}\]
+
+<h4 id="step-2">Step 2</h4>
+<p>Let $\alpha = 0.9$, and $z(x) = 1 + \alpha (x-1)$.</p>
+
+<p>We will admit the following: if $x \in [0.99, 1]$ then $z(x) \le P(x)$.</p>
+
+<p>Let $P_k$ be the result of applying $P$ (as defined in step 1) to $1-f$, $k$ times: $P_k = P(P(P(\dots P(1-f))))$. We will prove that $P_k \ge 1 - \alpha^k, \forall k &gt; 0$, by induction:</p>
+
+<ul>
+  <li><strong>Base case</strong>: $P_0 = 1-f = 0.99$ and $1-\alpha^0 = 1-1 = 0$, so $P_0 \ge 1-\alpha^0$.</li>
+  <li>
+    <p><strong>Induction step</strong>:</p>
+
+    <p>Let’s suppose that $P_k \ge 1-\alpha^k$. We want to prove this for $k+1$, namely $P_{k+1} \ge 1 - \alpha^{k+1}$.</p>
+
+\[P_{k+1} \ge P(P_k) \ge z(P_k) \ge z(1 - \alpha^k) \\
+P_{k+1} \ge 1 + \alpha(1 - \alpha^k - 1) \\
+P_{k+1} \ge 1 - \alpha^{k+1}\]
+  </li>
+</ul>
+
+<p>This proves the result that $\forall k, P_k \ge 1 - \alpha^k$.</p>
+
+<h4 id="step-3">Step 3</h4>
+<p>Todo.</p>
+
+<h2 id="guest-lecture-2-byzantine-failures">Guest lecture 2: Byzantine failures</h2>
+<p>So far, we’ve only considered situations in which nodes crash. In this section, we’ll consider a new case: the one where nodes go “evil”, a situation we call <strong>byzantine failures</strong>.</p>
+
+<p>Suppose that our nodes are arranged in a grid. $S$ sends a message $m$ to $R$ by broadcasting $(S, m)$. With a simple broadcast algorithm, we just broadcast the message to the neighbor, which may be a byzantine node $B$ that alters the message before rebroadcasting it. Because $B$ can simply do that, we see that this simple algorithm is not enough to deal with byzantine failures.</p>
+
+<p>To deal with this problem, we’ll consider some other algorithms.</p>
+
+<p>First, consider the case where there are $n$ intermediary nodes between $S$ and $R$ (this is not a daisy chain of nodes, but instead just $m$ paths of length 2 between $S$ and $R$). We assume that $S$ and $R$ are both correct (non-Byzantine) nodes, but the intermediary nodes may be.</p>
+
+<p>For this algorithm, we define $k = \frac{n}{2} - 1$ if $n$ is even, and $k = \frac{n - 1}{2}$ if it is odd. The idea is to have $k+1$ be the smallest number of nodes to have a majority among the $n$ intermediary nodes. Let’s also assume that $R$ has a set $\Omega$ that acts as its memory, and a variable $x$, initially set to $x = 0$. Our goal is to have $x = m$.</p>
+
+<p>$S$ simply sends out the message $m$ to its neighbors. The intermediary nodes forward messages that they receive to $R$. Finally, when $R$ receives a message $m$ from $p$, it adds it to the set $\Omega$. When there are $k+1$ nodes in the set, it can set $x = m$ (essentially, deliver the message).</p>
+
+<p>We’ll prove properties on this. The main point to note is that these proofs make no assumption on the potentially Byzantine nodes.</p>
+
+<ul>
+  <li>
+    <p><strong>Safety</strong>: if the number of Byzantine nodes $f$ is $f \le k$, then $x = 0$ or $x = m$.</p>
+
+    <p>The proof is by contradiction. Let’s suppose that the opposite is true, i.e. that $x = m’$, where $m’ \ne m$. Then, according to the algorithm, this means that there must be $k+1$ nodes such that $\forall i \in \left\{ 1, \dots, k+1 \right\}$, we have $(p_i, m) \in \Omega$. But according to the algorithm, there are only two reasons for such a message being in the set; that is, either $p_i$ operates in good faith, receiving $m’$ from $S$, or it operates in bad faith, being a Byzantine node. The first case is impossible, as $S$ is correct. The alternative case can only happen if there are $k+1$ byzantine nodes, which is also impossible (since by assumption $f \le k$. This contradiction proves the safety property.</p>
+  </li>
+  <li>
+    <p><strong>Liveness</strong>: if $f \le k$, we eventually have $x = m$.</p>
+
+    <p>To prove this, we first define a set of $k+1$ correct (non-Byzantine) intermediary nodes. These nodes all receive $m$ from $S$, send it to $R$, which places it in $\Omega$. Eventually, we’ll have $k+1$ nodes in the set, and then $x=m$.</p>
+
+    <p>By the liveness and safety property, we know that initially $x=0$, eventually $x=m$, and we never have $x=m’$.</p>
+  </li>
+  <li>
+    <p><strong>Optimality</strong>: if $f \ge k + 1$, it is impossible to ensure the safety property.</p>
+
+    <p>Assume we have $k+1$ Byzantine nodes sending $m’$ to $R$. According to the algorithm, we get $x = m’$, so no safety.</p>
+
+    <p>We can conclude that we can tolerate at most $k$ Byzantine nodes.</p>
+  </li>
+</ul>
+
+<p>But here we only considered the specific case of length 2 paths. Let’s now consider the general case, which is the $(2k+1)$ connected graph. In this case, we consider any graph, and each node needs to broadcast a message $m_p$. Every node has a set $p_R$ to send messages, and a set $p_X$ of received messages.</p>
+
+<p>The algorithm is as follows. Initially, the nodes send $(p, \emptyset, m_p)$ to their neighbors. When a node $p$ receives $(u, \Omega, m)$ from a neighbor $q$, with $p\notin\Omega$ and $q\notin\Omega$, the node sends $(u, \Omega\cup u, m)$ to its neighbors, and add that to $p_X$. When there exists a node $q$, a message $m$ and $k+1$ sets $\Omega_1, \dots, \Omega_{k+1}$ such that $\bigcup_{i=1}^{k+1} \Omega_i = \left\{ q \right\}$, and we have $k+1$ message in $p_X$, we can add $(q, m)$ to $p_R$.</p>
+
+<p>We’ll prove the following properties under the hypotheses that we have at most $k$ Byzantine nodes (a minority), and that the graph is connected (otherwise we couldn’t broadcast messages between the nodes)</p>
+
+<ul>
+  <li>
+    <p><strong>Safety</strong>: If $p$ and $q$ are two correct nodes, we never have $(p, m_p’)\in q_R$ (where $m_p’ \ne m_p$). In other words, no fake messages are accepted.</p>
+
+    <p>The proof is by contradiction, in which we use induction to arrive to a contradictory conclusion. We’ll try to prove the opposite of our claim, namely that there are two correct nodes $p$ and $q$ such that $(p, m_p’) \in q_R$.</p>
+
+    <p>According to our algorithm, we have $k+1$ disjoint sets whose intersection is $p$, and $k+1$ elements $(p, \Omega_i, m) \in q_X$.</p>
+
+    <p>To prove this, we’ll need to prove a sub-property: that each set $\Omega_i$ contains at least one byzantine node. We prove this by contradiction. We’ll suppose the opposite, namely that $\Omega_i$ contains no byzantine node (i.e. that they are all correct). I won’t write down the proof of this, but it’s in the lecture notes if ever (it’s by induction).</p>
+  </li>
+</ul>
+
+:ET

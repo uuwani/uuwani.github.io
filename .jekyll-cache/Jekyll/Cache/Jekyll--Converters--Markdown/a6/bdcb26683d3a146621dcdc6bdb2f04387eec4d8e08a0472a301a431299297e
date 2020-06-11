@@ -1,0 +1,11 @@
+I"
+<p>We can prove this formulation by using the following identity. If we let $\vec{P}$ be an $N\times M$ matrix, and $\vec{Q}$ be $M\times N$. Then:</p>
+
+\[\vec{P}(\vec{QP} + \vec{I}_M) = \vec{PQP} + \vec{P} = (\vec{PQ} + \vec{I}_N)\vec{P}\]
+
+<p>Assuming that $(\vec{QP} + \vec{I}_M)$ and $(\vec{PQ} + \vec{I}_N)$ are invertible, we have the identity:</p>
+
+\[(\vec{PQ}+\vec{I}_N)^{-1}\vec{P} = \vec{P}(\vec{QP}+\vec{I}_M)^{-1}\]
+
+<p>To derive the formula, we can let $\vec{P} = \vec{X}^T$ and $\vec{Q} = \frac{1}{\lambda}\vec{X}$.</p>
+:ET

@@ -1,0 +1,16 @@
+I"±
+<ol>
+  <li>If $z_k \neq x_i$ then we can just append $x_i = y_j$ to $Z$ to obtain a common subsequence of $X$ and $Y$ of length $k+1$, which would contradict the supposition that $Z$ is the <em>longest</em> common subsequence. Therefore, $z_k = x_i = y_j$</li>
+</ol>
+
+<p>Now onto the second part: $Z_{k-1}$ is an LCS of $X_{i-1}$ and $Y_{j-1}$ of length $(k-1)$. Letâ€™s prove this by contradiction; suppose that there exists a common subsequence $W$ with length greater than $k-1$. Then, appending $x_i = y_j$ to W produces a common subsequence of X and Y whose length is greater than $k$, which is a contradiction.</p>
+
+<ol>
+  <li>
+    <p>If there were a common subsequence $W$ of $X_{i-1}$ and $Y$ with length greater than $k$, then $W$ would also be a common subsequence of $X$ and $Y$ length greater than $k$, which contradicts the supposition that $Z$ is the LCS.</p>
+  </li>
+  <li>
+    <p>This proof is symmetric to 2.</p>
+  </li>
+</ol>
+:ET

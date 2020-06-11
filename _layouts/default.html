@@ -1,53 +1,21 @@
+---
+layout: compress
+---
+
 <!DOCTYPE html>
-<html lang="en" prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
-<head>
-    {% include head.html %}
-    {% strip %}
-        {% if page.image %}
-            {% if page.fallback-color %}
-                {% assign background-color = page.fallback-color %}
-            {% endif %}
-            {% assign background-image = page.image %}
-        {% else %}
-            {% assign background-color = site.hero.fallback-color %}
-            {% assign background-image = site.hero.image %}
-        {% endif %}
+<html lang="en">
 
-        <style type="text/css">
-        .hero {
-            background-color: {{ background-color }};
-            background-image: url('{{ background-image }}');
-            {% if page.background-position %} background-position: {{ page.background-position}}; {% endif %}
-        }
+  {% include head.html %}
 
-        {% for size in site.hero.breakpoints %}
-            {% include functions/hero-responsive-background.css size=size image=background-image %}
-        {% endfor %}
+  <body>
+     {% include masthead.html %}
 
-        </style>
-{% endstrip %}
-</head>
-<body>
-    <header class="hero">
-        <nav>
-            <a href="/notes/">NOTES</a>
-            <a href="/about/">ABOUT</a>
-        </nav>
-         
-        <div class="title">
-            <a href="/">
-                <h1>{{ site.name }}</h1>
-                <p>{{ site.subtitle_html }}</p>
-            </a>
-        </div>
-    </header>
-    <main class="content">
-       <div class="container">
-           
-           {{ content }}
-        
-        </div>
-    </main>
+      <main id="main" role="main">
+	      
+        {{ content }}
+      </main>
+
     {% include footer.html %}
-</body>
+
+  </body>
 </html>

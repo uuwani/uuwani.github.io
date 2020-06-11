@@ -1,0 +1,13 @@
+I"�<p>I’ve long been resistant to <a href="http://sass-lang.com/">Sass</a>. To me, it seemed like a complicated and superfluous layer of abstraction that would get in the way of how I usually write my CSS, and perhaps even create bloated, inefficient code — boy, was I wrong.</p>
+
+<p>As it turns out, Dan Cederholm had the <em>exact</em> same fear as I did about having to change the way he writes CSS, but the introduction to <a href="https://abookapart.com/products/sass-for-web-designers">his book</a> persuaded me to take a look at it:</p>
+
+<blockquote>
+  <p>But remember, since <strong>the SCSS syntax is a superset of CSS3</strong>, you don’t have to change anything about the way you write CSS. Commenting, indenting, or not indenting, all your formatting preferences can remain the same when working in .scss files. Once I realized this, I could dive in without fear.</p>
+
+  <p><a href="http://alistapart.com/article/why-sass">Dan Cederholm, Sass for Web Designers (Chapter 1), 2013</a></p>
+</blockquote>
+
+<p>Now, I’ve been using <a href="https://jekyllrb.com/">Jekyll</a>, the static site generator, for close to a year now, even for super simple sites. I really like how I’m able to keep my HTML <a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself">DRY</a> by using imports, variables and layouts; it’s a system that makes any and all edits incredibly easy and sensible. In a sense, Sass is just the equivalent of Jekyll for CSS: I can import CSS from other files, use variables, and inject code into my predefined mixins, just like I can with HTML in Jekyll. And it turns out that my CSS doesn’t only get more maintainable, but I’ve even found that my design as a whole gets better! Here’s how Sass has helped me out:</p>
+
+:ET

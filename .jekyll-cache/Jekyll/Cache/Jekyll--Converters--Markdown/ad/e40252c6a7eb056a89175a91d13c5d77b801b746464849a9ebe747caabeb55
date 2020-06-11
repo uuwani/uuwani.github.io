@@ -1,0 +1,5 @@
+I"r<p>When working on a Web project, I find it to be <em>really hard</em> to get the tooling configuration right: there are so many tools doing different things, so many options and alternatives to choose from, and oh-so-many ways that things can go wrong. This article is meant as an in-depth, step-by-step guide to a configuration that works really well.</p>
+
+<p>Configuration is a matter of both personal taste and of the needs of the project. The setup that I will show won’t work for everybody, and that’s fine! That is exactly the reason I wrote this article. Rather than just make a GitHub repo of my arbitrary choices, I wanted to write about the reasoning leading this configuration, discuss alternative options, show some common pitfalls, and share lessons learned the hard way from working on <a href="https://github.com/hashml/hashml">HashML</a>, over the summer.</p>
+
+:ET

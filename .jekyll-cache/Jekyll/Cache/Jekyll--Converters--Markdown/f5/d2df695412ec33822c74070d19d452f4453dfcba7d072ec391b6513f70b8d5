@@ -1,0 +1,8 @@
+I"O
+<p>Increasingly, browsers are taking on a central role in our daily lives. With web apps for everything, we have placed our most intimate data on online services such as Facebook, Amazon or GMail. This move to online services has required that we up the security of our online services, and due diligence has brought us HTTPS-only sites, two-factor authentication, and so on. But there’s still a weak link in the chain: a rogue browser extension can impair all of those security measures.</p>
+
+<p>It seems like most people are unaware of how big of an attack vector browser extensions have become. They’re still quite unregulated territory, and although there are inherent limits to what they can do, there exists little to no protection against extension malware — your antivirus can’t help you here.</p>
+
+<p>In this post, I’ll share what I have found by investigating one such malware extension that a friend of mine was infected by. I’ve hesitated a lot about publishing all of the code, but have finally decided against it; I would never want to help propagate malware. However, I still want to show how this malware functions, so I’ll be posting <em>extracts</em> of the code in this post. I’ve taken the liberty to remove some lines that were irrelevant to the point I was making, but everything else is really as I have found it.</p>
+
+:ET

@@ -1,0 +1,2493 @@
+I"<ul id="markdown-toc">
+  <li><a href="#le-projet-imhof" id="markdown-toc-le-projet-imhof">Le projet Imhof</a>    <ul>
+      <li><a href="#rendu-du-projet" id="markdown-toc-rendu-du-projet">Rendu du projet</a></li>
+    </ul>
+  </li>
+  <li><a href="#test-unitaire" id="markdown-toc-test-unitaire">Test unitaire</a>    <ul>
+      <li><a href="#utilisation-de-junit" id="markdown-toc-utilisation-de-junit">Utilisation de JUnit</a>        <ul>
+          <li><a href="#exemple-dun-test-junit" id="markdown-toc-exemple-dun-test-junit">Exemple d’un test JUnit</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#immuabilité" id="markdown-toc-immuabilité">Immuabilité</a>    <ul>
+      <li><a href="#exemple" id="markdown-toc-exemple">Exemple</a>        <ul>
+          <li><a href="#quelques-autres-types-de-variables" id="markdown-toc-quelques-autres-types-de-variables">Quelques autres types de variables</a></li>
+        </ul>
+      </li>
+      <li><a href="#règle-de-limmuabilité" id="markdown-toc-règle-de-limmuabilité">Règle de l’immuabilité</a></li>
+      <li><a href="#inconvénients-de-limmuabilité" id="markdown-toc-inconvénients-de-limmuabilité">Inconvénients de l’immuabilité</a></li>
+      <li><a href="#terminologie" id="markdown-toc-terminologie">Terminologie</a></li>
+      <li><a href="#pour-faire-une-classe-immuable" id="markdown-toc-pour-faire-une-classe-immuable">Pour faire une classe immuable</a></li>
+      <li><a href="#tableaux-et-immuabilité" id="markdown-toc-tableaux-et-immuabilité">Tableaux et immuabilité</a></li>
+    </ul>
+  </li>
+  <li><a href="#bâtisseurs" id="markdown-toc-bâtisseurs">Bâtisseurs</a>    <ul>
+      <li><a href="#exemple-1" id="markdown-toc-exemple-1">Exemple</a></li>
+      <li><a href="#appels-chaînés" id="markdown-toc-appels-chaînés">Appels chaînés</a></li>
+      <li><a href="#règle-du-bâtisseur" id="markdown-toc-règle-du-bâtisseur">Règle du bâtisseur</a></li>
+    </ul>
+  </li>
+  <li><a href="#classes-imbriquées-statiques" id="markdown-toc-classes-imbriquées-statiques">Classes imbriquées statiques</a></li>
+  <li><a href="#généricité" id="markdown-toc-généricité">Généricité</a>    <ul>
+      <li><a href="#utilisation" id="markdown-toc-utilisation">Utilisation</a></li>
+      <li><a href="#paires" id="markdown-toc-paires">Paires</a></li>
+      <li><a href="#généricité-et-types-de-base" id="markdown-toc-généricité-et-types-de-base">Généricité et types de base</a>        <ul>
+          <li><a href="#emballage--déballage" id="markdown-toc-emballage--déballage">Emballage &amp; déballage</a></li>
+          <li><a href="#limitations-de-la-généricité-en-java" id="markdown-toc-limitations-de-la-généricité-en-java">Limitations de la généricité en Java</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#collections" id="markdown-toc-collections">Collections</a>    <ul>
+      <li><a href="#collections-dans-lapi-java" id="markdown-toc-collections-dans-lapi-java">Collections dans l’API Java</a></li>
+      <li><a href="#règle-des-collections" id="markdown-toc-règle-des-collections">Règle des collections</a></li>
+      <li><a href="#linterface-collection-sans-s" id="markdown-toc-linterface-collection-sans-s">L’interface <code class="highlighter-rouge">Collection</code> (sans <code class="highlighter-rouge">s</code>)</a>        <ul>
+          <li><a href="#méthodes-importantes-de-collection" id="markdown-toc-méthodes-importantes-de-collection">Méthodes importantes de <code class="highlighter-rouge">Collection</code></a>            <ul>
+              <li><a href="#méthodes-de-consultation" id="markdown-toc-méthodes-de-consultation">Méthodes de consultation</a></li>
+              <li><a href="#méthodes-dajout" id="markdown-toc-méthodes-dajout">Méthodes d’ajout</a></li>
+              <li><a href="#méthodes-de-suppression" id="markdown-toc-méthodes-de-suppression">Méthodes de suppression</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><a href="#listes" id="markdown-toc-listes">Listes</a>        <ul>
+          <li><a href="#règle-des-listes-immuables" id="markdown-toc-règle-des-listes-immuables">Règle des listes immuables</a></li>
+          <li><a href="#complexité-des-listes" id="markdown-toc-complexité-des-listes">Complexité des listes</a>            <ul>
+              <li><a href="#arraylist" id="markdown-toc-arraylist"><code class="highlighter-rouge">ArrayList</code></a></li>
+              <li><a href="#linkedlist" id="markdown-toc-linkedlist"><code class="highlighter-rouge">LinkedList</code></a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><a href="#piles-deques--queues" id="markdown-toc-piles-deques--queues">Piles, Deques &amp; Queues</a>        <ul>
+          <li><a href="#règle-des-listes" id="markdown-toc-règle-des-listes">Règle des listes</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#itérateurs---parcours-dune-collection" id="markdown-toc-itérateurs---parcours-dune-collection">Itérateurs - parcours d’une collection</a></li>
+  <li><a href="#tables-associatives" id="markdown-toc-tables-associatives">Tables Associatives</a>    <ul>
+      <li><a href="#règle-des-tables-immuables" id="markdown-toc-règle-des-tables-immuables">Règle des tables immuables</a></li>
+      <li><a href="#hashmap" id="markdown-toc-hashmap"><code class="highlighter-rouge">HashMap</code></a></li>
+      <li><a href="#treemap" id="markdown-toc-treemap"><code class="highlighter-rouge">TreeMap</code></a></li>
+      <li><a href="#règle-hashmap--treemap" id="markdown-toc-règle-hashmap--treemap">Règle <code class="highlighter-rouge">HashMap</code> / <code class="highlighter-rouge">TreeMap</code></a></li>
+      <li><a href="#egalité-des-clés" id="markdown-toc-egalité-des-clés">Egalité des clés</a>        <ul>
+          <li><a href="#egalité-et-immuabilité" id="markdown-toc-egalité-et-immuabilité">Egalité et immuabilité</a></li>
+          <li><a href="#règle-de-equals" id="markdown-toc-règle-de-equals">Règle de <code class="highlighter-rouge">equals</code></a></li>
+          <li><a href="#règle-de-hashcode" id="markdown-toc-règle-de-hashcode">Règle de <code class="highlighter-rouge">hashCode</code></a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#ordre-en-java" id="markdown-toc-ordre-en-java">Ordre en Java</a>    <ul>
+      <li><a href="#linterface-comparable" id="markdown-toc-linterface-comparable">L’interface <code class="highlighter-rouge">Comparable</code></a>        <ul>
+          <li><a href="#exemples" id="markdown-toc-exemples">Exemples</a></li>
+          <li><a href="#règle-de-comparable" id="markdown-toc-règle-de-comparable">Règle de <code class="highlighter-rouge">Comparable</code></a></li>
+        </ul>
+      </li>
+      <li><a href="#linterface-comparator" id="markdown-toc-linterface-comparator">L’interface <code class="highlighter-rouge">Comparator</code></a>        <ul>
+          <li><a href="#différence-entre-comparator-et-comparable" id="markdown-toc-différence-entre-comparator-et-comparable">Différence entre <code class="highlighter-rouge">Comparator</code> et <code class="highlighter-rouge">Comparable</code></a></li>
+        </ul>
+      </li>
+      <li><a href="#règle-des-ensembles-immuables" id="markdown-toc-règle-des-ensembles-immuables">Règle des ensembles immuables</a></li>
+      <li><a href="#listset" id="markdown-toc-listset"><code class="highlighter-rouge">ListSet</code></a></li>
+      <li><a href="#hashset" id="markdown-toc-hashset"><code class="highlighter-rouge">HashSet</code></a></li>
+      <li><a href="#treeset" id="markdown-toc-treeset"><code class="highlighter-rouge">TreeSet</code></a></li>
+      <li><a href="#règle-hashsettreeset" id="markdown-toc-règle-hashsettreeset">Règle <code class="highlighter-rouge">HashSet</code>/<code class="highlighter-rouge">TreeSet</code></a></li>
+      <li><a href="#enumérations" id="markdown-toc-enumérations">Enumérations</a></li>
+    </ul>
+  </li>
+  <li><a href="#inputoutput" id="markdown-toc-inputoutput">Input/Output</a>    <ul>
+      <li><a href="#inputstream" id="markdown-toc-inputstream"><code class="highlighter-rouge">InputStream</code></a>        <ul>
+          <li><a href="#octets-int-ou-byte" id="markdown-toc-octets-int-ou-byte">Octets <code class="highlighter-rouge">int</code> ou <code class="highlighter-rouge">byte</code></a></li>
+          <li><a href="#sous-classes-de-inputstream" id="markdown-toc-sous-classes-de-inputstream">Sous-classes de <code class="highlighter-rouge">InputStream</code></a></li>
+          <li><a href="#sous-classes-de-outputstream" id="markdown-toc-sous-classes-de-outputstream">Sous-classes de <code class="highlighter-rouge">OutputStream</code></a></li>
+          <li><a href="#exemple-2" id="markdown-toc-exemple-2">Exemple</a></li>
+        </ul>
+      </li>
+      <li><a href="#resources" id="markdown-toc-resources">Resources</a>        <ul>
+          <li><a href="#try-with-resource" id="markdown-toc-try-with-resource">Try-with-resource</a></li>
+        </ul>
+      </li>
+      <li><a href="#représentation-de-caractères" id="markdown-toc-représentation-de-caractères">Représentation de caractères</a>        <ul>
+          <li><a href="#ascii" id="markdown-toc-ascii">ASCII</a>            <ul>
+              <li><a href="#extensions-dascii" id="markdown-toc-extensions-dascii">Extensions d’ASCII</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><a href="#readers--writers-lecture-textuelle" id="markdown-toc-readers--writers-lecture-textuelle">Readers / Writers: lecture textuelle</a>        <ul>
+          <li><a href="#quelques-détails-dimplémentation" id="markdown-toc-quelques-détails-dimplémentation">Quelques détails d’implémentation</a>            <ul>
+              <li><a href="#terminaison-des-lignes" id="markdown-toc-terminaison-des-lignes">Terminaison des lignes</a></li>
+              <li><a href="#encodage" id="markdown-toc-encodage">Encodage</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#fonctions-anonymes-lambdas" id="markdown-toc-fonctions-anonymes-lambdas">Fonctions anonymes (lambdas)</a>    <ul>
+      <li><a href="#interface-fonctionnelle" id="markdown-toc-interface-fonctionnelle">Interface fonctionnelle</a></li>
+      <li><a href="#fonction-anonyme" id="markdown-toc-fonction-anonyme">Fonction anonyme</a>        <ul>
+          <li><a href="#méthodes-par-défaut" id="markdown-toc-méthodes-par-défaut">Méthodes par défaut</a></li>
+        </ul>
+      </li>
+      <li><a href="#interfaces-fonctionnelles-de-java" id="markdown-toc-interfaces-fonctionnelles-de-java">Interfaces fonctionnelles de Java</a>        <ul>
+          <li><a href="#linterface-function" id="markdown-toc-linterface-function">L’interface <code class="highlighter-rouge">Function</code></a></li>
+          <li><a href="#composition-de-fonctions" id="markdown-toc-composition-de-fonctions">Composition de fonctions</a></li>
+          <li><a href="#linterface-unaryoperator" id="markdown-toc-linterface-unaryoperator">L’interface <code class="highlighter-rouge">UnaryOperator</code></a></li>
+          <li><a href="#linterface-bifunction" id="markdown-toc-linterface-bifunction">L’interface <code class="highlighter-rouge">BiFunction</code></a></li>
+          <li><a href="#linterface-predicate" id="markdown-toc-linterface-predicate">L’interface <code class="highlighter-rouge">Predicate</code></a></li>
+          <li><a href="#composition-de-prédicats" id="markdown-toc-composition-de-prédicats">Composition de prédicats</a></li>
+        </ul>
+      </li>
+      <li><a href="#fonctions-et-collections" id="markdown-toc-fonctions-et-collections">Fonctions et collections</a></li>
+      <li><a href="#programmation-par-flots" id="markdown-toc-programmation-par-flots">Programmation par flots</a>        <ul>
+          <li><a href="#exemple-conversion-f-en-c" id="markdown-toc-exemple-conversion-f-en-c">Exemple: Conversion °F en °C</a></li>
+          <li><a href="#types-de-méthodes-travaillant-sur-les-flots" id="markdown-toc-types-de-méthodes-travaillant-sur-les-flots">Types de méthodes travaillant sur les flots</a></li>
+          <li><a href="#pipelines" id="markdown-toc-pipelines">Pipelines</a></li>
+          <li><a href="#méthodes-de-stream" id="markdown-toc-méthodes-de-stream">Méthodes de <code class="highlighter-rouge">Stream</code></a>            <ul>
+              <li><a href="#ponts-vers-les-flots" id="markdown-toc-ponts-vers-les-flots">Ponts vers les flots</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><a href="#références-de-méthodes" id="markdown-toc-références-de-méthodes">Références de méthodes</a>        <ul>
+          <li><a href="#références-statiques" id="markdown-toc-références-statiques">Références statiques</a></li>
+          <li><a href="#références-à-un-constructeur" id="markdown-toc-références-à-un-constructeur">Références à un constructeur</a></li>
+          <li><a href="#références-non-statiques" id="markdown-toc-références-non-statiques">Références non-statiques</a>            <ul>
+              <li><a href="#reprise-de-lexemple-de-conversion" id="markdown-toc-reprise-de-lexemple-de-conversion">Reprise de l’exemple de conversion</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#généricité-avancée" id="markdown-toc-généricité-avancée">Généricité avancée</a>    <ul>
+      <li><a href="#sous-types" id="markdown-toc-sous-types">Sous-types</a>        <ul>
+          <li><a href="#polymorphisme-dinclusion" id="markdown-toc-polymorphisme-dinclusion">Polymorphisme d’inclusion</a></li>
+        </ul>
+      </li>
+      <li><a href="#jokers-wildcards" id="markdown-toc-jokers-wildcards">Jokers (<em>wildcards</em>)</a></li>
+      <li><a href="#règle-des-bornes" id="markdown-toc-règle-des-bornes">Règle des bornes</a></li>
+    </ul>
+  </li>
+  <li><a href="#types-bruts" id="markdown-toc-types-bruts">Types bruts</a>    <ul>
+      <li><a href="#règle-des-types-bruts" id="markdown-toc-règle-des-types-bruts">Règle des types bruts</a></li>
+    </ul>
+  </li>
+  <li><a href="#entiers-et-manipulation-de-bits" id="markdown-toc-entiers-et-manipulation-de-bits">Entiers et manipulation de bits</a>    <ul>
+      <li><a href="#types-entiers" id="markdown-toc-types-entiers">Types entiers</a>        <ul>
+          <li><a href="#complément-à-deux" id="markdown-toc-complément-à-deux">Complément à deux</a>            <ul>
+              <li><a href="#exemple-3" id="markdown-toc-exemple-3">Exemple</a></li>
+            </ul>
+          </li>
+          <li><a href="#notation-de-grands-nombres" id="markdown-toc-notation-de-grands-nombres">Notation de grands nombres</a></li>
+        </ul>
+      </li>
+      <li><a href="#opérations-arithmétiques" id="markdown-toc-opérations-arithmétiques">Opérations arithmétiques</a></li>
+    </ul>
+  </li>
+  <li><a href="#opérations-bit-à-bit-bitwise-operations" id="markdown-toc-opérations-bit-à-bit-bitwise-operations">Opérations bit à bit (<em>bitwise operations</em>)</a>    <ul>
+      <li><a href="#masques" id="markdown-toc-masques">Masques</a></li>
+      <li><a href="#mathématiques-et-opérations-bitwise" id="markdown-toc-mathématiques-et-opérations-bitwise">Mathématiques et opérations bitwise</a></li>
+      <li><a href="#entiers-dans-lapi-java" id="markdown-toc-entiers-dans-lapi-java">Entiers dans l’API Java</a>        <ul>
+          <li><a href="#auto-emballage-rappel" id="markdown-toc-auto-emballage-rappel">Auto-emballage (rappel)</a></li>
+          <li><a href="#api-java" id="markdown-toc-api-java">API Java</a></li>
+        </ul>
+      </li>
+      <li><a href="#somme-de-bits" id="markdown-toc-somme-de-bits">Somme de bits</a></li>
+    </ul>
+  </li>
+  <li><a href="#patrons" id="markdown-toc-patrons">Patrons</a>    <ul>
+      <li><a href="#attributs-dun-patron" id="markdown-toc-attributs-dun-patron">Attributs d’un patron</a></li>
+      <li><a href="#diagrammes-de-classes" id="markdown-toc-diagrammes-de-classes">Diagrammes de classes</a></li>
+      <li><a href="#builder" id="markdown-toc-builder">Builder</a>        <ul>
+          <li><a href="#builder-intelligent" id="markdown-toc-builder-intelligent">Builder intelligent</a></li>
+        </ul>
+      </li>
+      <li><a href="#adapter" id="markdown-toc-adapter">Adapter</a>        <ul>
+          <li><a href="#problème" id="markdown-toc-problème">Problème</a></li>
+          <li><a href="#solution" id="markdown-toc-solution">Solution</a></li>
+        </ul>
+      </li>
+      <li><a href="#decorator" id="markdown-toc-decorator">Decorator</a>        <ul>
+          <li><a href="#problème-1" id="markdown-toc-problème-1">Problème</a></li>
+          <li><a href="#solution-1" id="markdown-toc-solution-1">Solution</a></li>
+        </ul>
+      </li>
+      <li><a href="#composite" id="markdown-toc-composite">Composite</a>        <ul>
+          <li><a href="#problème-2" id="markdown-toc-problème-2">Problème</a></li>
+          <li><a href="#solution-2" id="markdown-toc-solution-2">Solution</a></li>
+        </ul>
+      </li>
+      <li><a href="#composite--decorator" id="markdown-toc-composite--decorator">Composite / Decorator</a></li>
+      <li><a href="#mvc" id="markdown-toc-mvc">MVC</a>        <ul>
+          <li><a href="#modèle" id="markdown-toc-modèle">Modèle</a></li>
+          <li><a href="#vue" id="markdown-toc-vue">Vue</a></li>
+          <li><a href="#contrôleur" id="markdown-toc-contrôleur">Contrôleur</a></li>
+          <li><a href="#avantages-de-mvc" id="markdown-toc-avantages-de-mvc">Avantages de MVC</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#interfaces-graphiques" id="markdown-toc-interfaces-graphiques">Interfaces graphiques</a>    <ul>
+      <li><a href="#composants" id="markdown-toc-composants">Composants</a>        <ul>
+          <li><a href="#conteneurs-intermiédiaires" id="markdown-toc-conteneurs-intermiédiaires">Conteneurs intermiédiaires</a>            <ul>
+              <li><a href="#jpanel" id="markdown-toc-jpanel"><code class="highlighter-rouge">JPanel</code></a></li>
+              <li><a href="#gestionnaire-dagencement" id="markdown-toc-gestionnaire-dagencement">Gestionnaire d’agencement</a></li>
+              <li><a href="#fermeture-des-fenêtres" id="markdown-toc-fermeture-des-fenêtres">Fermeture des fenêtres</a></li>
+              <li><a href="#boîte-de-dialogue-jdialog" id="markdown-toc-boîte-de-dialogue-jdialog">Boîte de dialogue <code class="highlighter-rouge">JDialog</code></a></li>
+            </ul>
+          </li>
+          <li><a href="#composants-de-base" id="markdown-toc-composants-de-base">Composants de base.</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#modèles" id="markdown-toc-modèles">Modèles</a></li>
+</ul>
+
+<!-- More -->
+
+<h1 id="le-projet-imhof"><a href="http://cs108.epfl.ch/archive/15/p00_intro.html">Le projet Imhof</a></h1>
+
+<p>Le but du projet de cette année est de dessiner des cartes topographiques au 1:50’000 dont le style s’inspire de celui des cartes suisses. Ce projet est nommé Imhof en l’honneur d’<a href="http://en.wikipedia.org/wiki/Eduard_Imhof">Eduard Imhof</a> (1895–1986), cartographe suisse célèbre — entre autres — pour ses magnifiques cartes en relief.</p>
+
+<p><a href="http://cs108.epfl.ch/archive/15/files/ppo15_01a_intro-cours-projet.pdf">Voir slides</a> pour un aperçu rapide du projet et de ses règles.</p>
+
+<h2 id="rendu-du-projet">Rendu du projet</h2>
+<p>Le rendu se fera <a href="http://cs108.epfl.ch/archive/15/submit.html">sur cette page</a>; le jeton a été envoyé par e-mail.</p>
+
+<h1 id="test-unitaire"><a href="http://cs108.epfl.ch/archive/15/files/ppo15_01b_test-unitaire.pdf">Test unitaire</a></h1>
+<p>Le test unitaire est un petit programme qui vérifie automatiquement que les classes se comportent comme on veut. Cela permet de rapidement détecter d’éventuels problèmes dans les petites parties isolées du programme.</p>
+
+<p>La bibliothèque utilisée dans le cadre de ce cours est JUnit.</p>
+
+<h2 id="utilisation-de-junit">Utilisation de JUnit</h2>
+<p>Pour utiliser JUnit, on doit marquer sa méthode avec la notation <code class="highlighter-rouge">@Test</code>.</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="nd">@Test</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">addition</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">assertEquals</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mi">1</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Ci-dessous des exemples des méthodes de JUnit.</p>
+
+<!-- More -->
+
+<ul>
+  <li><code class="highlighter-rouge">assertTrue(boolean b)</code> vérifie que <code class="highlighter-rouge">b</code> est vrai</li>
+  <li><code class="highlighter-rouge">assertNull(Object o)</code> vérifie que <code class="highlighter-rouge">o</code> est nul</li>
+  <li><code class="highlighter-rouge">assertEquals(Object e, Object a)</code> vérifie que <code class="highlighter-rouge">a</code> est égal à <code class="highlighter-rouge">e</code> au moyen de la méthode <code class="highlighter-rouge">equals</code></li>
+  <li><code class="highlighter-rouge">assertEquals(long e, long a)</code> vérifie que <code class="highlighter-rouge">e</code> et <code class="highlighter-rouge">a</code> sont égaux</li>
+  <li><code class="highlighter-rouge">assertEquals(double e, double a, double d)</code> vérifie que la différence entre <code class="highlighter-rouge">e</code> et <code class="highlighter-rouge">a</code> est inférieure à <code class="highlighter-rouge">d</code></li>
+  <li>etc.</li>
+</ul>
+
+<p><strong>Le premier argument est la valeur attendue, la seconde est la valeur obtenue.</strong> Lors de la rédaction de tests pour une unité, il y a trois types principaux de tests auxquels il convient de penser :</p>
+
+<ul>
+  <li>Les tests de <strong>cas d’erreur</strong>, qui vérifient que les erreurs qui
+doivent être signalées le sont bien, p.ex. lorsqu’un argument invalide est fourni</li>
+  <li>Les tests de <strong>cas aux limites</strong>, qui vérifient que l’unité se comporte bien dans les situations délicates, p.ex. qu’une méthode qui accepte un tableau de taille quelconque fonctionne correctement s’il est vide</li>
+  <li>Les tests de <strong>cas normaux</strong>, qui vérifient que l’unité se comporte bien dans les situations « normales ».</li>
+</ul>
+
+<p><strong>Attention</strong>: Passer les tests ne signifie pas que le code est correct!</p>
+
+<blockquote>
+  <p>Program testing can be used to show the presence of bugs, but never to show their absence!</p>
+
+  <p><a href="https://en.wikiquote.org/wiki/Edsger_W._Dijkstra#1970s">Edsger Dijkstra</a></p>
+</blockquote>
+
+<h3 id="exemple-dun-test-junit">Exemple d’un test JUnit</h3>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+</pre></td><td class="code"><pre><span class="kn">import</span> <span class="nn">org.junit.Test</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">static</span> <span class="n">org</span><span class="o">.</span><span class="na">junit</span><span class="o">.</span><span class="na">Assert</span><span class="o">.*;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">SortTest</span> <span class="o">{</span>
+    <span class="nd">@Test</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">sortsEmptyArray</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">a1</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="mi">0</span><span class="o">];</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">a2</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="mi">0</span><span class="o">];</span>
+        <span class="n">sort</span><span class="o">(</span><span class="n">a2</span><span class="o">);</span>
+        <span class="n">assertArrayEquals</span><span class="o">(</span><span class="n">a1</span><span class="o">,</span> <span class="n">a2</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kt">boolean</span> <span class="nf">isSorted</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">array</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">array</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">array</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">&lt;</span> <span class="n">array</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">])</span>
+        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Test</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">sortsNontrivialArray</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">a</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[]{</span> <span class="mi">4</span><span class="o">,</span><span class="mi">3</span><span class="o">,</span><span class="mi">6</span><span class="o">,</span><span class="mi">1</span><span class="o">,</span><span class="mi">5</span><span class="o">,</span><span class="mi">6</span><span class="o">,</span><span class="mi">4</span><span class="o">,-</span><span class="mi">1</span> <span class="o">};</span>
+        <span class="n">sort</span><span class="o">(</span><span class="n">a</span><span class="o">);</span>
+        <span class="n">assertTrue</span><span class="o">(</span><span class="n">isSorted</span><span class="o">(</span><span class="n">a</span><span class="o">));</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h1 id="immuabilité"><a href="http://cs108.epfl.ch/archive/15/files/ppo15_01c_immuabilite.pdf">Immuabilité</a></h1>
+
+<h2 id="exemple">Exemple</h2>
+
+<p>On crée ci-dessous les classes Date et Person de façon assez classique, avec des getters et des setters.</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+</pre></td><td class="code"><pre><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="nc">Date</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">y</span><span class="o">,</span> <span class="n">m</span><span class="o">,</span> <span class="n">d</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="nf">Date</span><span class="o">(</span><span class="kt">int</span> <span class="n">y</span><span class="o">,</span> <span class="kt">int</span> <span class="n">m</span><span class="o">,</span> <span class="kt">int</span> <span class="n">d</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// La vérification des arguments est omise</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">y</span> <span class="o">=</span> <span class="n">y</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">m</span> <span class="o">=</span> <span class="n">m</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">d</span> <span class="o">=</span> <span class="n">d</span><span class="o">;</span>
+    <span class="o">}</span>
+    
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">year</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">y</span><span class="o">;</span>
+    <span class="o">}</span>
+    
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setYear</span><span class="o">(</span><span class="kt">int</span> <span class="n">y2</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">y</span> <span class="o">=</span> <span class="n">y2</span><span class="o">;</span>
+    <span class="o">}</span>
+    
+    <span class="c1">// … idem pour month/setMonth, day/setDay</span>
+    
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">y</span> <span class="o">+</span> <span class="s">"-"</span> <span class="o">+</span> <span class="n">m</span> <span class="o">+</span> <span class="s">"-"</span> <span class="o">+</span> <span class="n">d</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="nc">Person</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">String</span> <span class="n">name</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">Date</span> <span class="n">bdate</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="nf">Person</span><span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">,</span> <span class="nc">Date</span> <span class="n">bdate</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">bdate</span> <span class="o">=</span> <span class="n">bdate</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">name</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">name</span><span class="o">;</span>
+    <span class="o">}</span>
+    
+    <span class="kd">public</span> <span class="nc">Date</span> <span class="nf">birthdate</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">bdate</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Ayant écrit ces classes, on peut les utiliser dans un petit programme qui sauvegarde la date de naissance de deux informaticiens célèbres nés le même jour.</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="nc">Date</span> <span class="n">d</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Date</span><span class="o">(</span><span class="mi">1903</span><span class="o">,</span> <span class="mi">12</span><span class="o">,</span> <span class="mi">28</span><span class="o">);</span>
+<span class="nc">Person</span> <span class="n">j</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Person</span><span class="o">(</span><span class="s">"John Von Neumann"</span><span class="o">,</span><span class="n">d</span><span class="o">);</span>
+<span class="n">d</span><span class="o">.</span><span class="na">setYear</span><span class="o">(</span><span class="mi">1969</span><span class="o">);</span>
+<span class="nc">Person</span> <span class="n">l</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Person</span><span class="o">(</span><span class="s">"Linus Torvalds"</span><span class="o">,</span> <span class="n">d</span><span class="o">);</span>
+<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">j</span><span class="o">.</span><span class="na">name</span><span class="o">()</span> <span class="o">+</span> <span class="s">" est né le "</span> <span class="o">+</span> <span class="n">j</span><span class="o">.</span><span class="na">birthdate</span><span class="o">());</span>
+<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">l</span><span class="o">.</span><span class="na">name</span><span class="o">()</span> <span class="o">+</span> <span class="s">" est né le "</span> <span class="o">+</span> <span class="n">l</span><span class="o">.</span><span class="na">birthdate</span><span class="o">());</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>L’intention est de changer la date de naissance de Linus Torvalds uniquement, mais le programme affiche que les deux sont nés en 1969! Le fait d’avoir changé l’objet <code class="highlighter-rouge">Date d</code> a effectué un changement pour les deux personnes, pas uniquement pour Torvalds, ce qui peut être une faille de sécurité, mais aussi une complication pour ceux qui souhaitent utiliser les classes que l’on a créé.</p>
+
+<p>Pour se protéger de ce problème, il faudrait faire une copie défensive.</p>
+
+<p>Tout cela commence dans le constructeur de <code class="highlighter-rouge">Date</code>. On doit pouvoir copier la date vers un nouvel objet dont tous les champs sont identiques mais dont la référence est différente. Pour ce faire, on écrit un constructeur de copie dans <code class="highlighter-rouge">Date</code>:</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="nc">Date</span> <span class="o">{</span>
+    <span class="c1">// … comme avant</span>
+    <span class="kd">public</span> <span class="nf">Date</span><span class="o">(</span><span class="nc">Date</span> <span class="n">that</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">(</span><span class="n">that</span><span class="o">.</span><span class="na">y</span><span class="o">,</span> <span class="n">that</span><span class="o">.</span><span class="na">m</span><span class="o">,</span> <span class="n">that</span><span class="o">.</span><span class="na">d</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>On effectue ensuite un second changement dans le constructeur de <code class="highlighter-rouge">Person</code> pour avoir:</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="nc">Person</span> <span class="o">{</span>
+    <span class="c1">// … comme avant</span>
+    <span class="kd">public</span> <span class="nf">Person</span><span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">,</span> <span class="nc">Date</span> <span class="n">bdate</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">bdate</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Date</span><span class="o">(</span><span class="n">bdate</span><span class="o">);</span> <span class="c1">// copie au lieu de l'original!</span>
+    <span class="o">}</span>
+<span class="o">}</span> 
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>et dans le getter de <code class="highlighter-rouge">Person</code>:</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="nc">Person</span> <span class="o">{</span>
+    <span class="c1">// … comme avant</span>
+    <span class="kd">public</span> <span class="nc">Date</span> <span class="nf">birthdate</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">Date</span><span class="o">(</span><span class="n">birthdate</span><span class="o">);</span> <span class="c1">// copie au lieu de l'original!</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h3 id="quelques-autres-types-de-variables">Quelques autres types de variables</h3>
+<ul>
+  <li>On n’a pas besoin de protéger la variable <code class="highlighter-rouge">name</code> car les variables de type  <code class="highlighter-rouge">String</code> sont <strong>immuables</strong>.</li>
+  <li>Les tableaux, quant à eux, son <strong>non-immuables</strong>, donc il faut avoir recourt aux copies défensives.</li>
+  <li>Les tableaux dynamiques <code class="highlighter-rouge">ArrayList&lt;&gt;</code> sont <strong>non-modifiables</strong> si ils sont <em>“enrobés”</em> dans <code class="highlighter-rouge">Collections.unmodifiableList();</code>:</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">m</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+<span class="n">m</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"un"</span><span class="o">);</span>
+<span class="n">m</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"deux"</span><span class="o">);</span>
+<span class="n">m</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"trois"</span><span class="o">);</span>
+<span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">u</span> <span class="o">=</span> <span class="nc">Collections</span><span class="o">.</span><span class="na">unmodifiableList</span><span class="o">(</span><span class="n">m</span><span class="o">);</span>
+<span class="n">u</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"quatre"</span><span class="o">);</span> <span class="c1">// lève l'exception UOE</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Ici, <code class="highlighter-rouge">u</code> est un objet par lequel on passe pour accéder à <code class="highlighter-rouge">m</code>, et qui bloque les changements en levant une exception. C’est ce qu’on appelle une <em>vue</em> (<em>a view</em>)</p>
+
+<p><strong>Note:</strong> La méthode <code class="highlighter-rouge">unmodifiableList</code> de la classe <code class="highlighter-rouge">java.util.Collections</code> permet d’obtenir une version non modifiable d’un tableau dynamique, dont toutes les méthodes de modification lèvent l’exception <code class="highlighter-rouge">UnsupportedOperationException</code> (abrégée UOE). Quiconque qui ait accès à la variable <code class="highlighter-rouge">m</code> peut cependent encore modifier l’<code class="highlighter-rouge">ArrayList</code>. C’est pourquoi on parle de liste <strong>non-modifiable</strong> plutôt qu’<strong>immuable</strong> (c’est le mieux qu’on puisse faire pour les tableaux).</p>
+
+<h2 id="règle-de-limmuabilité">Règle de l’immuabilité</h2>
+<blockquote>
+  <p>Dans la mesure du possible, écrivez des classes immuables.</p>
+</blockquote>
+
+<h2 id="inconvénients-de-limmuabilité">Inconvénients de l’immuabilité</h2>
+<ul>
+  <li>Si on change beacoup de variables, le fait de recréer un gros objet à chaque changement alourdit beacoup le programme.</li>
+  <li>Parfois, on veut qu’une modification à un endroit soit prise en compte à un autre, ce qui devient lourd à écrire.</li>
+</ul>
+
+<h2 id="terminologie">Terminologie</h2>
+<ul>
+  <li>Une classe est immuable si ses instances ne peuvent pas changer d’état une fois créées.</li>
+  <li>Une classe est non modifiable si un morceau de code ayant accès à l’une de ses instances n’a pas la possibilité d’appeler des méthodes modifiant son état.</li>
+</ul>
+
+<p><strong>Attention</strong> : même si une classe immuable n’est jamais modifiable, l’inverse n’est pas forcément vrai</p>
+
+<h2 id="pour-faire-une-classe-immuable">Pour faire une classe immuable</h2>
+<ol>
+  <li>Tous les champs doivent être déclarés en <code class="highlighter-rouge">final</code>, initialisés lors de la construction, et jamais modifiées par la suite.</li>
+  <li>Toute valeur non immuable fournie à son constructeur doit être copiée en profondeur avant d’être stockée dans un des champs.</li>
+  <li>Aucune valeur non immuable stockée dans un des champs ne doit être fournie de l’extérieur (soit la rendre non modifiable au préalable, soit fournir une copie profonde).</li>
+</ol>
+
+<h2 id="tableaux-et-immuabilité">Tableaux et immuabilité</h2>
+<ol>
+  <li>Les tableaux reçus à la construction sont copiés défensivement, rendus non modifiables par unmodifiableList puis stockés ainsi dans des champs.</li>
+  <li>Ces tableaux non modifiables sont directement retournés par les méthodes d’accès</li>
+</ol>
+
+<h1 id="bâtisseurs"><a href="http://cs108.epfl.ch/archive/15/files/ppo15_01c_immuabilite.pdf">Bâtisseurs</a></h1>
+<p>Un défaut de l’immuabilité est qu’il devient difficile de construire des classes immuables (du fait de la finalité de ses champs). Il faut le faire d’un seul coup, et trouver soi-même une façon de stocker les données entre temps…</p>
+
+<p>C’est pourquoi on a des bâtisseurs.</p>
+
+<h2 id="exemple-1">Exemple</h2>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+</pre></td><td class="code"><pre><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="nc">DateBuilder</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">y</span><span class="o">,</span> <span class="n">m</span><span class="o">,</span> <span class="n">d</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="nf">DateBuilder</span><span class="o">(</span><span class="kt">int</span> <span class="n">y</span><span class="o">,</span> <span class="kt">int</span> <span class="n">m</span><span class="o">,</span> <span class="kt">int</span> <span class="n">d</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">y</span> <span class="o">=</span> <span class="n">y</span><span class="o">;</span> <span class="k">this</span><span class="o">.</span><span class="na">m</span> <span class="o">=</span> <span class="n">m</span><span class="o">;</span> <span class="k">this</span><span class="o">.</span><span class="na">d</span> <span class="o">=</span> <span class="n">d</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">year</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">y</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setYear</span><span class="o">(</span><span class="kt">int</span> <span class="n">y2</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">y2</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="c1">// … idem pour month/setMonth et day/setDay</span>
+    <span class="kd">public</span> <span class="nc">Date</span> <span class="nf">build</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">Date</span><span class="o">(</span><span class="n">y</span><span class="o">,</span> <span class="n">m</span><span class="o">,</span> <span class="n">d</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>La méthode <code class="highlighter-rouge">.build()</code> construit et retourne l’objet créé.</p>
+
+<h2 id="appels-chaînés">Appels chaînés</h2>
+<p>Plûtot que de retourner un <code class="highlighter-rouge">void</code>, les setters peuvent retourner le constructeur lui-même, c’est-à-dire <code class="highlighter-rouge">this</code>. On peut alors chaîner les appels:</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="code"><pre><span class="nc">Date</span> <span class="n">d</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Date</span><span class="o">.</span><span class="na">Builder</span><span class="o">(</span><span class="mi">1903</span><span class="o">,</span> <span class="mi">12</span><span class="o">,</span> <span class="mi">28</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">setYear</span><span class="o">(</span><span class="mi">1969</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">build</span><span class="o">();</span> <span class="c1">// 1969-12-28</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h2 id="règle-du-bâtisseur">Règle du bâtisseur</h2>
+<blockquote>
+  <p>S’il peut être utile de construire par étapes des instances d’une classe immuable, attachez-lui un bâtisseur</p>
+</blockquote>
+
+<p>En plus de cela (par convention):</p>
+
+<ul>
+  <li>Appeler la classe bâtisseur <code class="highlighter-rouge">Builder</code></li>
+  <li>L’imbriquer statiquement dans la classe dont elle bâtit les instances</li>
+  <li>Nommer sa classe de construction <code class="highlighter-rouge">build</code></li>
+  <li>Retourner <code class="highlighter-rouge">this</code> pour les méthodes de modification (voir <a href="#appels-chaînés">appels chaînés</a>)</li>
+</ul>
+
+<h1 id="classes-imbriquées-statiques">Classes imbriquées statiques</h1>
+<p>On met les builders dans les classes qu’elles instantient (parce qu’un builder n’a pas de raison d’être sans).</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="nc">Date</span> <span class="o">{</span>
+    <span class="c1">// …</span>
+    <span class="kd">public</span> <span class="kd">final</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">Builder</span> <span class="o">{</span>
+        <span class="c1">// …</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Une classe imbriquée statique a accès aux membres privés <strong>statiques</strong> de sa classe englobante, et peut être déclarée privée (<code class="highlighter-rouge">private</code>) ou protégée (<code class="highlighter-rouge">protected</code>).</p>
+
+<h1 id="généricité"><a href="http://cs108.epfl.ch/archive/15/files/ppo15_02_genericite.pdf">Généricité</a></h1>
+<p>Admettons que l’on désire écrire une classe très simplemodélisant ce que nous appellerons une cellule(immuable), dont le but est de stocker un — et un seul — objet.</p>
+
+<p>Intuitivement, on utiliserait alors le type <code class="highlighter-rouge">Object</code> pour que la cellule fonctionne avec tous les types d’objets.</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre><span class="kd">final</span> <span class="kd">class</span> <span class="nc">ObjectCell</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">Object</span> <span class="n">o</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="nf">ObjectCell</span><span class="o">(</span><span class="nc">Object</span> <span class="n">o</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">o</span> <span class="o">=</span> <span class="n">o</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="nc">Object</span> <span class="nf">get</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">o</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span> 
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Cela peut demander un grand nombre de transtypage à son utilisation, car la classe retourne un type <code class="highlighter-rouge">Object</code>.</p>
+
+<p>Introduit dans Java 5, la notion de généricité (<em>genericity</em>), aussi appelée polymorphisme paramétrique (<em>parametric polymorphism</em>), résoud ce problème.</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre><span class="kd">final</span> <span class="kd">class</span> <span class="nc">Cell</span><span class="o">&lt;</span><span class="no">E</span><span class="o">&gt;</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="no">E</span> <span class="n">e</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="nf">Cell</span><span class="o">(</span><span class="no">E</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">e</span> <span class="o">=</span> <span class="n">e</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="no">E</span> <span class="nf">get</span><span class="o">()</span> <span class="o">{</span> 
+        <span class="k">return</span> <span class="n">e</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Ceci est une classe <strong>générique</strong>. On utilise le <strong>paramètre de type</strong> <code class="highlighter-rouge">E</code>.</p>
+
+<h2 id="utilisation">Utilisation</h2>
+
+<p>En pratique, on peut remplacer le paramètre <code class="highlighter-rouge">e</code> par le type d’objet que l’on veut utiliser:</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre><span class="nc">Cell</span><span class="o">&lt;</span><span class="nc">Object</span><span class="o">&gt;</span> <span class="n">a</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Cell</span><span class="o">&lt;</span><span class="nc">Object</span><span class="o">&gt;;</span>
+<span class="nc">Cell</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">b</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Cell</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;;</span>
+<span class="nc">Cell</span><span class="o">&lt;</span><span class="nc">Cell</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Cell</span><span class="o">&lt;</span><span class="nc">Cell</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;&gt;;</span>
+
+<span class="nc">Cell</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">o</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Cell</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;(</span><span class="s">"hello"</span><span class="o">);</span>
+<span class="kt">char</span> <span class="n">c</span> <span class="o">=</span> <span class="n">o</span><span class="o">.</span><span class="na">get</span><span class="o">().</span><span class="na">charAt</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span> <span class="c1">// Aucun probleme avec la généricité</span>
+
+<span class="nc">Cell</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">o</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Cell</span><span class="o">&lt;&gt;(</span><span class="s">"hello"</span><span class="o">);</span> <span class="c1">// Le type est inféré par Java. Permis depuis Java 7</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h2 id="paires">Paires</h2>
+<p>Si on veut utiliser plus d’un type dans une classe générique:</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre><span class="kd">final</span> <span class="kd">class</span> <span class="nc">Pair</span><span class="o">&lt;</span><span class="no">F</span><span class="o">,</span><span class="no">S</span><span class="o">&gt;</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="no">F</span> <span class="n">f</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="no">S</span> <span class="n">s</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="nf">Pair</span><span class="o">(</span><span class="no">F</span> <span class="n">f</span><span class="o">,</span> <span class="no">S</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span> <span class="k">this</span><span class="o">.</span><span class="na">f</span> <span class="o">=</span> <span class="n">f</span><span class="o">;</span> <span class="err">…</span> <span class="o">}</span>
+    <span class="kd">public</span> <span class="no">F</span> <span class="nf">getF</span><span class="o">()</span> <span class="o">{</span> <span class="k">return</span> <span class="n">f</span><span class="o">;</span> <span class="o">}</span>
+    <span class="kd">public</span> <span class="no">S</span> <span class="nf">getS</span><span class="o">()</span> <span class="o">{</span> <span class="k">return</span> <span class="n">s</span><span class="o">;</span> <span class="o">}</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Si on veut utiliser plus d’un type dans les méthodes d’une classe générique:</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="code"><pre><span class="kd">final</span> <span class="kd">class</span> <span class="nc">Cell</span><span class="o">&lt;</span><span class="no">E</span><span class="o">&gt;</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="no">E</span> <span class="n">e</span><span class="o">;</span>
+    <span class="c1">// … comme avant</span>
+    <span class="kd">public</span> <span class="o">&lt;</span><span class="no">S</span><span class="o">&gt;</span> <span class="nc">Pair</span><span class="o">&lt;</span><span class="no">E</span><span class="o">,</span> <span class="no">S</span><span class="o">&gt;</span> <span class="nf">pairWith</span><span class="o">(</span><span class="no">S</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nc">Pair</span><span class="o">&lt;&gt;(</span><span class="n">e</span><span class="o">,</span> <span class="n">s</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="c1">// Utilisation de cette classe:</span>
+<span class="nc">Cell</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Cell</span><span class="o">&lt;&gt;(</span><span class="s">"hello"</span><span class="o">);</span>
+<span class="nc">Pair</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">p</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="na">pairWith</span><span class="o">(</span><span class="mi">12</span><span class="o">);</span>
+
+<span class="c1">// On l'écrit ainsi uniquement si le compilateur n'arrive pas à inférer le type</span>
+<span class="nc">Pair</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">p</span> <span class="o">=</span> <span class="n">c</span><span class="o">.&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span><span class="n">pairWith</span><span class="o">(</span><span class="mi">12</span><span class="o">);</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h2 id="généricité-et-types-de-base"><a href="http://cs108.epfl.ch/archive/15/files/ppo15_02_genericite.pdf">Généricité et types de base</a></h2>
+
+<h3 id="emballage--déballage">Emballage &amp; déballage</h3>
+<p>Jusqu’à présent, on ne pouvait qu’utiliser la généricité avec des types évolués. La solution est celle de <em>l’emballage</em>, c’est-à-dire utiliser les types évolués correspondant aux types de base. Il est aussi possible de déballer.</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre><span class="nc">Cell</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Cell</span><span class="o">&lt;&gt;(</span><span class="k">new</span> <span class="nc">Integer</span><span class="o">(</span><span class="mi">1</span><span class="o">));</span>
+<span class="kt">int</span> <span class="n">succ</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="na">get</span><span class="o">().</span><span class="na">intValue</span><span class="o">()</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span> 
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Le compilateur Java peut le faire à la place du programmeur; c’est ce qu’on appelle le <em>déballage automatique</em> (<em>autoboxing</em>).</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre><span class="nc">Cell</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Cell</span><span class="o">&lt;&gt;(</span><span class="mi">1</span><span class="o">);</span>
+<span class="kt">int</span> <span class="n">succ</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="na">get</span><span class="o">()</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h3 id="limitations-de-la-généricité-en-java"><a href="http://cs108.epfl.ch/archive/15/files/ppo15_02_genericite.pdf">Limitations de la généricité en Java</a></h3>
+
+<p>Pour des raisons historiques, la généricité en Java possède
+les limitations suivantes:</p>
+
+<ul>
+  <li>La création de tableaux dont les éléments ont un type générique est interdite</li>
+  <li>Les tests d’instance impliquant des types génériques sont interdits</li>
+  <li>Les transtypages (casts) sur des types génériques ne sont pas sûrs, c-à-d qu’ils produisent un avertissement lors de la compilation et un résultat éventuellement incorrect à l’exécution</li>
+  <li>La définition d’exceptions génériques est interdite</li>
+</ul>
+
+<p>Sont alors interdits:</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="code"><pre><span class="kd">static</span> <span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="no">T</span><span class="o">[]</span> <span class="nf">newArray</span><span class="o">(</span><span class="no">T</span> <span class="n">x</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="no">T</span><span class="o">[]{</span> <span class="n">x</span> <span class="o">};</span> <span class="c1">// interdit</span>
+<span class="o">}</span>
+
+<span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="kt">int</span> <span class="nf">printIfStringCell</span><span class="o">(</span><span class="nc">Cell</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="n">c</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">c</span> <span class="k">instanceof</span> <span class="nc">Cell</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;)</span> <span class="c1">// interdit</span>
+    <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">c</span><span class="o">);</span>
+<span class="o">}</span> 
+
+<span class="nc">Cell</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Cell</span><span class="o">&lt;&gt;(</span><span class="mi">1</span><span class="o">);</span>
+<span class="nc">Object</span> <span class="n">o</span> <span class="o">=</span> <span class="n">c</span><span class="o">;</span>
+<span class="nc">Cell</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">c2</span> <span class="o">=</span> <span class="o">(</span><span class="nc">Cell</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;)</span><span class="n">o</span><span class="o">;</span> 
+
+<span class="kd">class</span> <span class="nc">BadException</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="c1">// interdit</span>
+    <span class="kd">extends</span> <span class="nc">Exception</span> <span class="o">{}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h1 id="collections"><a href="http://cs108.epfl.ch/archive/15/files/ppo15_03_listes.pdf">Collections</a></h1>
+
+<p>Une collection est un objet contenant d’autres objets. Nous étudierons ici:</p>
+
+<ol>
+  <li>Les <strong>listes</strong> (<em>lists</em>), collection ordonnée pour laquelle un élément donné peut apparaître plusieurs fois.</li>
+  <li>Les <strong>ensembles</strong> (<em>sets</em>), collection non ordonnée dans laquelle un élément donné peut apparaître au plus une fois.</li>
+  <li>Les <strong>tables associatives</strong> (<em>maps</em>) ou <strong>dictionnaires</strong> (<em>dictionaries</em>), collection associant des valeurs à des clef.</li>
+</ol>
+
+<h2 id="collections-dans-lapi-java">Collections dans l’API Java</h2>
+<p>L’API Java fournit un certain nombre de collections (<em>Java Collections Framework (JCF)</em>). Son contenu est dans <code class="highlighter-rouge">java.util</code>.</p>
+
+<p><img src="/images/notes-prog/heritance-collections.png" alt="Graphe d'héritanche des collections dans l'API Java" /></p>
+
+<h2 id="règle-des-collections">Règle des collections</h2>
+
+<blockquote>
+  <p>Program to an interface, not an implementation.</p>
+</blockquote>
+
+<p>En dehors des énoncés new, il faut toujours utiliser les interfaces (List, Set, Map, etc.) plutôt que les mises en œuvre (ArrayList, LinkedList, etc.).</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">l</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span> <span class="c1">// oui</span>
+<span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">l</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span> <span class="c1">// non</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h2 id="linterface-collection-sans-s">L’interface <code class="highlighter-rouge">Collection</code> (sans <code class="highlighter-rouge">s</code>)</h2>
+
+<p><code class="highlighter-rouge">Collection</code> est la super-interface commune à <code class="highlighter-rouge">List</code> et <code class="highlighter-rouge">Set</code>. C’est une interface générique.</p>
+
+<h3 id="méthodes-importantes-de-collection">Méthodes importantes de <code class="highlighter-rouge">Collection</code></h3>
+
+<h4 id="méthodes-de-consultation">Méthodes de consultation</h4>
+
+<ul>
+  <li><code class="highlighter-rouge">boolean isEmpty()</code>: retourne vrai ssi la collection est vide.</li>
+  <li><code class="highlighter-rouge">int size()</code>: retourne le nombre d’éléments contenus dans la collection.</li>
+  <li><code class="highlighter-rouge">boolean contains(Object e)</code>: retourne vrai ssi la collection contient l’élément donné. Le type de l’argument est malheureusement Object et non pas E pour des raisons historiques.</li>
+  <li><code class="highlighter-rouge">boolean containsAll(Collection&lt;E&gt; c)</code> : retourne vrai ssi la collection contient tous les éléments
+de la collection donnée.</li>
+</ul>
+
+<h4 id="méthodes-dajout">Méthodes d’ajout</h4>
+
+<ul>
+  <li><code class="highlighter-rouge">boolean add(E e)</code>: ajoute l’élément donné à la collection, et retourne vrai ssi la collection a été modifiée</li>
+  <li><code class="highlighter-rouge">boolean addAll(Collection&lt;E&gt; c)</code>: ajoute à la collection tous les éléments de la collection donnée, et retourne vrai ssi la collection a été modifiée</li>
+</ul>
+
+<h4 id="méthodes-de-suppression">Méthodes de suppression</h4>
+
+<ul>
+  <li><code class="highlighter-rouge">void clear()</code>: supprime tous les éléments de la collection</li>
+  <li><code class="highlighter-rouge">boolean remove(E e)</code>: supprime l’élément donné, s’il se trouve dans la collection</li>
+  <li><code class="highlighter-rouge">boolean removeAll(Collection&lt;E&gt; c)</code>: supprime tous les éléments de la collection donnée</li>
+  <li><code class="highlighter-rouge">boolean retainAll(Collection&lt;E&gt; c)</code>: supprime tous les éléments qui ne se trouvent pas dans la collection donnée</li>
+</ul>
+
+<h2 id="listes">Listes</h2>
+
+<p><img src="/images/notes-prog/heritance-listes.png" alt="Graphe d'héritance des listes dans l'API Java" /></p>
+
+<p>Listes et tableaux sont très similaires, mais la principale différence est:</p>
+
+<ul>
+  <li><strong>Taille</strong>: Fixe pour les tableaux, variable pour les listes</li>
+  <li><strong>Accès</strong>: Aléatoire O(1) pour les tableaux, séquentiel O(n) pour les listes</li>
+</ul>
+
+<p>Les listes ajoutent les méthodes suivantes:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">E get(int i)</code></li>
+  <li><code class="highlighter-rouge">int indexOf(E e)</code></li>
+  <li><code class="highlighter-rouge">int lastIndexOf(E e)</code></li>
+  <li><code class="highlighter-rouge">void add(int i, E e)</code></li>
+  <li><code class="highlighter-rouge">boolean addAll(int i, Collection&lt;E&gt; c) </code></li>
+  <li><code class="highlighter-rouge">E remove(int i)</code></li>
+  <li><code class="highlighter-rouge">E set(int i, E e)</code></li>
+  <li><code class="highlighter-rouge">List&lt;E&gt; subList(int b, int e)</code></li>
+</ul>
+
+<p>La méthode <code class="highlighter-rouge">subList(int b, int e)</code> retourne une vue sur la sous-liste entre <code class="highlighter-rouge">b</code> (inclus) et <code class="highlighter-rouge">e</code> (exclusif).</p>
+
+<p>La classe <code class="highlighter-rouge">Collections</code> offre également des méthodes pour les listes:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">&lt;T&gt; void sort(List&lt;T&gt; l)</code></li>
+  <li><code class="highlighter-rouge">&lt;T&gt; void shuffle(List&lt;T&gt; l)</code></li>
+  <li><code class="highlighter-rouge">&lt;T&gt; List&lt;T&gt; asList(T... a)</code> (nbre variable d’éléments dans une liste immuable)</li>
+  <li><code class="highlighter-rouge">&lt;T&gt; List&lt;T&gt; emptyList()</code> (liste vide immuable)</li>
+  <li><code class="highlighter-rouge">&lt;T&gt; List&lt;T&gt; singletonList(T e)</code> (liste immuable de longueur 1)</li>
+  <li><code class="highlighter-rouge">&lt;T&gt; List&lt;T&gt; nCopies(int n, T e)</code> (liste immuable de longueur <code class="highlighter-rouge">n</code> contenant uniquement <code class="highlighter-rouge">e</code>)</li>
+</ul>
+
+<h3 id="règle-des-listes-immuables">Règle des listes immuables</h3>
+
+<blockquote>
+  <p>Pour obtenir une liste immuable à partir d’une liste quelconque, obtenez une vue non modifiable d’une copie de cette liste.</p>
+</blockquote>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+</pre></td><td class="code"><pre><span class="nc">List</span><span class="o">&lt;</span><span class="err">…</span><span class="o">&gt;</span> <span class="n">immutableList</span> <span class="o">=</span> <span class="nc">Collections</span><span class="o">.</span><span class="na">unmodifiableList</span><span class="o">(</span><span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;(</span><span class="n">list</span><span class="o">));</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h3 id="complexité-des-listes">Complexité des listes</h3>
+
+<h4 id="arraylist"><code class="highlighter-rouge">ArrayList</code></h4>
+
+<ul>
+  <li><strong>Accès</strong>: O(1)</li>
+  <li><strong>Insertion</strong>: O(n)</li>
+</ul>
+
+<h4 id="linkedlist"><code class="highlighter-rouge">LinkedList</code></h4>
+
+<ul>
+  <li><strong>Accès</strong>: O(n)</li>
+  <li><strong>Insertion</strong>: O(1)</li>
+</ul>
+
+<h2 id="piles-deques--queues">Piles, Deques &amp; Queues</h2>
+
+<p><img src="/images/notes-prog/piles-deques-queues.png" alt="Différence entre pile, deque et queue" /></p>
+
+<p>Voir <a href="http://cs108.epfl.ch/archive/15/files/ppo15_03_listes.pdf">les slides</a> pour la liste des méthodes implémentées par l’interface <code class="highlighter-rouge">Queue</code>.</p>
+
+<h3 id="règle-des-listes">Règle des listes</h3>
+
+<blockquote>
+  <p>Pour représenter une pile, une queue ou un « deque », utilisez ArrayDeque. Pour représenter une liste dans toute sa généralité, utilisez ArrayList si les opérations d’indexation (get, set) dominent, sinon LinkedList.</p>
+</blockquote>
+
+<p><strong>Note:</strong> ArrayList peut également s’utiliser comme une pile, pour peu que les ajouts/suppressions se fassent toujours à la fin de la liste et pas au début.</p>
+
+<h1 id="itérateurs---parcours-dune-collection">Itérateurs - parcours d’une collection</h1>
+
+<p>Pour les <code class="highlighter-rouge">LinkedList</code>, une boucle <code class="highlighter-rouge">for</code> contenant un <code class="highlighter-rouge">.get(i)</code> est une mauvaise idée parce que l’accès se fait en O(n). On utilise alors une boucle for-each avec un itérateur.</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">l</span> <span class="o">=</span> <span class="err">…</span><span class="o">;</span>
+<span class="nc">Iterator</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">i</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="na">iterator</span><span class="o">();</span>
+<span class="k">while</span> <span class="o">(</span><span class="n">i</span><span class="o">.</span><span class="na">hasNext</span><span class="o">())</span> <span class="o">{</span>
+    <span class="nc">String</span> <span class="n">s</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="na">next</span><span class="o">();</span>
+    <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">s</span><span class="o">);</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>L’interface <code class="highlighter-rouge">Iterator</code> a 3 méthodes:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">boolean hasNext()</code></li>
+  <li><code class="highlighter-rouge">E next()</code></li>
+  <li><code class="highlighter-rouge">void remove()</code></li>
+</ul>
+
+<h1 id="tables-associatives"><a href="http://cs108.epfl.ch/archive/15/files/ppo15_04_tables-associatives.pdf">Tables Associatives</a></h1>
+<p>Une collection qui associe des <strong>valeurs</strong> à des <strong>clés</strong>.</p>
+
+<p><img src="/images/notes-prog/heritance-map.png" alt="Graphe d'héritance des Maps dans l'API Java" /></p>
+
+<h2 id="règle-des-tables-immuables">Règle des tables immuables</h2>
+
+<blockquote>
+  <p>Pour obtenir une table associative immuable à partir d’une table associative quelconque, obtenez une vue non modifiable d’une copie de cette table.</p>
+</blockquote>
+
+<p><strong>Exemple</strong>:</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+</pre></td><td class="code"><pre><span class="nc">Map</span><span class="o">&lt;</span><span class="err">…</span><span class="o">&gt;</span> <span class="n">immutableMap</span> <span class="o">=</span> <span class="nc">Collections</span><span class="o">.</span><span class="na">unmodifiableMap</span><span class="o">(</span><span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;(</span><span class="n">map</span><span class="o">));</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Dans une map, l’ordre d’itération est souvent aléatoire, et peut donc varier entre deux exécutions.</p>
+
+<p><strong>Exemple d’utilisation</strong>:</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre><span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;</span> <span class="n">s</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+<span class="n">s</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"printemps"</span><span class="o">,</span> <span class="s">"spring"</span><span class="o">);</span>
+<span class="n">s</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"été"</span><span class="o">,</span> <span class="s">"summer"</span><span class="o">);</span>
+<span class="n">s</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"automne"</span><span class="o">,</span> <span class="s">"autumn"</span><span class="o">);</span>
+<span class="n">s</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"hiver"</span><span class="o">,</span> <span class="s">"winter"</span><span class="o">);</span>
+
+<span class="k">for</span> <span class="o">(</span><span class="nc">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span><span class="nc">String</span><span class="o">&gt;</span> <span class="nl">e:</span> <span class="n">s</span><span class="o">.</span><span class="na">entrySet</span><span class="o">())</span>
+    <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"En anglais, "</span> <span class="o">+</span> <span class="n">e</span><span class="o">.</span><span class="na">getKey</span><span class="o">()</span> <span class="o">+</span> <span class="s">" se dit "</span> <span class="o">+</span> <span class="n">e</span><span class="o">.</span><span class="na">getValue</span><span class="o">();</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h2 id="hashmap"><code class="highlighter-rouge">HashMap</code></h2>
+<p>Une fonction de hachage prend une donnée et retourne un entier dans un intervalle borné (un hash value, ou <em>valeur de hachage</em>). On peut ensuite prendre cette valeur modulo <code class="highlighter-rouge">n</code>, et ensuite aller chercher dans la <code class="highlighter-rouge">hash mod n</code><sup>ieme</sup> liste. C’est ce qui se fait de mieux en termes de tables associatives, et les <code class="highlighter-rouge">HashMap</code> sont par conséquent plus utilisées.</p>
+
+<p><img src="/images/notes-prog/hashmap.png" alt="Fonctionnement d'une HashMap" /></p>
+
+<ul>
+  <li><strong>Fonction de hachage</strong>: O(1)</li>
+  <li><strong>Insertion</strong>: O(1)</li>
+  <li><strong>Recherche</strong>: O(1)</li>
+</ul>
+
+<h2 id="treemap"><code class="highlighter-rouge">TreeMap</code></h2>
+<p>Elle est organisée comme ceci:</p>
+
+<p><img src="/images/notes-prog/treemap.png" alt="Organisation d'une TreeMap" /></p>
+
+<p>Les éléments plus petits sont à gauche, plus grands à droite. La recherche est donc assez simple, puisqu’il s’agit d’une série de comparaisons.</p>
+
+<h2 id="règle-hashmap--treemap">Règle <code class="highlighter-rouge">HashMap</code> / <code class="highlighter-rouge">TreeMap</code></h2>
+
+<blockquote>
+  <p>Utilisez HashMap comme mise en œuvre des tables associatives en Java, sauf lorsqu’il est utile de parcourir les clefs en ordre croissant, auquel cas vous pourrez leur préférer TreeMap.</p>
+</blockquote>
+
+<h2 id="egalité-des-clés">Egalité des clés</h2>
+<p>Pour une table associative, il est important de pouvoir comparer la clé donnée à celle qui est stockée. Pour ce faire, deux formes d’identité existent:</p>
+
+<ol>
+  <li><strong>Egalité par référence</strong>: deux objets sont égaux ssi il s’agit du même objet. On utilise <code class="highlighter-rouge">==</code>.</li>
+  <li><strong>Egalité par structure</strong>: deux objets sont égaux ssi leurs champs ont la même valeur. On utilise le <code class="highlighter-rouge">.equals()</code>.</li>
+</ol>
+
+<h3 id="egalité-et-immuabilité">Egalité et immuabilité</h3>
+<p>Lors d’une redéfinition de equals, il est important de s’assurer que celle-ci est stable, dans le sens où deux objets considérés comme égaux à un instant donné le sont aussi à n’importe quel instant futur. Le seul moyen de garantir qu’une mise en œuvre de equals soit stable est qu’elle ne se base que sur des attributs immuables de la classe.</p>
+
+<h3 id="règle-de-equals">Règle de <code class="highlighter-rouge">equals</code></h3>
+<blockquote>
+  <p>Toute redéfinition de equals ne doit se baser que sur des attributs immuables de la classe.</p>
+</blockquote>
+
+<h3 id="règle-de-hashcode">Règle de <code class="highlighter-rouge">hashCode</code></h3>
+<blockquote>
+  <p>Si vous redéfinissez hashCode dans une classe, redéfinissez également equals — et inversement — afin que ces deux méthodes restent compatibles.</p>
+</blockquote>
+
+<p>et</p>
+
+<blockquote>
+  <p>Lorsque vous redéfinissez hashCode, utilisez la méthode statique hash de la classe Objects pour la mettre en œuvre, en lui passant tous les attributs à hacher</p>
+</blockquote>
+
+<p>L’écriture de fonctions de hachage de qualité étant très difficile, il est préférable de laisser cette tâche à des spécialistes. Heureusement, depuis peu la bibliothèque Java offre dans la classe Objects une méthode statique permettant de calculer une valeur de hachage pour une combinaison arbitraire d’objets :</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="code"><pre><span class="kd">public</span> <span class="kt">int</span> <span class="nf">hashCode</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="nc">Objects</span><span class="o">.</span><span class="na">hash</span><span class="o">(</span><span class="n">firstName</span><span class="o">,</span> <span class="n">lastName</span><span class="o">,</span> <span class="n">birthDate</span><span class="o">);</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h1 id="ordre-en-java">Ordre en Java</h1>
+<p>La possibilité d’ordonner les valeurs d’un type donné n’est pas prédéfinie en Java. Au lieu de cela, deux interfaces sont fournies pour ordonner des valeurs d’un type donné. L’une permet aux valeurs de se comparer elle-mêmes, tandis que l’autre permet à un objet externe de comparer deux valeurs</p>
+
+<h2 id="linterface-comparable">L’interface <code class="highlighter-rouge">Comparable</code></h2>
+<p>L’interface <code class="highlighter-rouge">Comparable</code> peut être implémentée par toute classe dont les instances sont comparables entre elles. Elle contient une seule méthode qui compare deux objets.</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="code"><pre><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Comparable</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="o">{</span>
+    <span class="kt">int</span> <span class="nf">compareTo</span><span class="o">(</span><span class="no">T</span> <span class="n">that</span><span class="o">);</span>
+<span class="o">}</span> 
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>La méthode <code class="highlighter-rouge">compareTo</code> retourne un entier négatif si  l’objet auquel on l’applique est inférieur à l’argument, nul si les deux sont égaux, et positif dans les autres cas.</p>
+
+<p>On peut l’implémenter de la façon suivante (le type de comparaison est défini par le type donné en argument):</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="code"><pre><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Comparable</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="o">{</span>
+    <span class="kt">int</span> <span class="nf">compareTo</span><span class="o">(</span><span class="no">T</span> <span class="n">that</span><span class="o">);</span>
+<span class="o">}</span> 
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h3 id="exemples">Exemples</h3>
+
+<ul>
+  <li><code class="highlighter-rouge">"le".compareTo("la")</code> retourne un entier positif</li>
+  <li><code class="highlighter-rouge">"le".compareTo("le")</code> retourne zéro</li>
+  <li><code class="highlighter-rouge">"mont".compareTo("montagne")</code> retourne un entier
+négatif</li>
+</ul>
+
+<h3 id="règle-de-comparable">Règle de <code class="highlighter-rouge">Comparable</code></h3>
+<p>Lorsque vous définissez une classe qui implémente l’interface <code class="highlighter-rouge">Comparable</code>, assurez-vous que sa méthode <code class="highlighter-rouge">compareTo</code> soit compatible avec sa méthode <code class="highlighter-rouge">equals</code>.</p>
+
+<h2 id="linterface-comparator">L’interface <code class="highlighter-rouge">Comparator</code></h2>
+<p>Cette interface décrit un comparateur, un objet capable de comparer deux objets.</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="code"><pre><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Comparator</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="o">{</span>
+    <span class="kt">int</span> <span class="nf">compare</span><span class="o">(</span><span class="no">T</span> <span class="n">o1</span><span class="o">,</span> <span class="no">T</span> <span class="n">o2</span><span class="o">);</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>La méthode compare doit retourner un entier négatif si le premier objet est  inférieur au second, nul si les deux sont égaux et positif dans les autres cas.</p>
+
+<h3 id="différence-entre-comparator-et-comparable">Différence entre <code class="highlighter-rouge">Comparator</code> et <code class="highlighter-rouge">Comparable</code></h3>
+<p>Voir le code ci-dessous: la première variante ne prend qu’un seul argument — la liste à trier — et la trie selon l’ordre naturel de ses éléments, qui doivent donc en posséder un (voir page suivante) :</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+</pre></td><td class="code"><pre><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="kt">void</span> <span class="nf">sort</span><span class="o">(</span><span class="nc">List</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="n">l</span><span class="o">)</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>La seconde variante prend deux arguments — la liste à trier et un comparateur  et la trie selon l’ordre du comparateur :</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+</pre></td><td class="code"><pre><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="kt">void</span> <span class="nf">sort</span><span class="o">(</span><span class="nc">List</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="n">l</span><span class="o">,</span> <span class="nc">Comparator</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="n">c</span><span class="o">)</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Cette variante est utilisable que les éléments aient un ordre naturel ou pas, car seul le comparateur est utilisé !</p>
+
+<h2 id="règle-des-ensembles-immuables">Règle des ensembles immuables</h2>
+<blockquote>
+  <p>Pour obtenir un ensemble immuable à partir d’un ensemble quelconque, obtenez une vue non modifiable d’une copie de cet ensemble.</p>
+</blockquote>
+
+<p><strong>Note</strong>: <em>Je ne prendrai pas de notes. Le tout est assez simple et bien expliqué dans les slides</em>.</p>
+
+<h2 id="listset"><code class="highlighter-rouge">ListSet</code></h2>
+<ul>
+  <li><strong>Insertion</strong>: O(n) (parce qu’il faut tout parcourir pour éviter les doublons)</li>
+  <li><strong>Recherche</strong>: O(n)</li>
+</ul>
+
+<h2 id="hashset"><code class="highlighter-rouge">HashSet</code></h2>
+<ul>
+  <li><strong>Hachage</strong>: O(1)</li>
+  <li><strong>Insertion</strong>: O(1)</li>
+  <li><strong>Recherche</strong>: O(1)</li>
+</ul>
+
+<h2 id="treeset"><code class="highlighter-rouge">TreeSet</code></h2>
+<ul>
+  <li><strong>Insertion</strong>: O(log(n))</li>
+  <li><strong>Recherche</strong>: O(log(n))</li>
+</ul>
+
+<p><em>La classe <code class="highlighter-rouge">TreeSet</code> est surtout intéressante dans le cas où il est important de pouvoir parcourir les éléments dans l’ordre.</em></p>
+
+<h2 id="règle-hashsettreeset">Règle <code class="highlighter-rouge">HashSet</code>/<code class="highlighter-rouge">TreeSet</code></h2>
+<blockquote>
+  <p>Utilisez HashSet comme mise en œuvre des ensembles en Java, sauf lorsqu’il est utile de parcourir les éléments en ordre croissant, auquel cas vous pourrez préférer TreeSet</p>
+</blockquote>
+
+<h2 id="enumérations">Enumérations</h2>
+<p>Exemple ci-dessous.</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="code"><pre><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="nc">Card</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">enum</span> <span class="nc">Suit</span> <span class="o">{</span>
+        <span class="no">SPADES</span><span class="o">,</span> <span class="no">DIAMONDS</span><span class="o">,</span> <span class="no">CLUBS</span><span class="o">,</span> <span class="no">HEARTS</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">frenchSuitName</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">switch</span> <span class="o">(</span><span class="n">suit</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">case</span> <span class="nl">SPADES:</span> <span class="k">return</span> <span class="s">"piques"</span><span class="o">;</span>
+            <span class="k">case</span> <span class="nl">DIAMONDS:</span> <span class="k">return</span> <span class="s">"carreaux"</span><span class="o">;</span>
+            <span class="k">case</span> <span class="nl">CLUBS:</span> <span class="k">return</span> <span class="s">"trèfles"</span><span class="o">;</span>
+            <span class="k">case</span> <span class="nl">HEARTS:</span> <span class="k">return</span> <span class="s">"cœurs"</span><span class="o">;</span>
+            <span class="k">default</span><span class="o">:</span> <span class="k">throw</span> <span class="k">new</span> <span class="nc">Error</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h1 id="inputoutput"><a href="http://cs108.epfl.ch/archive/15/files/ppo15_06_entrees-sorties.pdf">Input/Output</a></h1>
+
+<p>Deux paquetages Java: <code class="highlighter-rouge">java.io</code> et <code class="highlighter-rouge">java.nio</code>.<br />
+Dans <code class="highlighter-rouge">java.io</code>, l’abstraction de base est le <strong>flot</strong> (<em>stream</em>); dans <code class="highlighter-rouge">java.nio</code>, c’est surtout la <strong>mémoire tampon</strong> (<em>buffer</em>). Nous nous intéresserons aux flots.</p>
+
+<p>Les flots d’octets sont les <em>streams</em>, alors que les flots de caractères sont les <em>readers</em> ou <em>writers</em>.</p>
+
+<h2 id="inputstream"><code class="highlighter-rouge">InputStream</code></h2>
+
+<p>Il y a 3 variantes de la méthode <code class="highlighter-rouge">read</code>:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">int read()</code>: lit et retourne le prochain octet sous la forme d’une valeur comprise entre 0 et 255 inclus, ou -1 si la fin a été atteinte.</li>
+  <li><code class="highlighter-rouge">int read(byte[] b, int o, int l)</code>:  lit au plus <code class="highlighter-rouge">l</code> octets du flot, les place dans le tableau <code class="highlighter-rouge">b</code> à partir de la position <code class="highlighter-rouge">o</code> et retourne le nombre d’octets lus</li>
+  <li><code class="highlighter-rouge">int read(byte[] b)</code> équivalent à <code class="highlighter-rouge">read(b, 0, b.length)</code></li>
+</ul>
+
+<p>La classe offre aussi une méthode <code class="highlighter-rouge">skip</code>:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">long skip(long n)</code>:  ignore au plus <code class="highlighter-rouge">n</code> octets du flot et retourne le nombre d’octets ignorés</li>
+</ul>
+
+<p>Ces deux méthodes sont <strong>bloquantes</strong> (<em>blocking</em>), càd si le flot est plus lent que le programme, alors le programme est bloqué jusqu’à ce que le prochain byte soit disponible. C’est un problème pour la performance et/ou l’interactivité du programme: d’où le paquet <code class="highlighter-rouge">java.nio</code>, qui donne des méthodes non-bloquantes. Entre temps, <code class="highlighter-rouge">java.io</code> offre tout de même la méthode suivante:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">int available()</code>: retourne une estimation du nombre d’octets qu’il est possible de lire ou d’ignorer sans bloquer.</li>
+</ul>
+
+<p>On peut fermer le flot quand on a terminé (utile pour l’optimisation).</p>
+
+<ul>
+  <li><code class="highlighter-rouge">void close()</code>: ferme le flot, libérant ainsi les éventuelles resources associées et rendant par là même le flot inutilisable.</li>
+</ul>
+
+<h3 id="octets-int-ou-byte">Octets <code class="highlighter-rouge">int</code> ou <code class="highlighter-rouge">byte</code></h3>
+
+<p><code class="highlighter-rouge">byte</code> stocke un entier entre -128 et +127, et il y a pour cela deux variantes de la méthode <code class="highlighter-rouge">read</code>:</p>
+
+<ul>
+  <li>Celle qui retourne le prochain octet comme un <code class="highlighter-rouge">int</code> entre 0 et 255, et -1 signifie la fin.</li>
+  <li>Celle qui retourne un octet comme un <code class="highlighter-rouge">byte[]</code> (entre -128 et +127), et -1 est une valeur valide.</li>
+</ul>
+
+<h3 id="sous-classes-de-inputstream">Sous-classes de <code class="highlighter-rouge">InputStream</code></h3>
+
+<p>On peut soit avoir un flot d’entrée primaire (=brut), ou alors un flot d’entrée filtrant, dont les données proviennent d’un <strong>flot sous-jacent</strong>
+(<em>underlying stream</em>). Exemples ci-dessous:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">FileInputStream</code>: primaire</li>
+  <li><code class="highlighter-rouge">ByteArrayInputStream</code>: primaire, octets proviennent d’un <code class="highlighter-rouge">byte[]</code></li>
+  <li><code class="highlighter-rouge">BufferedInputStream</code>: filtrant (qui ne filtre rien: rajoute juste une mémoire tampon)</li>
+  <li><code class="highlighter-rouge">GZIPInputStream</code>: filtrant (décompresse à la volée)</li>
+</ul>
+
+<h3 id="sous-classes-de-outputstream">Sous-classes de <code class="highlighter-rouge">OutputStream</code></h3>
+
+<p>Comme <code class="highlighter-rouge">InputStream</code>, il y a deux sortes de sorties: primaires et filtrantes. Offre une méthode <code class="highlighter-rouge">write</code>:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">void write(int b)</code>: écrit l’octet <code class="highlighter-rouge">b</code> — compris entre 0 et 255 — dans le flot,</li>
+  <li><code class="highlighter-rouge">void write(byte[] b, int o, int l)</code>: écrit les <code class="highlighter-rouge">l</code> octets obtenus du tableau <code class="highlighter-rouge">b</code> à partir de la position <code class="highlighter-rouge">o</code> dans le flot</li>
+  <li><code class="highlighter-rouge">void write(byte[] b)</code>: équivalent à <code class="highlighter-rouge">write(b, 0, b.length)</code></li>
+</ul>
+
+<p>Il y a aussi <code class="highlighter-rouge">close</code> (comme pour l’input), et une méthode <code class="highlighter-rouge">flush</code>:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">void flush()</code> force les données du flot à être écrites effectivement, p.ex. sur le disque ou sur la console</li>
+</ul>
+
+<h3 id="exemple-2">Exemple</h3>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre><span class="nc">InputStream</span> <span class="n">s</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">GZIPInputStream</span><span class="o">(</span><span class="k">new</span> <span class="nc">BufferedInputStream</span><span class="o">(</span><span class="k">new</span> <span class="nc">FileInputStream</span><span class="o">(</span><span class="s">"in.gz"</span><span class="o">)));</span>
+<span class="kt">int</span> <span class="n">b</span><span class="o">,</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+<span class="k">while</span> <span class="o">((</span><span class="n">b</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">read</span><span class="o">())</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">b</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span>
+    <span class="n">c</span> <span class="o">+=</span> <span class="mi">1</span><span class="o">;</span>
+<span class="o">}</span>
+<span class="n">s</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">c</span><span class="o">);</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h2 id="resources">Resources</h2>
+<p>Les objets liés à une resource du système et quoi doivent être fermés en fin d’utilisations (comme les flots, par exemple).</p>
+
+<h3 id="try-with-resource">Try-with-resource</h3>
+
+<p>Depuis peu, on a des blocs try qui marchent avec des resources, qui “close” en cas d’exception.</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre><span class="k">try</span> <span class="o">(</span><span class="nc">InputStream</span> <span class="n">i</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">FileInputStream</span><span class="o">(</span><span class="s">"in.bin"</span><span class="o">);</span>
+     <span class="nc">OutputStream</span> <span class="n">o</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">FileOutputStream</span><span class="o">(</span><span class="s">"out.bin"</span><span class="o">))</span> <span class="o">{</span>
+    <span class="c1">// … code utilisant les flots i et o</span>
+<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// … code gérant l'exception</span>
+<span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+    <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"done!"</span><span class="o">);</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Pour pouvoir être utilisée dans un énoncé try-with-resource, une valeur doit implémenter l’interface AutoCloseable du paquetage java.lang, définie ainsi :</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="code"><pre><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">AutoCloseable</span> <span class="o">{</span>
+    <span class="kt">void</span> <span class="nf">close</span><span class="o">();</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h2 id="représentation-de-caractères">Représentation de caractères</h2>
+
+<h3 id="ascii">ASCII</h3>
+
+<p><em>American Standard Code for Information Interchange</em>: représente un caractère par un entier de 7 bits, donc 2<sup>7</sup> = 128 caractères différents. Inclut toutes les lettres non accentuées de l’alphabet anglais.</p>
+
+<h4 id="extensions-dascii">Extensions d’ASCII</h4>
+<p>De nombreuses extensions d’ASCII à 8 bits ont donc été inventées, utilisant la plage des valeurs de 128 à 255 pour ces caractères manquants.</p>
+
+<p>Par exemple, on peut maintenant écire les € et les œ.</p>
+
+<ul>
+  <li><strong>ISO 8859–1</strong>, ou ISO latin 1, malheureusement incapable de représenter les caractères €, œ ou Œ</li>
+  <li><strong>ISO 8859–15</strong>, variante de 8859–1 résolvant ce problème</li>
+  <li><strong>Mac Roman</strong>, utilisé sur Mac OS</li>
+  <li><strong>Windows 1252</strong>, variante de ISO 8859–1 utilisée sur
+Windows</li>
+</ul>
+
+<p>Heureusement, Unicode est un standard à but universel, et offre plus d’un million de caractères. <strong>UTF-8</strong> et <strong>UTF-16</strong> sont à longueur variable, alors qu’<strong>UTF-32</strong> est à longueur fixe (le chiffre donne la longueur minimale de la longueur d’un caractère en bits).</p>
+
+<h2 id="readers--writers-lecture-textuelle">Readers / Writers: lecture textuelle</h2>
+
+<p><code class="highlighter-rouge">Reader</code> et <code class="highlighter-rouge">Writer</code> sont des classes abstraites:</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+</pre></td><td class="code"><pre><span class="kd">abstract</span> <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Reader</span> <span class="o">{</span>
+    <span class="kt">void</span> <span class="nf">close</span><span class="o">();</span>
+    <span class="kt">int</span> <span class="nf">read</span><span class="o">();</span>
+    <span class="kt">int</span> <span class="nf">read</span><span class="o">(</span><span class="kt">char</span><span class="o">[]</span> <span class="n">c</span><span class="o">,</span> <span class="kt">int</span> <span class="n">o</span><span class="o">,</span> <span class="kt">int</span> <span class="n">l</span><span class="o">);</span>
+    <span class="kt">int</span> <span class="nf">read</span><span class="o">(</span><span class="kt">char</span><span class="o">[]</span> <span class="n">c</span><span class="o">);</span>
+    <span class="kt">long</span> <span class="nf">skip</span><span class="o">(</span><span class="kt">long</span> <span class="n">n</span><span class="o">);</span>
+    <span class="kt">boolean</span> <span class="nf">ready</span><span class="o">();</span>
+    <span class="kt">boolean</span> <span class="nf">markSupported</span><span class="o">();</span>
+    <span class="kt">void</span> <span class="nf">mark</span><span class="o">(</span><span class="n">l</span><span class="o">);</span>
+    <span class="kt">void</span> <span class="nf">reset</span><span class="o">();</span>
+<span class="o">}</span>
+
+<span class="kd">abstract</span> <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Writer</span> <span class="o">{</span>
+    <span class="kt">void</span> <span class="nf">write</span><span class="o">(</span><span class="kt">int</span> <span class="n">c</span><span class="o">);</span>
+    <span class="kt">void</span> <span class="nf">write</span><span class="o">(</span><span class="kt">char</span><span class="o">[]</span> <span class="n">a</span><span class="o">);</span>
+    <span class="kt">void</span> <span class="nf">write</span><span class="o">(</span><span class="kt">char</span><span class="o">[]</span> <span class="n">a</span><span class="o">,</span> <span class="kt">int</span> <span class="n">o</span><span class="o">,</span> <span class="kt">int</span> <span class="n">l</span><span class="o">);</span>
+    <span class="kt">void</span> <span class="nf">write</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">);</span>
+    <span class="nc">Writer</span> <span class="nf">append</span><span class="o">(</span><span class="kt">char</span> <span class="n">c</span><span class="o">);</span>
+    <span class="nc">Writer</span> <span class="nf">append</span><span class="o">(</span><span class="nc">CharSequence</span> <span class="n">c</span><span class="o">);</span>
+    <span class="nc">Writer</span> <span class="nf">append</span><span class="o">(</span><span class="nc">CharSequence</span> <span class="n">c</span><span class="o">,</span> <span class="kt">int</span> <span class="n">s</span><span class="o">,</span> <span class="kt">int</span> <span class="n">e</span><span class="o">);</span>
+    <span class="kt">void</span> <span class="nf">flush</span><span class="o">();</span>
+    <span class="kt">void</span> <span class="nf">close</span><span class="o">();</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h3 id="quelques-détails-dimplémentation">Quelques détails d’implémentation</h3>
+
+<h4 id="terminaison-des-lignes">Terminaison des lignes</h4>
+<p>Il existe plusieurs types de fin de lignes:</p>
+
+<ol>
+  <li>CR (retour de chariot)</li>
+  <li>LF (saut de ligne)</li>
+  <li>CR puis LF</li>
+</ol>
+
+<p>Avec les writers, il est donc sage d’utiliser l’appel suivant: <code class="highlighter-rouge">System.getProperty("line.separator");</code></p>
+
+<h4 id="encodage">Encodage</h4>
+<p>Ci-dessous un programme qui fait la conversion d’UTF-8 en UTF-16:</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="k">try</span> <span class="o">(</span><span class="nc">Reader</span> <span class="n">i</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">InputStreamReader</span><span class="o">(</span><span class="k">new</span> <span class="nc">FileInputStream</span><span class="o">(</span><span class="n">fi</span><span class="o">),</span> <span class="nc">StandardCharsets</span><span class="o">.</span><span class="na">UTF_16</span><span class="o">);</span>
+     <span class="nc">Writer</span> <span class="n">o</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">OutputStreamWriter</span><span class="o">(</span><span class="k">new</span> <span class="nc">FileOutputStream</span><span class="o">(</span><span class="n">fo</span><span class="o">),</span><span class="nc">StandardCharsets</span><span class="o">.</span><span class="na">UTF_8</span><span class="o">))</span> <span class="o">{</span>
+    <span class="kt">int</span> <span class="n">c</span><span class="o">;</span>
+    <span class="k">while</span> <span class="o">((</span><span class="n">c</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="na">read</span><span class="o">())</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span>
+    <span class="n">o</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">c</span><span class="o">);</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h1 id="fonctions-anonymes-lambdas"><a href="http://cs108.epfl.ch/archive/15/files/ppo15_07_fonctions.pdf">Fonctions anonymes (lambdas)</a></h1>
+
+<p>Voici comment on trierait une liste par ordre lexiquographique inverse avec une fonction anonyme</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">sortInv</span><span class="o">(</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">l</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nc">Collections</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">l</span><span class="o">,</span> <span class="k">new</span> <span class="nc">Comparator</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;()</span> <span class="o">{</span>
+       <span class="nd">@Override</span>
+       <span class="kd">public</span> <span class="kt">int</span> <span class="nf">compare</span><span class="o">(</span><span class="nc">String</span> <span class="n">s1</span><span class="o">,</span> <span class="nc">String</span> <span class="n">s2</span><span class="o">)</span> <span class="o">{</span>
+          <span class="k">return</span> <span class="n">s2</span><span class="o">.</span><span class="na">compareTo</span><span class="o">(</span><span class="n">s1</span><span class="o">);</span>
+       <span class="o">}</span>
+    <span class="o">});</span>
+<span class="o">}</span> 
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Mais depuis Java 8, cette syntaxe équivalente est correcte:</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">sortInv</span><span class="o">(</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">l</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nc">Collections</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">l</span><span class="o">,</span> <span class="o">(</span><span class="nc">String</span> <span class="n">s1</span><span class="o">,</span> <span class="nc">String</span> <span class="n">s2</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">s2</span><span class="o">.</span><span class="na">compareTo</span><span class="o">(</span><span class="n">s1</span><span class="o">);</span>
+    <span class="o">});</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>C’est ce qu’on appelle une <strong>fonction anonyme</strong> ou une <strong>lambda expression</strong>.</p>
+
+<p>Mais ce n’est pas fini!! On peut encore simplifier, puisque:</p>
+
+<ul>
+  <li>Le type des paramètres est optionnel car inféré</li>
+  <li>Si le corps de la fonction est composé d’une seule expression, elle peut être écrite telle quelle, sans accolades englobantes ni <code class="highlighter-rouge">return</code>.</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="code"><pre><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">sortInv</span><span class="o">(</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">l</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nc">Collections</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">l</span><span class="o">,</span> <span class="o">(</span><span class="n">s1</span><span class="o">,</span> <span class="n">s2</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">s2</span><span class="o">.</span><span class="na">compareTo</span><span class="o">(</span><span class="n">s1</span><span class="o">));</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h2 id="interface-fonctionnelle">Interface fonctionnelle</h2>
+<p>Une <strong>interface fonctionnelle</strong> (<em>functional interface</em>) ne possède qu’une seule méthode abstraite. <code class="highlighter-rouge">Comparator</code> est alors une interface fonctionnelle puisqu’elle ne contient que la méthode <code class="highlighter-rouge">compare</code>.</p>
+
+<h2 id="fonction-anonyme">Fonction anonyme</h2>
+<p>Une <strong>lambda expression</strong> est une expression créant une instance d’une classe anonyme qui implémente une interface fonctionnelle, en utilisant la syntaxe <code class="highlighter-rouge">arguments -&gt; corps</code>.</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="c1">// Légal car Comparator est une interface fonctionnelle:</span>
+<span class="nc">Comparator</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">y</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">x</span><span class="o">.</span><span class="na">compareTo</span><span class="o">(</span><span class="n">y</span><span class="o">);</span> 
+<span class="c1">// Illégal car Object n'est pas une interface fonctionnelle:</span>
+<span class="nc">Object</span> <span class="n">c</span> <span class="o">=</span> <span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">y</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">x</span><span class="o">.</span><span class="na">compareTo</span><span class="o">(</span><span class="n">y</span><span class="o">);</span> 
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p><em>Note</em>: Lorsque la méthode ne prend qu’un seul paramètre, les parenthèses peuvent être omises.</p>
+
+<h3 id="méthodes-par-défaut">Méthodes par défaut</h3>
+<p>Depuis Java 8, les interfaces peuvent avoir des méthodes par défaut, non-statiques, héritées par toutes les classes qui implémentent l’interface.</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Comparator</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">compare</span><span class="o">(</span><span class="no">T</span> <span class="n">o1</span><span class="o">,</span> <span class="no">T</span> <span class="n">o2</span><span class="o">);</span>
+    <span class="kd">public</span> <span class="k">default</span> <span class="nc">Comparator</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="nf">reversed</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="o">(</span><span class="n">o1</span><span class="o">,</span> <span class="n">o2</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">compare</span><span class="o">(</span><span class="n">o2</span><span class="o">,</span> <span class="n">o1</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="c1">// … autres méthodes par défaut/statiques</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h2 id="interfaces-fonctionnelles-de-java">Interfaces fonctionnelles de Java</h2>
+<p>Il est utile d’avoir à disposition un certain nombre d’interfaces fonctionnelles, couvrant les principaux cas d’utilisation.</p>
+
+<h3 id="linterface-function">L’interface <code class="highlighter-rouge">Function</code></h3>
+<p>Une fonction à un argument. Le type de cet argument et le type de retour de la fonction sont les paramètres de type de cette interface, nommés respectivement T et R:</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre><span class="c1">// Définition de l'interface</span>
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Function</span><span class="o">&lt;</span><span class="no">T</span><span class="o">,</span> <span class="no">R</span><span class="o">&gt;</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="no">R</span> <span class="nf">apply</span><span class="o">(</span><span class="no">T</span> <span class="n">x</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="c1">// Exemple d'utilisation</span>
+<span class="nc">Function</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">stringLength</span> <span class="o">=</span> <span class="n">s</span> <span class="o">-&gt;</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>
+<span class="n">stringLength</span><span class="o">.</span><span class="na">apply</span><span class="o">(</span><span class="s">"bonjour"</span><span class="o">);</span> <span class="c1">// → 7</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h3 id="composition-de-fonctions">Composition de fonctions</h3>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="nc">Function</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">f</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-&gt;</span> <span class="n">x</span> <span class="o">+</span> <span class="n">x</span><span class="o">;</span>
+<span class="nc">Function</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">g</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-&gt;</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+<span class="nc">Function</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">fg</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="na">compose</span><span class="o">(</span><span class="n">g</span><span class="o">);</span>
+
+<span class="n">fg</span><span class="o">.</span><span class="na">apply</span><span class="o">(</span><span class="mi">10</span><span class="o">);</span> <span class="c1">// → 22</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h3 id="linterface-unaryoperator">L’interface <code class="highlighter-rouge">UnaryOperator</code></h3>
+<p>Le type de retour est le même que celui d’entrée</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="nc">UnaryOperator</span><span class="o">&lt;</span><span class="nc">Double</span><span class="o">&gt;</span> <span class="n">abs</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-&gt;</span> <span class="nc">Math</span><span class="o">.</span><span class="na">abs</span><span class="o">(</span><span class="n">x</span><span class="o">);</span>
+
+<span class="n">abs</span><span class="o">.</span><span class="na">apply</span><span class="o">(-</span><span class="mf">1.2</span><span class="o">);</span> <span class="c1">// → 1.2</span>
+<span class="n">abs</span><span class="o">.</span><span class="na">apply</span><span class="o">(</span><span class="nc">Math</span><span class="o">.</span><span class="na">PI</span><span class="o">);</span> <span class="c1">// → 3.1415…</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h3 id="linterface-bifunction">L’interface <code class="highlighter-rouge">BiFunction</code></h3>
+<p>2 arguments de types donnés par les paramêtres de la fonction générique.</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre><span class="nc">BiFunction</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span><span class="nc">Integer</span><span class="o">,</span><span class="nc">Character</span><span class="o">&gt;</span> <span class="n">charAt</span> <span class="o">=</span> <span class="o">(</span><span class="n">s</span><span class="o">,</span> <span class="n">i</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+<span class="n">charAt</span><span class="o">.</span><span class="na">apply</span><span class="o">(</span><span class="s">"hello"</span><span class="o">,</span> <span class="mi">2</span><span class="o">);</span> <span class="c1">// → l</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h3 id="linterface-predicate">L’interface <code class="highlighter-rouge">Predicate</code></h3>
+<p>Retourne un booléen:</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="nc">Predicate</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">stringIsEmpty</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-&gt;</span> <span class="n">x</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">();</span>
+
+<span class="n">stringIsEmpty</span><span class="o">.</span><span class="na">test</span><span class="o">(</span><span class="s">"not empty!"</span><span class="o">);</span> <span class="c1">// → false</span>
+<span class="n">stringIsEmpty</span><span class="o">.</span><span class="na">test</span><span class="o">(</span><span class="s">""</span><span class="o">);</span> <span class="c1">// → true</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h3 id="composition-de-prédicats">Composition de prédicats</h3>
+<p>On a les méthodes <code class="highlighter-rouge">and</code>, <code class="highlighter-rouge">or</code> et <code class="highlighter-rouge">negate</code>:</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="nc">Predicate</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">p</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-&gt;</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="o">;</span>
+<span class="nc">Predicate</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">q</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-&gt;</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="mi">5</span><span class="o">;</span>
+<span class="nc">Predicate</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">r</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="na">and</span><span class="o">(</span><span class="n">q</span><span class="o">);</span>
+<span class="nc">Predicate</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">s</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="na">or</span><span class="o">(</span><span class="n">q</span><span class="o">);</span>
+<span class="nc">Predicate</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">t</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">negate</span><span class="o">();</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Et:</p>
+<ul>
+  <li><code class="highlighter-rouge">BinaryOperator</code> (double UnaryOperator)</li>
+  <li><code class="highlighter-rouge">BiPredicate</code> (double prédicat)</li>
+  <li><code class="highlighter-rouge">Consumer</code> (ne retourne rien, mais peut par exemple faire un print)</li>
+  <li><code class="highlighter-rouge">Supplier</code> (aucun argument, retourne une valeur)</li>
+</ul>
+
+<h2 id="fonctions-et-collections">Fonctions et collections</h2>
+<ul>
+  <li><code class="highlighter-rouge">Iterable.forEach</code> prend un consommateur en argument et l’applique à chaque élément de l’entité itérable.</li>
+  <li><code class="highlighter-rouge">Collection.removeIf</code> prend un prédicat en argument et supprime tous les éléments de la collection qui le satisfont.</li>
+  <li><code class="highlighter-rouge">List.replaceAll</code> prend un opérateur unaire en argument et remplace chaque élément de la liste par le résultat de cet opérateur appliqué à l’élément en question.</li>
+  <li><code class="highlighter-rouge">Map.computeIfAbsent</code> retourne la valeur associée à une clef, si elle existe ; sinon, elle utilise la fonction qu’on lui a passée pour déterminer la valeur associée à la clef, l’ajoute à la table, puis la retourne.</li>
+</ul>
+
+<p>L’intérêt de ces fonctions est clair:</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="n">m</span><span class="o">.</span><span class="na">computeIfAbsent</span><span class="o">(</span><span class="n">k</span><span class="o">,</span> <span class="n">k1</span> <span class="o">-&gt;</span> <span class="k">new</span> <span class="nc">HashSet</span><span class="o">&lt;&gt;()).</span><span class="na">add</span><span class="o">(</span><span class="n">v</span><span class="o">);</span> 
+<span class="c1">// Est équivalent à:</span>
+<span class="k">if</span> <span class="o">(!</span><span class="n">m</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="n">k</span><span class="o">))</span>
+    <span class="n">m</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">k</span><span class="o">,</span> <span class="k">new</span> <span class="nc">HashSet</span><span class="o">&lt;&gt;());</span>
+<span class="n">m</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">k</span><span class="o">).</span><span class="na">add</span><span class="o">(</span><span class="n">v</span><span class="o">);</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h2 id="programmation-par-flots">Programmation par flots</h2>
+<p>Le paquetage <code class="highlighter-rouge">java.util.stream</code> — nouveauté de la version 8 de Java — définit plusieurs classes et interfaces permettant de faire de la programmation par flots.</p>
+
+<h3 id="exemple-conversion-f-en-c">Exemple: Conversion °F en °C</h3>
+
+<ol>
+  <li>Obtenir le flot des lignes du fichier d’entrées</li>
+  <li>Filtrer ce flot pour ne garder que les lignes non vides</li>
+  <li>Convertir le flot de lignes — des chaînes de caractères — en un flot de températures en °F — des nombres réels</li>
+  <li>Convertir le flot des températures en °F en flot des températures en °C, au moyen de la formule de conversion [°C = (°F − 32) × 5/9]</li>
+  <li>Ecrire chaque valeur du flot dans le fichier de sortie, une par ligne.</li>
+</ol>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre><span class="k">try</span><span class="o">(</span><span class="nc">BufferedReader</span> <span class="n">r</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">BufferedReader</span><span class="o">(</span>
+    <span class="k">new</span> <span class="nf">FileReader</span><span class="o">(</span><span class="s">"f.txt"</span><span class="o">));</span>
+    <span class="nc">PrintWriter</span> <span class="n">w</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">PrintWriter</span><span class="o">(</span><span class="k">new</span> <span class="nc">FileWriter</span><span class="o">(</span><span class="s">"c.txt"</span><span class="o">)))</span> <span class="o">{</span>
+        <span class="n">r</span><span class="o">.</span><span class="na">lines</span><span class="o">()</span>
+            <span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">l</span> <span class="o">-&gt;</span> <span class="o">!</span><span class="n">l</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span>
+            <span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">l</span> <span class="o">-&gt;</span> <span class="nc">Double</span><span class="o">.</span><span class="na">parseDouble</span><span class="o">(</span><span class="n">l</span><span class="o">))</span>
+            <span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">f</span> <span class="o">-&gt;</span> <span class="o">(</span><span class="n">f</span> <span class="o">-</span> <span class="mi">32</span><span class="n">d</span><span class="o">)</span> <span class="o">*</span> <span class="o">(</span><span class="mi">5</span><span class="n">d</span> <span class="o">/</span> <span class="mi">9</span><span class="n">d</span><span class="o">))</span>
+            <span class="o">.</span><span class="na">forEach</span><span class="o">(</span><span class="n">c</span> <span class="o">-&gt;</span> <span class="o">{</span> <span class="n">w</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">c</span><span class="o">);</span>
+    <span class="o">});</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h3 id="types-de-méthodes-travaillant-sur-les-flots">Types de méthodes travaillant sur les flots</h3>
+
+<ol>
+  <li>Les <strong>méthodes sources</strong>, qui produisent un flot de valeurs à partir d’une source qui peut p.ex. être une collection, un fichier, etc.</li>
+  <li>Les <strong>méthodes intermédiaires</strong>, qui transforment les valeurs du flot</li>
+  <li>Les <strong>méthodes terminales</strong>, qui consomment les valeurs du flot, p.ex. en les écrivant dans un fichier, en les réduisant à une valeur unique, etc.</li>
+</ol>
+
+<h3 id="pipelines">Pipelines</h3>
+<p>Une pipeline est formée de:</p>
+
+<ul>
+  <li><em>Une</em> méthode source, qui produit un flot de valeurs</li>
+  <li><em>Zero ou plusieurs méthodes</em> intermédiaires, qui transforment les valeurs</li>
+  <li><em>Une</em> méthode terminale, qui consomme les valeurs</li>
+</ul>
+
+<h3 id="méthodes-de-stream">Méthodes de <code class="highlighter-rouge">Stream</code></h3>
+<ul>
+  <li><code class="highlighter-rouge">Stream.of</code>: prend un nombre arbitraire d’arguments et en crée un flot.</li>
+  <li><code class="highlighter-rouge">Stream.iterate</code>: produit un flot infini. Exemple:</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+</pre></td><td class="code"><pre><span class="nc">Stream</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">posInts</span> <span class="o">=</span> <span class="nc">Stream</span><span class="o">.</span><span class="na">iterate</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="n">i</span> <span class="o">-&gt;</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span> <span class="c1">// 1, 2, …</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<ul>
+  <li><code class="highlighter-rouge">Stream.filter</code>: Méthode intermédiaire qui produit un flot filtré contenant uniquement les valeurs satisfaisant un prédicat:</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+</pre></td><td class="code"><pre><span class="nc">Stream</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">multiplesOfThree</span> <span class="o">=</span> <span class="n">posInts</span><span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">x</span> <span class="o">-&gt;</span> <span class="n">x</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span><span class="o">);</span> <span class="c1">// 3,6,…</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<ul>
+  <li><code class="highlighter-rouge">Stream.map</code>: méthode intermédiaire qui applique une fonction à un argument aux éléments du flot et produit le flot des résultats:</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+</pre></td><td class="code"><pre><span class="nc">Stream</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">posSqrs</span> <span class="o">=</span> <span class="n">posInts</span><span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">i</span> <span class="o">-&gt;</span> <span class="n">i</span> <span class="o">*</span> <span class="n">i</span><span class="o">);</span> <span class="c1">// 1, 4, 9, 16, …</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<ul>
+  <li>
+    <p><code class="highlighter-rouge">Stream.limit</code>: limite le nombre maximal de valeurs que peut produire un flot (<code class="highlighter-rouge">posInts.limit(10)</code>).</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">Stream.reduce</code>: méthode terminale qui réduit à une valeur unique les  valeurs du flot, au moyen d’une valeur initiale et d’un opérateur binaire:</p>
+  </li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre><span class="kt">int</span> <span class="n">posInts10Sum</span> <span class="o">=</span> <span class="n">posInts10</span><span class="o">.</span><span class="na">reduce</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">y</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="o">);</span>
+<span class="kt">int</span> <span class="n">posInts10Prod</span> <span class="o">=</span> <span class="n">posInts10</span><span class="o">.</span><span class="na">reduce</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">y</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">x</span> <span class="o">*</span> <span class="n">y</span><span class="o">);</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h4 id="ponts-vers-les-flots">Ponts vers les flots</h4>
+
+<ul>
+  <li>
+    <p><code class="highlighter-rouge">Collection.stream</code>: La méthode stream de l’interface Collection retourne un flot avec les éléments de la collection. Elle sert donc de pont entre le monde des collections et celui des flots.</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">BufferedReader.lines</code>: La méthode lines de BufferedReader retourne le flot des lignes du lecteur auquel on l’applique. Elle sert donc de pont entre le monde des lecteurs et celui des flots.</p>
+  </li>
+</ul>
+
+<h2 id="références-de-méthodes">Références de méthodes</h2>
+<p>Il arrive souvent que l’on veuille écrire une fonction anonyme qui se contente d’appeler une méthode en lui passant les arguments qu’elle a reçus.</p>
+
+<p>Il y a une notation plus concise:</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="c1">// Méthode anonyme qui renvoie simplement ses arguments:</span>
+<span class="nc">Comparator</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="o">(</span><span class="n">i1</span><span class="o">,</span> <span class="n">i2</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">compare</span><span class="o">(</span><span class="n">i1</span><span class="o">,</span> <span class="n">i2</span><span class="o">);</span>
+<span class="c1">// Est équivalent à:</span>
+<span class="nc">Comparator</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="nl">Integer:</span><span class="o">:</span><span class="n">compare</span><span class="o">;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Il y a trois types de références:</p>
+
+<ul>
+  <li>les références de méthodes statiques,</li>
+  <li>les références de constructeurs,</li>
+  <li>les références de méthodes non statiques, dont il existe
+deux variantes</li>
+</ul>
+
+<h3 id="références-statiques">Références statiques</h3>
+<p>Une référence à une méthode statique s’obtient simplement en séparant le nom de la classe et celui de la méthode par un double deux-points.</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="code"><pre><span class="nc">Comparator</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="nl">Integer:</span><span class="o">:</span><span class="n">compare</span><span class="o">;</span>
+<span class="c1">// Equivalent:</span>
+<span class="nc">Comparator</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="o">(</span><span class="n">s1</span><span class="o">,</span> <span class="n">s2</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">compare</span><span class="o">(</span><span class="n">s1</span><span class="o">,</span> <span class="n">s2</span><span class="o">);</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h3 id="références-à-un-constructeur">Références à un constructeur</h3>
+<p>On utilise le mot-clef new en lieu et place du nom de méthode statique.</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre><span class="nc">Supplier</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&gt;</span> <span class="n">lists</span> <span class="o">=</span> <span class="nl">ArrayList:</span><span class="o">:</span><span class="k">new</span><span class="o">;</span>
+<span class="nc">Supplier</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&gt;</span> <span class="n">lists</span> <span class="o">=</span> <span class="o">()</span> <span class="o">-&gt;</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">();</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h3 id="références-non-statiques">Références non-statiques</h3>
+<p><strong>Exemple</strong>: un comparateur sur les chaînes ne faisant rien d’autre qu’utiliser la méthode (non statique !) <code class="highlighter-rouge">compareTo</code> des chaînes peut s’écrire :</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre><span class="nc">Comparator</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="nl">String:</span><span class="o">:</span><span class="n">compareTo</span><span class="o">;</span>
+<span class="nc">Comparator</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="o">(</span><span class="n">s1</span><span class="o">,</span> <span class="n">s2</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">s1</span><span class="o">.</span><span class="na">compareTo</span><span class="o">(</span><span class="n">s2</span><span class="o">);</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p><em>Note</em>: l’objet auquel on applique la méthode devient le premier argument de la fonction anonyme !</p>
+
+<p>La différence entre une référence statique et non-statique est:</p>
+
+<ul>
+  <li>une référence à une méthode statique produit une fonction anonyme ayant le même nombre d’arguments que la méthode,</li>
+  <li>une référence à une méthode non statique produit une fonction anonyme ayant un argument de plus que la méthode, cet argument supplémentaire étant le récepteur, c-à-d l’objet auquel on applique la méthode.</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre><span class="c1">// Equivalents:</span>
+<span class="nc">Function</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">Character</span><span class="o">&gt;</span> <span class="n">alphabetChar</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-&gt;</span> <span class="s">"abcdefghijklmnopqrstuvwxyz"</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+<span class="nc">Function</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">Character</span><span class="o">&gt;</span> <span class="n">alphabetChar</span> <span class="o">=</span> <span class="s">"abcdefghijklmnopqrstuvwxyz"</span><span class="o">::</span><span class="n">charAt</span><span class="o">;</span>
+
+
+<span class="c1">// Compilent tous les 2:</span>
+<span class="nc">BiFunction</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">c1</span> <span class="o">=</span> <span class="nl">Integer:</span><span class="o">:</span><span class="n">compare</span><span class="o">;</span> <span class="c1">// statique</span>
+<span class="nc">BiFunction</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">c2</span> <span class="o">=</span> <span class="nl">Integer:</span><span class="o">:</span><span class="n">compareTo</span><span class="o">;</span> <span class="c1">// non statique</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h4 id="reprise-de-lexemple-de-conversion">Reprise de <a href="#exemple-conversion-f-en-c">l’exemple de conversion</a></h4>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre><span class="k">try</span><span class="o">(</span><span class="nc">BufferedReader</span> <span class="n">r</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">BufferedReader</span><span class="o">(</span><span class="k">new</span> <span class="nc">FileReader</span><span class="o">(</span><span class="s">"f.txt"</span><span class="o">));</span>
+    <span class="nc">PrintWriter</span> <span class="n">w</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">PrintWriter</span><span class="o">(</span>
+    <span class="k">new</span> <span class="nf">FileWriter</span><span class="o">(</span><span class="s">"c.txt"</span><span class="o">)))</span> <span class="o">{</span>
+        <span class="n">r</span><span class="o">.</span><span class="na">lines</span><span class="o">()</span>
+        <span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">l</span> <span class="o">-&gt;</span> <span class="o">!</span><span class="n">l</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span> <span class="c1">// X</span>
+        <span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="nl">Double:</span><span class="o">:</span><span class="n">parseDouble</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">f</span> <span class="o">-&gt;</span> <span class="o">(</span><span class="n">f</span> <span class="o">-</span> <span class="mi">32</span><span class="n">d</span><span class="o">)</span> <span class="o">*</span> <span class="o">(</span><span class="mi">5</span><span class="n">d</span> <span class="o">/</span> <span class="mi">9</span><span class="n">d</span><span class="o">))</span>
+        <span class="o">.</span><span class="na">forEach</span><span class="o">(</span><span class="nl">w:</span><span class="o">:</span><span class="n">println</span><span class="o">);</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p><em>Note:</em> A l’endroit marqué X, on pourrait réécrire avec <code class="highlighter-rouge">l::isEmpty</code> (ou un truc du genre) <strong>si</strong> on ne faisait pas un <code class="highlighter-rouge">!</code>.</p>
+
+<h1 id="généricité-avancée"><a href="http://cs108.epfl.ch/archive/15/files/ppo15_08_genericite-avancee.pdf">Généricité avancée</a></h1>
+
+<h2 id="sous-types">Sous-types</h2>
+<p>Lorsqu’une classe implémente ou étend une autre, alors son type est un sous-type de l’autre (String est un sous-type d’Object, par exemple).</p>
+
+<p>La relation de sous-typage est:</p>
+
+<ul>
+  <li><strong>Réflexive</strong>: tout type est sous-type de lui-même.</li>
+  <li><strong>Transitive</strong>: le sous-type du sous-type d’un type est sous-type du type (c’est logique).</li>
+  <li><strong>Anti-symétrique</strong>: Si T1 est sous-type de T2 et vice versa alors T1 = T2.</li>
+</ul>
+
+<p>(En maths, on parle <em>d’ordre partiel</em>).</p>
+
+<h3 id="polymorphisme-dinclusion">Polymorphisme d’inclusion</h3>
+<p>On peut substituer un sous-type à un type (exemple: utiliser un <code class="highlighter-rouge">Integer</code> et un <code class="highlighter-rouge">Double</code> lorsqu’une méthode demande deux <code class="highlighter-rouge">Number</code>s).</p>
+
+<p>Ceci est alors permis:</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="nc">List</span><span class="o">&lt;</span><span class="nc">Number</span><span class="o">&gt;</span> <span class="n">l</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">LinkedList</span><span class="o">&lt;&gt;();</span>
+<span class="nc">Integer</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+<span class="n">l</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+<span class="nc">Double</span> <span class="n">d</span> <span class="o">=</span> <span class="mf">3.14</span><span class="o">;</span>
+<span class="n">l</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">d</span><span class="o">);</span> 
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Cependant, ceci ne l’est pas (!!):</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="nc">List</span><span class="o">&lt;</span><span class="nc">Number</span><span class="o">&gt;</span> <span class="n">l</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">LinkedList</span><span class="o">&lt;&gt;();</span>
+<span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">li</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">LinkedList</span><span class="o">&lt;&gt;();</span>
+<span class="nc">Integer</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+<span class="n">li</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+<span class="n">l</span><span class="o">.</span><span class="na">addAll</span><span class="o">(</span><span class="n">li</span><span class="o">);</span> <span class="c1">// refusé !</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Pourquoi? Parce que <code class="highlighter-rouge">List&lt;Integer&gt;</code> n’est pas un sous-type de <code class="highlighter-rouge">List&lt;Number&gt;</code> (par contre, <code class="highlighter-rouge">LinkedList&lt;Integer&gt;</code> est un sous-type de <code class="highlighter-rouge">List&lt;Integer&gt;</code>).</p>
+
+<p>Voici ce qu’on peut faire pour y remédier:</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="kd">interface</span> <span class="nc">List</span><span class="o">&lt;</span><span class="no">E</span><span class="o">&gt;</span> <span class="o">{</span>
+    <span class="err">…</span>
+    <span class="o">&lt;</span><span class="no">F</span> <span class="kd">extends</span> <span class="no">E</span><span class="o">&gt;</span> <span class="kt">void</span> <span class="nf">addAll</span><span class="o">(</span><span class="nc">List</span><span class="o">&lt;</span><span class="no">F</span><span class="o">&gt;</span> <span class="n">other</span><span class="o">);</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Ceci donne une borne supérieure au type; tous les sous-types de E, sous-sous-types de E, …, sont acceptés.</p>
+
+<h2 id="jokers-wildcards">Jokers (<em>wildcards</em>)</h2>
+<p>On peut utiliser un <code class="highlighter-rouge">?</code> au lieu de nommer un nouveau type qui n’est utilisé qu’une fois. La solution précédente serait alors:</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">List</span><span class="o">&lt;</span><span class="no">E</span><span class="o">&gt;</span> <span class="o">{</span>
+    <span class="err">…</span>
+    <span class="kt">void</span> <span class="nf">addAll</span><span class="o">(</span><span class="nc">List</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="no">E</span><span class="o">&gt;</span> <span class="n">other</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="c1">// ?&gt; Because of my stupid IDE.</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Si jamais on voulait faire l’inverse:</p>
+
+<p><strong>Attention</strong>: La notation <code class="highlighter-rouge">super</code> n’est uniquement valide en combinaison avec le joker <code class="highlighter-rouge">?</code>.</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">List</span><span class="o">&lt;</span><span class="no">E</span><span class="o">&gt;</span> <span class="o">{</span>
+    <span class="err">…</span>
+    <span class="kt">void</span> <span class="nf">addAllInto</span><span class="o">(</span><span class="nc">List</span><span class="o">&lt;?</span> <span class="kd">super</span> <span class="no">E</span><span class="o">&gt;</span> <span class="n">other</span><span class="o">);</span>
+    <span class="c1">// ?&gt;</span>
+<span class="o">}</span>
+<span class="nc">List</span><span class="o">&lt;</span><span class="nc">Number</span><span class="o">&gt;</span> <span class="n">l</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">LinkedList</span><span class="o">&lt;&gt;();</span>
+<span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">li</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">LinkedList</span><span class="o">&lt;&gt;();</span>
+<span class="nc">Integer</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+<span class="n">li</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+<span class="n">li</span><span class="o">.</span><span class="na">addAllInto</span><span class="o">(</span><span class="n">l</span><span class="o">);</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h2 id="règle-des-bornes">Règle des bornes</h2>
+<blockquote>
+  <p>Lorsqu’on désire uniquement lire dans une structure, on utilise une borne supérieure (avec <code class="highlighter-rouge">extends</code>);<br />
+lorsqu’on désire uniquement y écrire, on utilise une borne inférieure (avec <code class="highlighter-rouge">super</code>);<br />
+lorsqu’on désire à la fois y lire et y écrire, on n’utilise aucune borne.</p>
+</blockquote>
+
+<p>En anglais, on s’en souvient avec l’acronyme <strong>PECS</strong> (<em>Producer <code class="highlighter-rouge">Extends</code>, Consumer <code class="highlighter-rouge">Super</code></em>).</p>
+
+<h1 id="types-bruts"><a href="http://cs108.epfl.ch/archive/15/files/ppo15_08_genericite-avancee.pdf">Types bruts</a></h1>
+
+<p>L’introduction de généricité a été faite de façon <em>backwards-compatible</em>. <code class="highlighter-rouge">List</code> n’était pas générique avant, et pour que l’ancien code continue à être valide, alors <code class="highlighter-rouge">List</code> a été accepté comme un <strong>type brut</strong>.</p>
+
+<h2 id="règle-des-types-bruts">Règle des types bruts</h2>
+<blockquote>
+  <p>N’utilisez jamais les types bruts dans votre code, ils n’existent que pour faciliter la migration du code écrit avant l’introduction de la généricité.</p>
+</blockquote>
+
+<h1 id="entiers-et-manipulation-de-bits"><a href="http://cs108.epfl.ch/archive/15/files/ppo15_09_entiers.pdf">Entiers et manipulation de bits</a></h1>
+
+<h2 id="types-entiers">Types entiers</h2>
+<p>En Java, les entiers peuvent être représentés par <code class="highlighter-rouge">byte</code>, <code class="highlighter-rouge">short</code>, <code class="highlighter-rouge">int</code> et <code class="highlighter-rouge">long</code>, mais ils sont limités (puisque numériques).</p>
+
+<h3 id="complément-à-deux">Complément à deux</h3>
+<ol>
+  <li>Inverser tous les bits</li>
+  <li>Ajouter 1</li>
+  <li>On a le complément à deux</li>
+</ol>
+
+<ul>
+  <li>2<sup>n-1</sup>-1 valeurs &gt;0</li>
+  <li>2<sup>n-1</sup> valeurs &lt;0</li>
+  <li>zéro</li>
+</ul>
+
+<h4 id="exemple-3">Exemple</h4>
+<ol>
+  <li>00001100</li>
+  <li>11110011</li>
+  <li>11110100</li>
+</ol>
+
+<h3 id="notation-de-grands-nombres">Notation de grands nombres</h3>
+<ul>
+  <li>Pour faciliter la lecture, on peut écrire les nombres avec un <code class="highlighter-rouge">_</code>.</li>
+  <li>On utilise le suffixe <code class="highlighter-rouge">L</code> pour les <code class="highlighter-rouge">long</code></li>
+  <li>On utilise le préfixe <code class="highlighter-rouge">0b</code> pour le binaire</li>
+  <li>On utilise le préfixe <code class="highlighter-rouge">0x</code> pour l’héxadécimal</li>
+  <li>On utilise le préfixe <code class="highlighter-rouge">0</code> pour l’octal (base 8)</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="code"><pre><span class="kt">int</span> <span class="n">earthRadius</span> <span class="o">=</span> <span class="mi">6371</span><span class="o">;</span>
+<span class="kt">int</span> <span class="n">earthRadius</span> <span class="o">=</span> <span class="mi">6_371</span><span class="o">;</span>
+
+<span class="kt">long</span> <span class="n">earthPopulation</span> <span class="o">=</span> <span class="mi">7_130_000_000L</span><span class="o">;</span>
+
+<span class="kt">int</span> <span class="n">twelve</span> <span class="o">=</span> <span class="mb">0b1100</span><span class="o">;</span> <span class="c1">// vaut 12</span>
+<span class="kt">int</span> <span class="n">maxInt</span> <span class="o">=</span> <span class="mb">0b01111111_11111111_11111111_11111111</span><span class="o">;</span>
+
+<span class="kt">long</span> <span class="n">twelveAsLong</span> <span class="o">=</span> <span class="mb">0b1100</span><span class="no">L</span><span class="o">;</span>
+<span class="kt">int</span> <span class="n">twelve</span> <span class="o">=</span> <span class="mh">0xC</span>
+<span class="kt">long</span> <span class="n">minusOne</span> <span class="o">=</span> <span class="mh">0xFFFF_FFFF_FFFF_FFFF</span><span class="no">L</span><span class="o">;</span> <span class="c1">// vaut -1 (long)</span>
+
+<span class="kt">int</span> <span class="n">thirty</span> <span class="o">=</span> <span class="mi">30</span><span class="o">;</span> <span class="c1">// vaut 30</span>
+<span class="kt">int</span> <span class="n">notThirty</span> <span class="o">=</span> <span class="mo">030</span><span class="o">;</span> <span class="c1">// vaut 24 (!)</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h2 id="opérations-arithmétiques">Opérations arithmétiques</h2>
+<p>La plupart des opérations peuvent produire des valeurs non représentables dans le type entier concerné. On dit alors qu’il y a dépassement de <em>capacité</em> (<strong>overflow</strong>).</p>
+
+<p>Cela cause une multitude de problèmes:</p>
+
+<ul>
+  <li>De sécurité, si on donne le mauvais index du tableau.</li>
+  <li>Mathématiques, puisque <code class="highlighter-rouge">Math.abs</code> peut retourner un nombre négatif (il ne peut pas inverser <code class="highlighter-rouge">Integer.MIN_VALUE</code>).</li>
+</ul>
+
+<h1 id="opérations-bit-à-bit-bitwise-operations">Opérations bit à bit (<em>bitwise operations</em>)</h1>
+<ul>
+  <li><code class="highlighter-rouge">~x</code>: <strong>inversion (ou complément)</strong>: retourne l’inverse d’un bit</li>
+  <li><code class="highlighter-rouge">x &lt;&lt; y</code> : <strong>décalage à gauche</strong>: on rajoute <code class="highlighter-rouge">y</code> 0 du coté du poids faible de <code class="highlighter-rouge">x</code>, et on perd les bits de poids fort de <code class="highlighter-rouge">x</code> (attention, les valeurs de <code class="highlighter-rouge">y</code> sont prises en modulo 32). Equivalent à une multiplication par 2<sup>y</sup>.</li>
+  <li><code class="highlighter-rouge">x &gt;&gt; y</code>: <strong>décalage à droite arithmétique</strong>: copie le bit de poids fort dans toutes les positions laissées libres par le décalage. Equivalent à une division <strong>entière</strong> par 2<sup>y</sup>, lorsque <code class="highlighter-rouge">x &gt;= 0</code>.</li>
+  <li><code class="highlighter-rouge">x &gt;&gt;&gt; y</code> : <strong>décalage à droite logique</strong>: comme pour le décalage à gauche, on rajoute <code class="highlighter-rouge">y</code> 0 du coté du poids fort de <code class="highlighter-rouge">x</code>, et on perd les bits de poids faible de <code class="highlighter-rouge">x</code> (attention, les valeurs de <code class="highlighter-rouge">y</code> sont prises en modulo 32)</li>
+  <li><code class="highlighter-rouge">x &amp; y</code> : conjonction (et) bit à bit,</li>
+  <li><code class="highlighter-rouge">x | y</code> : disjonction (ou) bit à bit,</li>
+  <li><code class="highlighter-rouge">x ^ y</code> : disjonction exclusive (ou exclusif) bit à bit.</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mb">0b00001100</span> <span class="o">&lt;&lt;</span> <span class="mi">3</span><span class="o">;</span> <span class="c1">// vaut 0b01100000</span>
+<span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="mb">0b11110000</span> <span class="o">&gt;&gt;</span> <span class="mi">2</span><span class="o">;</span> <span class="c1">// vaut 0b11111100</span>
+<span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="mb">0b11110000</span> <span class="o">&gt;&gt;&gt;</span> <span class="mi">2</span><span class="o">;</span> <span class="c1">// vaut 0b00111100</span>
+<span class="kt">int</span> <span class="n">d</span> <span class="o">=</span> <span class="mb">0b11110000</span> <span class="o">&amp;</span> <span class="mb">0b00111100</span><span class="o">;</span> <span class="c1">// vaut 0b00110000</span>
+<span class="kt">int</span> <span class="n">e</span> <span class="o">=</span> <span class="mb">0b11110000</span> <span class="o">|</span> <span class="mb">0b00111100</span><span class="o">;</span> <span class="c1">// vaut 0b11111100</span>
+<span class="kt">int</span> <span class="n">f</span> <span class="o">=</span> <span class="mb">0b11110000</span> <span class="o">&amp;</span> <span class="mb">0b00111100</span><span class="o">;</span> <span class="c1">// vaut 0b11001100</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p><code class="highlighter-rouge">&amp;</code>, <code class="highlighter-rouge">|</code> et <code class="highlighter-rouge">^</code> peuvent être utilisés sur des <code class="highlighter-rouge">boolean</code>: la différence avec <code class="highlighter-rouge">&amp;&amp;</code> et <code class="highlighter-rouge">||</code> est que ces-derniers n’évaluent que le deuxième argument si c’est strictrement nécessaire.</p>
+
+<h2 id="masques">Masques</h2>
+<p>Il est souvent utile de manipuler un ou plusieurs bits d’un entier sans toucher aux autres. Pour ce faire, on construit tout d’abord un entier — appelé le masque (mask) — dont seuls les bits à manipuler sont à 1. Ensuite, on utilise l’opération bit à bit appropriée (<code class="highlighter-rouge">&amp;</code>, <code class="highlighter-rouge">|</code> ou <code class="highlighter-rouge">^</code>), appliquée au masque et à la valeur. Un masque peut soit s’écrire directement sous forme d’entier littéral — généralement en base 2 ou 16 — soit se construire en combinant décalages et disjonctions :</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+</pre></td><td class="code"><pre><span class="kt">int</span> <span class="n">mask13</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">13</span><span class="o">;</span> <span class="c1">// uniquement bit 13</span>
+<span class="kt">int</span> <span class="n">mask17</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">17</span><span class="o">;</span> <span class="c1">// uniquement bit 17</span>
+<span class="kt">int</span> <span class="n">mask13_17</span> <span class="o">=</span> <span class="n">mask13</span> <span class="o">|</span> <span class="n">mask17</span><span class="o">;</span> <span class="c1">// bits 13 et 17</span>
+
+<span class="c1">// Pour tester si les bits 13 et 17 de l'entier x sont à 1, on écrit:</span>
+<span class="kt">boolean</span> <span class="n">bits13_17Set</span> <span class="o">=</span> <span class="o">(</span><span class="n">x</span> <span class="o">&amp;</span> <span class="n">mask13_17</span><span class="o">)</span> <span class="o">==</span> <span class="n">mask13_17</span><span class="o">;</span>
+
+<span class="c1">// Pour tester si tous ces bits sont à 0, on écrit:</span>
+<span class="kt">boolean</span> <span class="n">bits13_17Cleared</span> <span class="o">=</span> <span class="o">(</span><span class="n">x</span> <span class="o">&amp;</span> <span class="n">mask13_17</span><span class="o">)</span> <span class="o">==</span> <span class="mi">0</span><span class="o">;</span>
+
+<span class="c1">// Pour tester si au moins l'un de ces bits est à 1, on écrit:</span>
+<span class="kt">boolean</span> <span class="n">bit13OrBit17Set</span> <span class="o">=</span> <span class="o">(</span><span class="n">x</span> <span class="o">&amp;</span> <span class="n">mask13_17</span><span class="o">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">;</span>
+
+<span class="c1">// Pour mettre à 1 les bits 13 et 17 de l'entier x,on écrit:</span>
+<span class="kt">int</span> <span class="n">xWithBits13_17Set</span> <span class="o">=</span> <span class="n">x</span> <span class="o">|</span> <span class="n">mask13_17</span><span class="o">;</span>
+
+<span class="c1">// Pour mettre à 0 les bits 13 et 17 de l'entier x, on écrit:</span>
+<span class="kt">int</span> <span class="n">xWithBits13_17Cleared</span> <span class="o">=</span> <span class="n">x</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">mask13_17</span><span class="o">;</span>
+
+<span class="c1">// Pour inverser les bits 13 et 17 de l'entier x, on écrit:</span>
+<span class="kt">int</span> <span class="n">xWithBits13_17Toggled</span> <span class="o">=</span> <span class="n">x</span> <span class="o">^</span> <span class="n">mask13_17</span><span class="o">;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h2 id="mathématiques-et-opérations-bitwise">Mathématiques et opérations bitwise</h2>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre><span class="c1">// x * 2^n:</span>
+<span class="kt">int</span> <span class="n">multiplyWith2PowN</span> <span class="o">=</span>  <span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="n">n</span><span class="o">;</span>
+
+<span class="c1">// x / 2^n (pour x&gt;=0):</span>
+<span class="kt">int</span> <span class="n">integerDivisionBy2PowN</span> <span class="o">=</span> <span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="n">n</span><span class="o">;</span>
+
+<span class="c1">// x % 2^n</span>
+<span class="kt">int</span> <span class="n">mod2PowN</span> <span class="o">=</span> <span class="n">x</span> <span class="o">&amp;</span> <span class="o">((</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">n</span><span class="o">)</span> <span class="o">-</span> <span class="mi">1</span><span class="o">);</span>
+
+<span class="c1">// Tests de parité</span>
+<span class="kt">boolean</span> <span class="n">isXEven</span> <span class="o">=</span> <span class="o">(</span><span class="n">x</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="o">)</span> <span class="o">==</span> <span class="mi">0</span><span class="o">;</span>
+<span class="kt">boolean</span> <span class="n">isXOdd</span> <span class="o">=</span> <span class="o">(</span><span class="n">x</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="o">)</span> <span class="o">==</span> <span class="mi">1</span><span class="o">;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h2 id="entiers-dans-lapi-java">Entiers dans l’API Java</h2>
+<p>Il y a dans l’API Java des classes qui correspondent à chaque type d’entier (<code class="highlighter-rouge">Byte</code> pour <code class="highlighter-rouge">byte</code>, <code class="highlighter-rouge">Integer</code> pour <code class="highlighter-rouge">int</code>…), que l’on peut utiliser dans les <code class="highlighter-rouge">List&lt;&gt;</code>, par exemple. Elles ont 2 buts:</p>
+
+<ol>
+  <li>Servir de “classes d’emballage” pour la généricité.</li>
+  <li>Offrir, sous forme de méthodes statiques, des opérations sur les valeurs du type qu’elles représentent (<code class="highlighter-rouge">MIN_VALUE</code> et <code class="highlighter-rouge">MAX_VALUE</code>, <code class="highlighter-rouge">SIZE</code>, <code class="highlighter-rouge">BYTES</code>…)</li>
+</ol>
+
+<h3 id="auto-emballage-rappel">Auto-emballage (rappel)</h3>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="code"><pre><span class="nc">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">l</span> <span class="o">=</span> <span class="nc">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="mi">4</span><span class="o">);</span> <span class="c1">// incorrect !</span>
+<span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="o">=</span> <span class="nc">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="k">new</span> <span class="nc">Integer</span><span class="o">(</span><span class="mi">4</span><span class="o">));</span>
+<span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">l</span> <span class="o">=</span> <span class="nc">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span> <span class="c1">// Equivalent</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h3 id="api-java">API Java</h3>
+<p><code class="highlighter-rouge">Integer</code> offre :</p>
+
+<ul>
+  <li><code class="highlighter-rouge">int bitCount(int i)</code>: retourne le nombre de bits à 1 dans i;</li>
+  <li><code class="highlighter-rouge">int numberOfLeadingZeros(int i)</code>: retourne le nombre de bits à 0 en tête (à gauche) de i;</li>
+  <li><code class="highlighter-rouge">int numberOfTrailingZeros(int i)</code> : retourne le nombre de bits à 0 en queue (à droite) de i.</li>
+  <li><code class="highlighter-rouge">int lowestOneBit(int i)</code>: retourne 0 si i vaut 0, ou une valeur ayant un seul bit à 1, dont la position est celle du bit à 1 de poids de plus faible de i,</li>
+  <li><code class="highlighter-rouge">int highestOneBit(int i)</code>: idem, mais pour le bit de poids le plus fort.</li>
+  <li><code class="highlighter-rouge">int rotateLeft(int i, int d)</code>: retourne l’entier obtenu par rotation des bits de i de d positions vers la gauche; Une rotation est similaire à un décalage, mais les bits qui sont éjectés d’un côté sont réinjectés de l’autre.</li>
+  <li><code class="highlighter-rouge">int rotateRight(int i, int d)</code>: idem, mais vers la droite.</li>
+  <li><code class="highlighter-rouge">int reverse(int i)</code>: retourne l’entier obtenu en inversant l’ordre des bits de i;</li>
+  <li><code class="highlighter-rouge">int reverseBytes(int i)</code>: retourne l’entier obtenu en inversant l’ordre des octets de i.</li>
+</ul>
+
+<p>(<code class="highlighter-rouge">Long</code> aussi, mais les arguments sont des <code class="highlighter-rouge">long</code>)</p>
+
+<h2 id="somme-de-bits">Somme de bits</h2>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="kd">public</span> <span class="kd">static</span> <span class="kt">int</span> <span class="nf">bitCount</span><span class="o">(</span><span class="kt">byte</span> <span class="n">b</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kt">int</span> <span class="n">s1</span> <span class="o">=</span> <span class="o">((</span><span class="n">b</span> <span class="o">&amp;</span> <span class="mb">0b10101010</span><span class="o">)</span> <span class="o">&gt;&gt;&gt;</span> <span class="mi">1</span><span class="o">)</span> <span class="o">+</span> <span class="o">(</span><span class="n">b</span> <span class="o">&amp;</span> <span class="mb">0b01010101</span><span class="o">);</span>
+    <span class="kt">int</span> <span class="n">s2</span> <span class="o">=</span> <span class="o">((</span><span class="n">s1</span> <span class="o">&amp;</span> <span class="mb">0b11001100</span><span class="o">)</span> <span class="o">&gt;&gt;&gt;</span> <span class="mi">2</span><span class="o">)</span> <span class="o">+</span> <span class="o">(</span><span class="n">s1</span> <span class="o">&amp;</span> <span class="mb">0b00110011</span><span class="o">);</span>
+    <span class="kt">int</span> <span class="n">s3</span> <span class="o">=</span> <span class="o">((</span><span class="n">s2</span> <span class="o">&amp;</span> <span class="mb">0b11110000</span><span class="o">)</span> <span class="o">&gt;&gt;&gt;</span> <span class="mi">4</span><span class="o">)</span> <span class="o">+</span> <span class="o">(</span><span class="n">s2</span> <span class="o">&amp;</span> <span class="mb">0b00001111</span><span class="o">);</span>
+    <span class="k">return</span> <span class="n">s3</span><span class="o">;</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Voir <a href="http://cs108.epfl.ch/archive/15/files/ppo15_09_entiers.pdf">les slides</a> pour une description plus détaillée!</p>
+
+<h1 id="patrons"><a href="http://cs108.epfl.ch/archive/15/files/ppo15_10_patrons_builder-iterator-strategy-factory.pdf">Patrons</a></h1>
+
+<p>Des modèles de programmation pour résoudre des problèmes récurrents (Cependant, attention à ne pas les surutiliser.)</p>
+
+<h2 id="attributs-dun-patron">Attributs d’un patron</h2>
+<ul>
+  <li>son nom,</li>
+  <li>une description du problème résolu,</li>
+  <li>une description de la solution à ce problème,</li>
+  <li>une présentation des conséquences liées à l’utilisation du patron.</li>
+</ul>
+
+<h2 id="diagrammes-de-classes">Diagrammes de classes</h2>
+<p>Décrit visuellement un ensemble de classes ou d’interfaces. Il y a 3 types de relations entre les classes:</p>
+
+<ul>
+  <li><strong>héritage</strong>: lorsqu’une classe hérite d’une autre ou implémente une interface,</li>
+  <li><strong>association</strong>: lorsqu’une classe utilise une ou plusieurs instances d’une autre classe,</li>
+  <li><strong>instanciation</strong>: lorsqu’une classe créée des instances d’une autre classe.</li>
+</ul>
+
+<p>Voir les slides 13-15 pour les règles utilisées dans le cadre de ce cours.</p>
+
+<h2 id="builder">Builder</h2>
+<p>Pas de surprise.</p>
+
+<h3 id="builder-intelligent">Builder intelligent</h3>
+<p>Construit un objet différent en fonction de l’input (par exemple, en fonction de la densité d’une matrice).</p>
+
+<p>Honnêtement, voir les <a href="http://cs108.epfl.ch/archive/15/files/ppo15_10_patrons_builder-iterator-strategy-factory.pdf">slides</a>. Je ne prendrai pas plus de notes cette semaine. Cependant, une liste est présentée ci-dessous.</p>
+
+<ul>
+  <li><em>Builder</em></li>
+  <li><em>Iterator</em></li>
+  <li><em>Strategy</em> (le tout petit bout de code réutilisable, voir comparateurs)</li>
+  <li><em>Factory</em></li>
+  <li><em>Abstract Factory</em> (revoir ceci)</li>
+</ul>
+
+<h2 id="adapter">Adapter</h2>
+
+<h3 id="problème">Problème</h3>
+<p>Comment peut-on utiliser <code class="highlighter-rouge">public static void shuffle(List&lt;?&gt; list)</code> sur un tableau d’entiers?</p>
+
+<h3 id="solution">Solution</h3>
+<p>Une classe qui adapte le tableau en le présentant comme une liste en implémentant l’interface <code class="highlighter-rouge">List</code></p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="code"><pre><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="nc">ArrayAdapter</span><span class="o">&lt;</span><span class="no">E</span><span class="o">&gt;</span>
+    <span class="kd">implements</span> <span class="nc">List</span><span class="o">&lt;</span><span class="no">E</span><span class="o">&gt;</span> <span class="o">{</span>
+        <span class="kd">private</span> <span class="kd">final</span> <span class="no">E</span><span class="o">[]</span> <span class="n">array</span><span class="o">;</span>
+        <span class="kd">public</span> <span class="nf">ArrayAdapter</span><span class="o">(</span><span class="no">E</span><span class="o">[]</span> <span class="n">array</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">array</span> <span class="o">=</span> <span class="n">array</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="no">E</span> <span class="nf">get</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">)</span> <span class="o">{</span> <span class="k">return</span> <span class="n">array</span><span class="o">[</span><span class="n">i</span><span class="o">];</span> <span class="o">}</span>
+    <span class="kd">public</span> <span class="no">E</span> <span class="nf">set</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">,</span> <span class="no">E</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="no">E</span> <span class="n">curr</span> <span class="o">=</span> <span class="n">array</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+        <span class="n">array</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">e</span><span class="o">;</span>
+        <span class="k">return</span> <span class="n">curr</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="c1">// … les 21 autres méthodes de List</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h2 id="decorator">Decorator</h2>
+
+<h3 id="problème-1">Problème</h3>
+<p>On veut dessiner et manipuler des formes géométriques, en offrant la possibilité d’appliquer des transformations de base (translation, rotation, symétrie, …)</p>
+
+<h3 id="solution-1">Solution</h3>
+<p>On définit des pseudos-formes qui en transforment d’autres.</p>
+
+<h2 id="composite">Composite</h2>
+
+<h3 id="problème-2">Problème</h3>
+<p>Souvent, il est difficile de grouper plusieurs éléments et les reclasser; par exemple, pour un groupe de formes, on veut les grouper pour former une grande forme.</p>
+
+<h3 id="solution-2">Solution</h3>
+<p>On définit une pseudo-forme qui représente un groupe.</p>
+
+<h2 id="composite--decorator">Composite / Decorator</h2>
+<p>La différence entre Composite et Decorator est minime et se résume au fait que le premier référence plusieurs objets de son propre type, le second un seul.</p>
+
+<p>Le reste est compliqué et est dans les slides.</p>
+
+<h2 id="mvc">MVC</h2>
+<p>En général, on découpe l’organisation d’une interface graphique en trois ensembles de classes:</p>
+
+<ul>
+  <li>le <strong>modèle</strong>, qui contient la totalité du code propre à
+l’application et qui n’a aucune notion d’interface
+graphique,</li>
+  <li>la <strong>vue</strong>, qui contient la totalité du code permettant de
+représenter le modèle à l’écran,</li>
+  <li>le <strong>contrôleur</strong>, qui contient la totalité du code gérant les
+entrées de l’utilisateur et les modifications du modèle
+correspondantes</li>
+</ul>
+
+<p>MVC est qualifié de <strong>modèle architectural</strong>; il ne résoud pas des petits problèmes locaux, mais permet d’organiser l’ensemble de l’application.</p>
+
+<h3 id="modèle">Modèle</h3>
+<p>Ensemble du code qui gère les données propres à l’application (par exemple, dans un browser, le code qui gère la connexion au réseau, la décompression d’images…)</p>
+
+<h3 id="vue">Vue</h3>
+<p>Ensemble du code responsable de l’affichage des données à l’écran (par exemple, transformer l’HTML en quelque chose de visible).</p>
+
+<h3 id="contrôleur">Contrôleur</h3>
+<p>Ensemble du code responsable de la gestion des entrées de l’utilisateur (gérer les clics sur les liens, entrées de texte…)</p>
+
+<h3 id="avantages-de-mvc">Avantages de MVC</h3>
+<ul>
+  <li><strong>Réutilisable</strong>: avec d’autres interfaces (mobile, desktop, …)</li>
+  <li><strong>Facile à tester</strong>: car les parties sont indépendantes.</li>
+</ul>
+
+<h1 id="interfaces-graphiques"><a href="http://cs108.epfl.ch/archive/15/files/ppo15_13_interfaces-graphiques.pdf">Interfaces graphiques</a></h1>
+<p>Les principales librairies sont AWT, Swing et JavaFX.</p>
+
+<h2 id="composants">Composants</h2>
+<p>Dans Swing, il y a 2 types de composants:</p>
+
+<ul>
+  <li><strong>Composants de base</strong>: ne contiennent pas d’autres composants (boutons, zones de texte, …)
+    <ul>
+      <li>Etiquette, textuelle ou graphique (<code class="highlighter-rouge">JLabel</code>)</li>
+      <li>Boutons: à un état (<code class="highlighter-rouge">JButton</code>), à deux états (<code class="highlighter-rouge">JToggleButton</code>), radio (<code class="highlighter-rouge">JRadioButton</code>), à cocher (<code class="highlighter-rouge">JCheckBox</code>)</li>
+      <li>…</li>
+    </ul>
+  </li>
+  <li><strong>Conteneurs</strong>: regroupent et organisent un certain nombre de composants (une fenêtre, par exemple).
+    <ul>
+      <li>De <em>niveau supérieur</em>, pas contenu dans les autres</li>
+      <li>De <em>niveau intermédiaire</em>, contenus dans les autres
+        <ul>
+          <li>Panneau sans représentation graphique (<code class="highlighter-rouge">JPanel</code>)</li>
+          <li>Panneau séparé en deux parties redimensionnables (<code class="highlighter-rouge">JSplitPane</code>)</li>
+          <li>Panneau à onglets (<code class="highlighter-rouge">JTabPane</code>)</li>
+          <li>…</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="conteneurs-intermiédiaires">Conteneurs intermiédiaires</h3>
+<ul>
+  <li><code class="highlighter-rouge">JSplitPane</code>  permet de diviser le composant en deux parties, chacune affichant un composant fils. La division peut être verticale ou horizontale, et est redimensionnable, éventuellement par l’utilisateur.</li>
+  <li><code class="highlighter-rouge">JTabbedPane</code> un panneau composé d’un certain nombre d’onglets affichant chacun un composant fils différent. Un seul onglet est visible à un instant donné.</li>
+  <li><code class="highlighter-rouge">JScrollPane</code> donne accès à une sous-partie d’un composant trop grand pour tenir à l’écran et permet de déplacer la zone visualisée de différentes manières, p.ex. au moyen de barres de défilement.</li>
+  <li><code class="highlighter-rouge">JLayeredPane</code> permet de superposer plusieurs composants, ce qui peut être utile pour dessiner au-dessus de composants existants ou pour intercepter les clics de souris qui leur sont destinés. Normalement, il n’y a pas de chevauchement; il faut utiliser un <code class="highlighter-rouge">JLayeredPane</code> pour le faire.</li>
+</ul>
+
+<h4 id="jpanel"><code class="highlighter-rouge">JPanel</code></h4>
+<p>C’est un panneau, un conteneur intermédiaire sans représentation graphique propre. <code class="highlighter-rouge">JPanel</code> donne les méthodes suivantes:
+– <code class="highlighter-rouge">void add(JComponent c, Object l, int i)</code>: insère le composant <code class="highlighter-rouge">c</code> à la position <code class="highlighter-rouge">i</code> dans les fils (<code class="highlighter-rouge">–1</code> signifiant la fin) et lui associe l’information d’agencement <code class="highlighter-rouge">l</code> (voir plus loin),
+– <code class="highlighter-rouge">void add(JComponent c, Object l)</code>, équivalent à <code class="highlighter-rouge">add(c, l, -1)</code>
+– <code class="highlighter-rouge">void add(JComponent c)</code>, équivalent à <code class="highlighter-rouge">add(c, null)</code>
+– <code class="highlighter-rouge">void remove(JComponent c)</code>: supprime le composant c des fils,
+– <code class="highlighter-rouge">void remove(int i)</code>: supprime le fils d’index <code class="highlighter-rouge">i</code>.</p>
+
+<p>L’agencement des fils — leur positionnement à l’intérieur du rectangle de leur parent — peut se faire de deux manières:</p>
+
+<ol>
+  <li>« manuellement », en changeant leurs bornes au moyen de la méthode setBounds</li>
+  <li>via un <strong>gestionnaire d’agencement</strong> (<em>layout manager</em>) attaché au parent et responsable de l’agencement de ses fils et de son dimensionnement.</li>
+</ol>
+
+<h4 id="gestionnaire-dagencement">Gestionnaire d’agencement</h4>
+<p>L’interface LayoutManager représente un gestionnaire d’agencement. Ces gestionnaires agencent chacun les fils en fonction d’une technique qui leur est propre.</p>
+
+<ul>
+  <li><code class="highlighter-rouge">BorderLayout</code>: agencement en lignes successives.</li>
+  <li><code class="highlighter-rouge">BoxLayout</code>: agencement en ligne verticale, centrée.</li>
+  <li><code class="highlighter-rouge">GridLayout</code>: en grille de n*m éléments.</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre><span class="nc">JPanel</span> <span class="n">p</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JPanel</span><span class="o">(</span><span class="k">new</span> <span class="nc">BorderLayout</span><span class="o">());</span>
+<span class="nc">JFormattedTextField</span> <span class="n">display</span> <span class="o">=</span> <span class="err">…</span><span class="o">;</span>
+
+<span class="c1">// … configuration de display</span>
+<span class="n">p</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">display</span><span class="o">,</span> <span class="nc">BorderLayout</span><span class="o">.</span><span class="na">PAGE_START</span><span class="o">);</span>
+<span class="nc">JPanel</span> <span class="n">keyboard</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JPanel</span><span class="o">(</span><span class="k">new</span> <span class="nc">GridLayout</span><span class="o">(</span><span class="mi">4</span><span class="o">,</span> <span class="mi">4</span><span class="o">));</span>
+
+<span class="c1">// … configuration de keyboard (boutons, …)</span>
+<span class="n">p</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">keyboard</span><span class="o">,</span> <span class="nc">BorderLayout</span><span class="o">.</span><span class="na">CENTER</span><span class="o">);</span>
+<span class="nc">JFrame</span> <span class="n">frame</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JFrame</span><span class="o">(</span><span class="s">"RPN Calc"</span><span class="o">);</span>
+<span class="n">frame</span><span class="o">.</span><span class="na">setContentPane</span><span class="o">(</span><span class="n">panel</span><span class="o">);</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h4 id="fermeture-des-fenêtres">Fermeture des fenêtres</h4>
+<p>Pour fermer l’application lorsque l’on ferme la fenêtre (vs. juste rendre la fenêtre invisible), il faut faire:</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre><span class="nc">JFrame</span> <span class="n">f</span> <span class="o">=</span> <span class="err">…</span><span class="o">;</span>
+<span class="n">frame</span><span class="o">.</span><span class="na">setDefaultCloseOperation</span><span class="o">(</span><span class="nc">JFrame</span><span class="o">.</span><span class="na">EXIT_ON_CLOSE</span><span class="o">);</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h4 id="boîte-de-dialogue-jdialog">Boîte de dialogue <code class="highlighter-rouge">JDialog</code></h4>
+<p>Elle est liée à la fenêtre principale, n’est pas une fenêtre à part entière. En fermant la fenêtre, on ferme aussi la boîte de dialogue.</p>
+
+<h3 id="composants-de-base">Composants de base.</h3>
+<ul>
+  <li><code class="highlighter-rouge">JLabel</code> pour les étiquettes</li>
+  <li><code class="highlighter-rouge">JButton</code> pour les boutons</li>
+  <li><code class="highlighter-rouge">JCheckBox</code> pour un checkbox</li>
+  <li><code class="highlighter-rouge">JRadioButton</code> pour un bouton radio</li>
+  <li><code class="highlighter-rouge">Combo box</code> pour un <code class="highlighter-rouge">&lt;select&gt;&lt;/select&gt;</code>.</li>
+</ul>
+
+<h1 id="modèles">Modèles</h1>
+
+<p>Voir slides – je préfère me concentrer sur ce qui est dit.</p>
+
+:ET

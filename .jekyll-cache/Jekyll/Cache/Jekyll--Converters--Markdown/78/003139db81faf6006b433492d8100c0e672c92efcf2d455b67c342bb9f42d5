@@ -1,0 +1,321 @@
+I"-<p>For the last few weeks, I’ve been working on building a <a href="http://mamedev.org/">MAME</a> arcade machine from an old computer. The software part is done (I’ll cover that in another post), and I have started to prepare the hardware. To save some money, I decided not to buy the <a href="https://www.ultimarc.com/ipac1.html">I-PAC</a>. Instead, hacking a keyboard seemed cheaper, and I just happened to have a lot of old, unused keyboards at hand. I thought that I’d just connect some wires from the keyboard to a button; when the button is pressed, it would emulate a keystroke. The only problem was that it would take up too much space, and it wouldn’t be practical. The connections wouldn’t be optimal, the keyboard might fall… All in all, a better approach was possible, and much needed.</p>
+
+<p>If you open up a keyboard, you’ll often find a small PCB connected to a USB cable (sometimes to some LEDs too), a rubber sheet with dots on it, and to three plastic sheets:</p>
+
+<!-- More -->
+
+<ul>
+  <li>The rubber sheet is filled with small rubber buttons; when you press a key, it pushes one of these little rubber buttons down.</li>
+  <li>The top sheet is a printed circuit with dots, each dot corresponding to one key.</li>
+  <li>The middle sheet is just plain, transparent plastic with holes where the dots on the sheet below are.</li>
+  <li>The bottom sheet is another printed circuit with dots, each dot corresponding to one key.</li>
+</ul>
+
+<p>When you are pressing a key, you are in fact creating a connection between the top and the bottom sheet. The connection you just created connects two pins on the PCB. Depending on the connected pins, the PCB will output a different signal, which will be interpreted as a different keystroke.
+As you can see on the pictures below, some buttons are on the same line. If two buttons are on the same line on the bottom sheet, they won’t be connected like that on the top sheet, thus creating a new combination of pins for each key. This may seem complicated, and if you don’t understand it, try to open up a keyboard; there’s a lot to learn from it.</p>
+
+<p>I threw the middle sheet out; I didn’t need it.</p>
+
+<p>I started out by scanning my two sheets. They were a bit longer than a piece of A4 paper, and my Canon MP640 couldn’t scan a complete sheet. I ended up scanning each plastic sheet twice. This is what the scans of the bottom sheet looked like:</p>
+
+<p><img src="/images/Keyboard-Hack/min/min_a1.png" alt="A scan of the left side of the plastic sheet" /></p>
+
+<p><img src="/images/Keyboard-Hack/min/min_a2.png" alt="A scan of the right side of the plastic sheet" /></p>
+
+<p>To stitch them together, I used <a href="https://research.microsoft.com/en-us/um/redmond/groups/ivm/ice/">Microsoft ICE</a>: it’s a great piece of software from the Microsoft Research team. It stitches multiple photos into one big panorama, and does so perfectly: forget the  skewed, distorted panoramas that you may have taken with your phone, this software almost never makes mistakes.</p>
+
+<p><img src="/images/Keyboard-Hack/min/min_stitch0001.png" alt="A scan of the complete plastic sheet" /></p>
+
+<p>So I had my two huge scans (they were about 12MB each). I may have asked for a too good quality, as a tenth of the resolution I had would have been sufficient. If your scanner lets you choose the resolution of your scan, 200-300 dpi should be more than enough – I had asked for 600.</p>
+
+<p>I edited the stitched scans with <a href="https://www.gimp.org/">GIMP</a>. The first thought was to use the magic wand and some “clever” contrast and coloring. That wasn’t a huge success, so I just ended up linking the the dots to the pins with the good old pen and my shift key (it adds the option to draw a line with the pen).</p>
+
+<p>This are the results I got:</p>
+
+<p><img src="/images/Keyboard-Hack/min/min_keyboard_stitch.png" alt="Colored plastic sheet (layer 1)" /></p>
+
+<p><img src="/images/Keyboard-Hack/min/min_keyboard-a.png" alt="Colored plastic sheet (layer 2)" /></p>
+
+<p>Interestingly enough, some dots weren’t used at all: they didn’t correspond to any rubber button, or to any key on the keyboard! I guess that the manufacturer did this so that they would be able to use the same plastic sheets for different keyboard layouts.
+I named all the pins, from A (to the left) to Z (to the right).</p>
+
+<p>Here is the list of what keys each pin is responsible for:</p>
+
+<h2 id="bottom-sheet">Bottom sheet:</h2>
+
+<p><strong>I:</strong> Volume +, left Ctrl, right Ctrl</p>
+
+<p><strong>J:</strong> Play/Pause, Search, Mail, Sleep, left Shift, right Shift</p>
+
+<p><strong>K:</strong> Prt Screen, e Scr Lk, browser, Alt, Alt Gr</p>
+
+<p><strong>L:</strong> Up, Left, Numpad Enter, Numpad +, Home, End, Pause/Break</p>
+
+<p><strong>M:</strong> Numpad ,, Numpad 3, Numpad 6, Numpad 9, Numpad *, Numpad -, Page Up, Page Down</p>
+
+<p><strong>N:</strong> F11, Down, Num Lock, Numpad 7, Numpad 4, Numpad 1, Delete</p>
+
+<p><strong>O:</strong> Insert, F12, Right, Numpad 0, Numpad 2, Numpad 5, Numpad 8, Numpad /</p>
+
+<p><strong>P:</strong> Enter, Backspace, F10, F9, F5, Space</p>
+
+<p><strong>Q:</strong> *, Ø, Æ, -, Å, P, +, 0</p>
+
+<p><strong>R:</strong> ., L, O, 9, F7, F8</p>
+
+<p><strong>S:</strong> ,, K, I, 8, F6, ´, ^</p>
+
+<p><strong>T:</strong> M, N, J, H, U, Y, 6, 7</p>
+
+<p><strong>U:</strong> B, V, G, F, R, T, 4, 5</p>
+
+<p><strong>V:</strong> C, D, E, 3, F2, F3, F4</p>
+
+<p><strong>W:</strong> &lt;, Caps Lock, X, S, W, 2, F1</p>
+
+<p><strong>X:</strong> Tab, ½, Esc, 1, Q, A, Z</p>
+
+<p><strong>Y:</strong> Context Menu, left Windows, Previous, Next</p>
+
+<p><strong>Z:</strong> right Windows, Stop, Volume -, Mute</p>
+
+<h2 id="top-sheet">Top sheet:</h2>
+
+<p><strong>A:</strong> Space, B, N, Alt Gr, -, left Shift, Left, Down, Right, Numpad -</p>
+
+<p><strong>B:</strong> Z, X, C, V, M, ,, ., right Windows, right Ctrl, right Shift, Enter, *, Numpad *,  Numpad /, Num Lock, Pause/Break</p>
+
+<p><strong>C:</strong> F6, F5, F4, Mute, Play/Pause, Esc, left Alt, &lt;, G, H, Ø, Up, Numpad 0, Numpad ,</p>
+
+<p><strong>D:</strong> Sleep, left Windows, A, S, D, F, J, K, L, Æ, Numpad 1, Numpad 2, Numpad 3, Numpad Enter</p>
+
+<p><strong>E:</strong> Numpad 4, Numpad 5, Numpad 6, Backspace, ^, Å, F7, Y, T, F3, Volume +, 
+Stop, Tab, Caps Lock, left Shift</p>
+
+<p><strong>F:</strong> e Scr Lk, Numpad 7, Numpad 8, Numpad 9, Numpad +, Context Menu, P, O, I, U, R, E, W, Q, Volume -</p>
+
+<p><strong>G:</strong> Prt Scrn, End, Page Down, 1, 2, 3, 4, Search, Previous, 7, 8, 9, 0, F10, F11, F12</p>
+
+<p><strong>H:</strong> Delete, Insert, Home, Page Up, left Ctrl, ½, F1, F2, Browser, Mail, Next, 5, 6, F8, F9, +, ´</p>
+
+<p>To find the pins corresponding to a key, you’ll have to search in the bottom sheet for the wanted key, and then again in the top sheet for the same key. You’ll then have to make the connection from your 2 pins to something else (a button, a pedal, whatever). To find the pins corresponding to a key, you can use this table:</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><strong>A</strong></td>
+      <td><strong>B</strong></td>
+      <td><strong>C</strong></td>
+      <td><strong>D</strong></td>
+      <td><strong>E</strong></td>
+      <td><strong>F</strong></td>
+      <td><strong>G</strong></td>
+      <td><strong>H</strong></td>
+    </tr>
+    <tr>
+      <td><strong>I</strong></td>
+      <td> </td>
+      <td>Right Ctrl</td>
+      <td> </td>
+      <td> </td>
+      <td>Volume +</td>
+      <td> </td>
+      <td> </td>
+      <td>Left Ctrl</td>
+    </tr>
+    <tr>
+      <td><strong>J</strong></td>
+      <td>Left Shift</td>
+      <td>Right Shift</td>
+      <td>Play/Pause</td>
+      <td>Sleep</td>
+      <td> </td>
+      <td> </td>
+      <td>Search</td>
+      <td>Mail</td>
+    </tr>
+    <tr>
+      <td><strong>K</strong></td>
+      <td>Alt Gr</td>
+      <td> </td>
+      <td>Alt</td>
+      <td> </td>
+      <td> </td>
+      <td>e Scr Lk</td>
+      <td>Prt Screen</td>
+      <td>Browser</td>
+    </tr>
+    <tr>
+      <td><strong>L</strong></td>
+      <td>Left</td>
+      <td>Pause/Break</td>
+      <td>Up</td>
+      <td>Numpad Enter</td>
+      <td> </td>
+      <td>Numpad +</td>
+      <td>End</td>
+      <td>Home</td>
+    </tr>
+    <tr>
+      <td><strong>M</strong></td>
+      <td>Numpad -</td>
+      <td>Numpad *</td>
+      <td>Numpad,</td>
+      <td>Numpad 3</td>
+      <td>Numpad 6</td>
+      <td>Numpad 9</td>
+      <td>Page Down</td>
+      <td>Page Up</td>
+    </tr>
+    <tr>
+      <td><strong>N</strong></td>
+      <td>Down</td>
+      <td>Num Lock</td>
+      <td> </td>
+      <td>Numpad 1</td>
+      <td>Numpad 4</td>
+      <td>Numpad 7</td>
+      <td>F11</td>
+      <td>Delete</td>
+    </tr>
+    <tr>
+      <td><strong>O</strong></td>
+      <td>Right</td>
+      <td>Numpad /</td>
+      <td>Numpad 0</td>
+      <td>Numpad 2</td>
+      <td>Numpad 5</td>
+      <td>Numpad 8</td>
+      <td>F12</td>
+      <td>Insert</td>
+    </tr>
+    <tr>
+      <td><strong>P</strong></td>
+      <td>Space</td>
+      <td>Enter</td>
+      <td>F5</td>
+      <td> </td>
+      <td>Backspace</td>
+      <td> </td>
+      <td>F10</td>
+      <td>F9</td>
+    </tr>
+    <tr>
+      <td><strong>Q</strong></td>
+      <td>-</td>
+      <td>*</td>
+      <td>Ø</td>
+      <td>Æ</td>
+      <td>Å</td>
+      <td>P</td>
+      <td>0</td>
+      <td>+</td>
+    </tr>
+    <tr>
+      <td><strong>R</strong></td>
+      <td> </td>
+      <td>.</td>
+      <td> </td>
+      <td>L</td>
+      <td>F7</td>
+      <td>O</td>
+      <td>9</td>
+      <td>F8</td>
+    </tr>
+    <tr>
+      <td><strong>S</strong></td>
+      <td> </td>
+      <td>,</td>
+      <td>F6</td>
+      <td>K</td>
+      <td>^</td>
+      <td>I</td>
+      <td>8</td>
+      <td>`</td>
+    </tr>
+    <tr>
+      <td><strong>T</strong></td>
+      <td>N</td>
+      <td>M</td>
+      <td>H</td>
+      <td>J</td>
+      <td>Y</td>
+      <td>U</td>
+      <td>7</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <td><strong>U</strong></td>
+      <td>B</td>
+      <td>V</td>
+      <td>G</td>
+      <td>F</td>
+      <td>T</td>
+      <td>R</td>
+      <td>4</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <td><strong>V</strong></td>
+      <td> </td>
+      <td>C</td>
+      <td>F4</td>
+      <td>D</td>
+      <td>F3</td>
+      <td>E</td>
+      <td>3</td>
+      <td>F2</td>
+    </tr>
+    <tr>
+      <td><strong>W</strong></td>
+      <td> </td>
+      <td>X</td>
+      <td>&lt;</td>
+      <td>Sleep</td>
+      <td>Caps Lock</td>
+      <td>W</td>
+      <td>2</td>
+      <td>F1</td>
+    </tr>
+    <tr>
+      <td><strong>X</strong></td>
+      <td> </td>
+      <td>Z</td>
+      <td>Esc</td>
+      <td>A</td>
+      <td>Tab</td>
+      <td>Q</td>
+      <td>1</td>
+      <td>½</td>
+    </tr>
+    <tr>
+      <td><strong>Y</strong></td>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+      <td>Left Windows</td>
+      <td> </td>
+      <td>Context Menu</td>
+      <td>Previous</td>
+      <td>Next</td>
+    </tr>
+    <tr>
+      <td><strong>Z</strong></td>
+      <td> </td>
+      <td>Right Windows</td>
+      <td>Mute</td>
+      <td> </td>
+      <td>Stop</td>
+      <td>Volume -</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<p><br />
+For my arcade, I’m mostly going to use numbers 1 to 5, arrow keys, Ctrl, Alt, Space, R, D, F, G, Q and A, and perhaps also media keys.</p>
+
+<p>So that’s basically how to reverse engineer a keyboard! At this point, you can throw everything but the PCB out. Scan, stitch, color, list, solder,  and you’re ready to go!</p>
+:ET

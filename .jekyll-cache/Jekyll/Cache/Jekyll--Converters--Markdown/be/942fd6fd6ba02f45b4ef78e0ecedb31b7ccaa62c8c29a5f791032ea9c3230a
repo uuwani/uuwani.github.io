@@ -1,0 +1,23 @@
+I"§
+<p>We need to show that if $(u, v) \in E$ then <code class="highlighter-rouge">v.f &lt; u.f</code>.<br />
+When we explore <em>(u, v)</em>, what are the colors of <em>u</em> and <em>v</em>?</p>
+
+<ul>
+  <li><em>u</em> is gray</li>
+  <li>Is <em>v</em> gray too?
+    <ul>
+      <li><strong>No</strong> because then <em>v</em> would be an ancestor of <em>u</em> which implies that there is a back edge so the graph is not acyclic (view lemma below)</li>
+    </ul>
+  </li>
+  <li>Is <em>v</em> white?
+    <ul>
+      <li>Then it becomes a descendent of <em>u</em>, and by the parenthesis theorem, <code class="highlighter-rouge">u.d &lt; v.d &lt; v.f &lt; u.f</code></li>
+    </ul>
+  </li>
+  <li>Is <em>v</em> black?
+    <ul>
+      <li>Then <em>v</em> is already finished. Since we are exploring <em>(u, v)</em>, we have not yet finished <em>u</em>. Therefore, <code class="highlighter-rouge">v.f &lt; u.f</code></li>
+    </ul>
+  </li>
+</ul>
+:ET

@@ -1,0 +1,54 @@
+I"�<p>I’m a Master’s student in Computer Science at the <a href="https://epfl.ch/">Swiss Federal Institute of Technology (EPFL)</a>. Throughout my studies, I’ve always taken quite detailed notes. I find that taking notes during classes helps me concentrate on the content of the lecture, and that perfecting the notes after class is a good way for me to process the information I’ve just taken in.</p>
+
+<p>As such, I’ve accumulated a collection of fairly comprehensive notes for a few courses at EPFL. To me, they’re a useful resource for when I want to refresh my memory on a topic that I’ve seen in the past.</p>
+
+<p>I hope that they may be useful for other people too!</p>
+
+<ul>
+
+    <li>
+        <a href="/notes-prog/">CS-108 Pratique de la programmation orientée-objet</a>
+    </li>
+
+    <li>
+        <a href="/parcon/">CS-206 Parallelism and Concurrency</a>
+    </li>
+
+    <li>
+        <a href="/funprog/">CS-210 Functional Programming Principles in Scala</a>
+    </li>
+
+    <li>
+        <a href="/algorithms/">CS-250 Algorithms</a>
+    </li>
+
+    <li>
+        <a href="/os/">CS-323 Operating Systems</a>
+    </li>
+
+    <li>
+        <a href="/ml/">CS-443 Machine Learning</a>
+    </li>
+
+    <li>
+        <a href="/advanced-algorithms/">CS-450 Advanced Algorithms</a>
+    </li>
+
+    <li>
+        <a href="/distributed-algorithms/">CS-451 Distributed Algorithms</a>
+    </li>
+
+    <li>
+        <a href="/fos/">CS-452 Foundations of Software</a>
+    </li>
+
+    <li>
+        <a href="/tree-structured-data/">CS-525 Foundations and tools for tree-structured data</a>
+    </li>
+
+    <li>
+        <a href="/formal-verification/">CS-550 Formal Verification</a>
+    </li>
+
+</ul>
+:ET

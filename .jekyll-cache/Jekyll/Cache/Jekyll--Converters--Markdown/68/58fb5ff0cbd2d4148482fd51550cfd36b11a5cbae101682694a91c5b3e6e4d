@@ -1,0 +1,1354 @@
+I"t*<ul id="markdown-toc">
+  <li><a href="#intro" id="markdown-toc-intro">Intro</a>    <ul>
+      <li><a href="#a-little-bit-of-history" id="markdown-toc-a-little-bit-of-history">A little bit of history</a></li>
+      <li><a href="#what-does-the-os-do" id="markdown-toc-what-does-the-os-do">What does the OS do?</a></li>
+      <li><a href="#where-does-the-os-live" id="markdown-toc-where-does-the-os-live">Where does the OS live?</a></li>
+      <li><a href="#os-interfaces" id="markdown-toc-os-interfaces">OS interfaces</a>        <ul>
+          <li><a href="#system-calls" id="markdown-toc-system-calls">System calls</a></li>
+          <li><a href="#traps" id="markdown-toc-traps">Traps</a></li>
+          <li><a href="#interrupts" id="markdown-toc-interrupts">Interrupts</a></li>
+        </ul>
+      </li>
+      <li><a href="#os-control-flow" id="markdown-toc-os-control-flow">OS control flow</a></li>
+      <li><a href="#os-design-goals" id="markdown-toc-os-design-goals">OS design goals</a></li>
+      <li><a href="#high-level-os-structure" id="markdown-toc-high-level-os-structure">High-level OS structure</a></li>
+    </ul>
+  </li>
+  <li><a href="#processes" id="markdown-toc-processes">Processes</a>    <ul>
+      <li><a href="#what-is-a-process" id="markdown-toc-what-is-a-process">What is a process?</a></li>
+      <li><a href="#outline-of-the-linux-shell" id="markdown-toc-outline-of-the-linux-shell">Outline of the Linux shell</a></li>
+      <li><a href="#linux-process-tree" id="markdown-toc-linux-process-tree">Linux process tree</a></li>
+      <li><a href="#multiprocessing" id="markdown-toc-multiprocessing">Multiprocessing</a>        <ul>
+          <li><a href="#process-switching" id="markdown-toc-process-switching">Process switching</a></li>
+          <li><a href="#process-scheduling" id="markdown-toc-process-scheduling">Process scheduling</a></li>
+          <li><a href="#scheduling-algorithm" id="markdown-toc-scheduling-algorithm">Scheduling algorithm</a></li>
+          <li><a href="#application-multiprocess-structuring" id="markdown-toc-application-multiprocess-structuring">Application multiprocess structuring</a></li>
+        </ul>
+      </li>
+      <li><a href="#interprocess-communication" id="markdown-toc-interprocess-communication">Interprocess communication</a>        <ul>
+          <li><a href="#message-passing" id="markdown-toc-message-passing">Message passing</a></li>
+          <li><a href="#remote-procedure-call" id="markdown-toc-remote-procedure-call">Remote procedure call</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#application-multithreading-and-synchronization" id="markdown-toc-application-multithreading-and-synchronization">Application multithreading and synchronization</a>    <ul>
+      <li><a href="#multithreading-vs-multiprocessing" id="markdown-toc-multithreading-vs-multiprocessing">Multithreading vs. multiprocessing</a></li>
+      <li><a href="#pthreads" id="markdown-toc-pthreads">Pthreads</a></li>
+      <li><a href="#synchronization" id="markdown-toc-synchronization">Synchronization</a></li>
+      <li><a href="#kernel-multithreading" id="markdown-toc-kernel-multithreading">Kernel multithreading</a></li>
+    </ul>
+  </li>
+  <li><a href="#memory-management" id="markdown-toc-memory-management">Memory management</a>    <ul>
+      <li><a href="#goals-and-assumptions" id="markdown-toc-goals-and-assumptions">Goals and assumptions</a></li>
+      <li><a href="#virtual-and-physical-address-spaces" id="markdown-toc-virtual-and-physical-address-spaces">Virtual and physical address spaces</a></li>
+      <li><a href="#mapping-methods-and-allocation" id="markdown-toc-mapping-methods-and-allocation">Mapping methods and allocation</a>        <ul>
+          <li><a href="#base-and-bounds" id="markdown-toc-base-and-bounds">Base and bounds</a></li>
+          <li><a href="#segmentation" id="markdown-toc-segmentation">Segmentation</a></li>
+          <li><a href="#paging" id="markdown-toc-paging">Paging</a></li>
+          <li><a href="#segmentation-with-paging" id="markdown-toc-segmentation-with-paging">Segmentation with Paging</a></li>
+        </ul>
+      </li>
+      <li><a href="#optimizations" id="markdown-toc-optimizations">Optimizations</a>        <ul>
+          <li><a href="#memory-allocation" id="markdown-toc-memory-allocation">Memory allocation</a></li>
+          <li><a href="#protection" id="markdown-toc-protection">Protection</a></li>
+          <li><a href="#sharing" id="markdown-toc-sharing">Sharing</a></li>
+          <li><a href="#feature-comparison" id="markdown-toc-feature-comparison">Feature comparison</a></li>
+          <li><a href="#tlbs" id="markdown-toc-tlbs">TLBs</a></li>
+        </ul>
+      </li>
+      <li><a href="#dealing-with-large-virtual-address-spaces" id="markdown-toc-dealing-with-large-virtual-address-spaces">Dealing with large virtual address spaces</a></li>
+      <li><a href="#process-switching-and-memory-management" id="markdown-toc-process-switching-and-memory-management">Process switching and memory management</a></li>
+    </ul>
+  </li>
+  <li><a href="#demand-paging" id="markdown-toc-demand-paging">Demand Paging</a>    <ul>
+      <li><a href="#page-replacement" id="markdown-toc-page-replacement">Page replacement</a></li>
+      <li><a href="#frame-allocation" id="markdown-toc-frame-allocation">Frame allocation</a></li>
+      <li><a href="#optimizations-1" id="markdown-toc-optimizations-1">Optimizations</a>        <ul>
+          <li><a href="#prepaging" id="markdown-toc-prepaging">Prepaging</a></li>
+          <li><a href="#cleaning" id="markdown-toc-cleaning">Cleaning</a></li>
+          <li><a href="#free-frame-pool" id="markdown-toc-free-frame-pool">Free frame pool</a></li>
+          <li><a href="#copy-on-write" id="markdown-toc-copy-on-write">Copy-on-write</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#file-systems" id="markdown-toc-file-systems">File Systems</a>    <ul>
+      <li><a href="#what-is-a-file-system" id="markdown-toc-what-is-a-file-system">What is a file system?</a></li>
+      <li><a href="#interface" id="markdown-toc-interface">Interface</a>        <ul>
+          <li><a href="#access-primitives" id="markdown-toc-access-primitives">Access primitives</a></li>
+          <li><a href="#concurrency-primitives" id="markdown-toc-concurrency-primitives">Concurrency primitives</a></li>
+          <li><a href="#naming-primitives" id="markdown-toc-naming-primitives">Naming primitives</a></li>
+        </ul>
+      </li>
+      <li><a href="#disks" id="markdown-toc-disks">Disks</a>        <ul>
+          <li><a href="#how-does-a-disk-work" id="markdown-toc-how-does-a-disk-work">How does a disk work?</a></li>
+          <li><a href="#interface-1" id="markdown-toc-interface-1">Interface</a></li>
+          <li><a href="#performance" id="markdown-toc-performance">Performance</a>            <ul>
+              <li><a href="#caching" id="markdown-toc-caching">Caching</a></li>
+              <li><a href="#read-ahead" id="markdown-toc-read-ahead">Read-ahead</a></li>
+              <li><a href="#disk-scheduling" id="markdown-toc-disk-scheduling">Disk scheduling</a></li>
+              <li><a href="#disk-allocation" id="markdown-toc-disk-allocation">Disk allocation</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><a href="#os-file-system-implementation" id="markdown-toc-os-file-system-implementation">OS File System Implementation</a>        <ul>
+          <li><a href="#introduction" id="markdown-toc-introduction">Introduction</a></li>
+          <li><a href="#disk-structure" id="markdown-toc-disk-structure">Disk structure</a></li>
+          <li><a href="#data-allocation" id="markdown-toc-data-allocation">Data allocation</a></li>
+          <li><a href="#in-memory-data-structures" id="markdown-toc-in-memory-data-structures">In-memory data structures</a></li>
+          <li><a href="#pseudo-code" id="markdown-toc-pseudo-code">Pseudo-code</a></li>
+          <li><a href="#loose-ends" id="markdown-toc-loose-ends">Loose ends</a></li>
+          <li><a href="#alternative-file-access-method-memory-mapping" id="markdown-toc-alternative-file-access-method-memory-mapping">Alternative file access method: memory mapping</a></li>
+        </ul>
+      </li>
+      <li><a href="#dealing-with-crashes" id="markdown-toc-dealing-with-crashes">Dealing with crashes</a>        <ul>
+          <li><a href="#atomic-writes" id="markdown-toc-atomic-writes">Atomic writes</a></li>
+          <li><a href="#intentions-log" id="markdown-toc-intentions-log">Intentions log</a></li>
+          <li><a href="#comparison" id="markdown-toc-comparison">Comparison</a></li>
+        </ul>
+      </li>
+      <li><a href="#log-structured-file-system-lfs" id="markdown-toc-log-structured-file-system-lfs">Log-Structured File System (LFS)</a>        <ul>
+          <li><a href="#writing" id="markdown-toc-writing">Writing</a></li>
+          <li><a href="#reading" id="markdown-toc-reading">Reading</a></li>
+          <li><a href="#checkpoints" id="markdown-toc-checkpoints">Checkpoints</a></li>
+          <li><a href="#disk-cleaning" id="markdown-toc-disk-cleaning">Disk cleaning</a></li>
+          <li><a href="#summary" id="markdown-toc-summary">Summary</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#alternative-storage-media" id="markdown-toc-alternative-storage-media">Alternative storage media</a>    <ul>
+      <li><a href="#raid" id="markdown-toc-raid">RAID</a></li>
+      <li><a href="#ssd" id="markdown-toc-ssd">SSD</a></li>
+    </ul>
+  </li>
+  <li><a href="#virtual-machines" id="markdown-toc-virtual-machines">Virtual Machines</a>    <ul>
+      <li><a href="#virtualization" id="markdown-toc-virtualization">Virtualization</a></li>
+      <li><a href="#terminology" id="markdown-toc-terminology">Terminology</a></li>
+      <li><a href="#history" id="markdown-toc-history">History</a></li>
+      <li><a href="#vmm-implementation" id="markdown-toc-vmm-implementation">VMM Implementation</a>        <ul>
+          <li><a href="#popekgoldberg-theorem" id="markdown-toc-popekgoldberg-theorem">Popek/Goldberg Theorem</a></li>
+        </ul>
+      </li>
+      <li><a href="#virtual-memory" id="markdown-toc-virtual-memory">Virtual memory</a></li>
+    </ul>
+  </li>
+</ul>
+
+<!-- More -->
+
+<h2 id="intro">Intro</h2>
+<h3 id="a-little-bit-of-history">A little bit of history</h3>
+<p>In the early, early days, users would program the raw machine. The first “abstractions” were libraries for scientific functions (<code class="highlighter-rouge">sin</code>, <code class="highlighter-rouge">cos</code>, …), and libraries for doing I/O (at the time, considered a major improvement; it was an extra card deck that you’d put behind yours). And indeed, I/O libraries are the first pieces of an OS.</p>
+
+<p>In the early days, only one program would run at a time. Computers were expensive, so to get more use of the resources, we started doing multiprogramming; this just means that multiple programs are in memory at once.</p>
+
+<h3 id="what-does-the-os-do">What does the OS do?</h3>
+<ul>
+  <li>It provides <strong>abstraction</strong>, and makes the hardware easier to use. It serves as an interface between hardware and user-defined programs. In hardware, we have CPU, memory, disks and devices. The OS abstracts to processes, memory locations, files, virtual devices.</li>
+  <li>It does <strong>resource management</strong>: it allocates hardware resources (memory, CPU) between programs and users, to make sure that they can all use the resources fairly and independently (not corrupting each other’s memory for instance)</li>
+</ul>
+
+<h3 id="where-does-the-os-live">Where does the OS live?</h3>
+<p>The CPU always operates in dual mode: there’s the <em>kernel mode</em> and the <em>user mode</em>. In terms of hardware, there’s a bit that tells you which mode you are in. In short, kernel mode is the God-mode, and user-mode is very restricted.</p>
+
+<p>In kernel mode, there are additional, privileged instructions: for instance, the instruction to set the mode bit is only available in kernel mode. In this mode, you have direct access to all of memory and to devices. In user mode, you don’t actually have direct access to the disk; you can ask the kernel to write something for you (the OS is the only entity that can write to a device).</p>
+
+<p>The OS runs in kernel mode, and applications run in user mode. This allows the OS to protect itself, and to solely manage applications and devices.</p>
+
+<h3 id="os-interfaces">OS interfaces</h3>
+<h4 id="system-calls">System calls</h4>
+<p>Switching from kernel mode to user mode is easy; in kernel mode, we can simply change the mode bit and give control to the user program. The other way is more tricky; to go from user to kernel mode, a device generates an <em>interrupt</em>, or a program executes a <em>trap</em> or a <em>system call</em>. For that purpose, there’s a system call interface that allows the kernel and user entities to communicate. This interface is essential to the integrity of the OS. System calls include process management, memory management, file systems, device management, <a href="https://github.com/freebsd/freebsd/blob/master/sys/sys/syscall.h">etc</a>.</p>
+
+<p>Traditionally, system calls went through interrupts with a number; more recently, ISAs provide dedicated instructions (you put the system call number in register <code class="highlighter-rouge">%eax</code>, then execute system call instruction. If you need more space for parameters, you can put them in registers, or use registers as pointers etc). That being said, in practice, the universally used solution is the kernel API, which is an interface to the system call interface (i.e. nobody writes system calls by hand, the library takes care of putting the appropriate data in the appropriate registers, and doing the syscalls).</p>
+
+<p><em>Side note</em>: <a href="https://meltdownattack.com">Meltdown and Spectre</a> were about some of the things in kernel space being visible in user space.</p>
+
+<p><em>Side note</em>: when doing a <code class="highlighter-rouge">printf</code>, we’re not writing a <code class="highlighter-rouge">printf</code> kernel call directly. First of all, there’s no kernel call code specifically for print: the console is considered to be a device that the kernel can write to. Second, we’re using the language library (called libc for C) as an additional abstraction over the kernel API (see <a href="https://github.com/lattera/glibc/blob/master/stdio-common/printf.c">source for printf</a>). Note that libc makes system calls look like a function call (deliberately) but it is not just a regular function call: it’s also a user-kernel transition from one program (user) to another (kernel). This is a much more expensive operation.</p>
+
+<h4 id="traps">Traps</h4>
+<p>A trap is generated by the CPU as a result of an error (divide by zero, privileged instruction execution in user mode, illegal access to memory, …). Generally, the result is that God (the kernel) sees this and punishes you (kills the process). Still, this works like an “involuntary” system call. It sets the mode to the kernel mode and lets it do its job.</p>
+
+<h4 id="interrupts">Interrupts</h4>
+<p>Generated by a device that needs attention (packet arrived from network, disk IO completed, …). It’s identified by an interrupt number which, roughly speaking, identifies the device.</p>
+
+<h3 id="os-control-flow">OS control flow</h3>
+<p>The OS is an event-driven program. In other words, if there’s nothing to do, it does nothing. If there’s an interrupt, a system call or an interrupt, it starts running.</p>
+
+<p>The (simplified) execution flow is as follows:</p>
+
+<ol>
+  <li>The user executes a system call or a trap with code <em>i</em>, or there’s an interrupt with code <code class="highlighter-rouge">i</code>.</li>
+  <li>The hardware receives this, puts the machine in kernel mode, and depending on what it’s received, does the following:
+    <ul>
+      <li><strong>System call</strong>: put the machine in kernel mode, set <code class="highlighter-rouge">PC = SystemCallVector[i]</code></li>
+      <li><strong>Trap</strong>: put the machine in kernel mode, set <code class="highlighter-rouge">PC = TrapVector[i]</code></li>
+      <li><strong>Interrupt</strong>: put the machine in kernel mode, set <code class="highlighter-rouge">PC = InterruptVector[i]</code></li>
+    </ul>
+  </li>
+  <li>The kernel executes system call <code class="highlighter-rouge">i</code> handler routine (after checking that the <code class="highlighter-rouge">i</code> parameter is valid), and then executes a “return from kernel” instruction</li>
+  <li>The hardware puts the machine back in user mode</li>
+  <li>The user executes the next instruction after the system call.</li>
+</ol>
+
+<h3 id="os-design-goals">OS design goals</h3>
+<ul>
+  <li><strong>Correct abstractions</strong></li>
+  <li><strong>Performance</strong></li>
+  <li><strong>Portability</strong>: You cannot do this completely, but you can try to minimize the architecture-independent sections so that you only have to rewrite those to port to a new system.</li>
+  <li><strong>Reliability</strong>: The OS must never fail. It must carefully check inbound parameters. For instance, the inbound address parameter must be valid.</li>
+</ul>
+
+<h3 id="high-level-os-structure">High-level OS structure</h3>
+<p>The simplest OS structure is the “monolithic OS”, where there’s a hard line between the whole OS, in kernel mode, and the user programs, in user mode. But the OS is a huge piece of software (millions of lines of code), so if something goes wrong in kernel mode, the machine will likely halt or crash.</p>
+
+<p>Luckily, many pieces of the OS can be in user mode, and the above is a strong incentive to put them there. Indeed, some parts of the OS don’t need the privileged access, and we save some effort that way. A good example of those are daemons (printer daemon, system log, etc.), that are placed in user mode. This is known as the “systems programs” structure.</p>
+
+<p>Bringing this idea to the extreme, we have the microkernel. The idea is to place the absolute minimum in kernel mode, and all the rest in user mode. This does not only place deamons in user mode, but also process management, memory management, the file system, etc. Note that these still communicate with the microkernel, but run the majority of their code in user mode. In practice, microkernels have been a commercial failure, and the “systems programs” has won out.</p>
+
+<h2 id="processes">Processes</h2>
+
+<h3 id="what-is-a-process">What is a process?</h3>
+<p>A process is a program in execution: a program is executable code on a file on disk, and when it runs, it’s a process. A process can do just about anything, as far as the user is concerned (shell, compiler, editor, browser, etc). Each process has a unique process identifier, the <code class="highlighter-rouge">pid</code>.</p>
+
+<p>Basic operations on a process:</p>
+<ul>
+  <li>Create</li>
+  <li>Terminate
+    <ul>
+      <li>Normal exit</li>
+      <li>Error (trap)</li>
+      <li>Terminated by another process (<code class="highlighter-rouge">KILLSIG</code>)</li>
+    </ul>
+  </li>
+</ul>
+
+<p>Linux has a simple yet powerful list of process primitives:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">fork()</code>: if a process runs a fork, it becomes the parent of the new process. The new process is an <em>identical copy of the process that called fork</em>, except for one thing: in the parent, the call to <code class="highlighter-rouge">fork</code> returns the <code class="highlighter-rouge">pid</code>, while in the child, it returns <code class="highlighter-rouge">0</code>.</li>
+  <li><code class="highlighter-rouge">exec(filename)</code>: loads into memory the file with the given filename. Note that running this completely replaces the code that called the <code class="highlighter-rouge">exec</code>, it’s not like a function call that returns to the caller’s execution context. But it does leave the environment intact! More on that later</li>
+  <li><code class="highlighter-rouge">wait()</code>: waits for one of the children to terminate (the basic <code class="highlighter-rouge">wait</code> function waits for any child; there are more advanced versions that wait for a particular one).</li>
+  <li><code class="highlighter-rouge">exit()</code>: terminates the process (it’s a suicide)</li>
+</ul>
+
+<p>Here’s some typical forking code:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="p">(</span><span class="n">pid</span> <span class="o">=</span> <span class="n">fork</span><span class="p">())</span> <span class="p">{</span>
+    <span class="n">wait</span><span class="p">();</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="n">exec</span><span class="p">(</span><span class="n">filename</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">fork</code> will execute the fork, return the <code class="highlighter-rouge">pid</code> of the child in the parent, and <code class="highlighter-rouge">0</code> in the child. The parent therefore enters the if-statement and waits, while the child goes into the else-statement, and executes the file. We’re assuming that the C file in filename ends with an <code class="highlighter-rouge">exit()</code> (it’s inserted by the C compiler if you don’t explicitly write it), which causes the child process to terminate, and the parent process to stop waiting.</p>
+
+<p><em>Side note</em>: This may seem a bit strange: why would the new thread need to be a copy? Why use fork+exec instead of simply create (like Windows does)? A process is not just code, it’s environment and code. The environment includes ownership, open files and environment variables; note that it does not include registers or the heap or stack, or anything like that (that would probably be a big security issue). A call to <code class="highlighter-rouge">fork</code> doesn’t replace the environment, it only changes the code (and the registers, etc are reset). This default behavior allows us to have simple function calls, without a million arguments for environment like in Windows.</p>
+
+<h3 id="outline-of-the-linux-shell">Outline of the Linux shell</h3>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">forever</span> <span class="p">{</span>
+    <span class="n">read</span> <span class="n">from</span> <span class="n">input</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">logout</span><span class="p">)</span> <span class="n">exit</span><span class="p">()</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">pid</span> <span class="o">=</span> <span class="n">fork</span><span class="p">())</span> <span class="p">{</span>
+        <span class="n">wait</span><span class="p">()</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="c1">// You can make changes to the environment</span>
+        <span class="c1">// of the child here.</span>
+        <span class="n">exec</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>You can manipulate the environment of the child without changing the environment of the parent by adding code where the comment is. For instance, a command shell may redirect <code class="highlighter-rouge">stdin</code> and <code class="highlighter-rouge">stdout</code> to a file before doing an <code class="highlighter-rouge">exec</code>.</p>
+
+<h3 id="linux-process-tree">Linux process tree</h3>
+<p>The first process, <code class="highlighter-rouge">init</code> runs from boot. When the user logs in, it forks and waits, and the child executes the shell (say, bash): at this stage, the child process is the shell process for the user running bash. Now, the user runs <code class="highlighter-rouge">make</code>, so the shell forks and waits, and its child executes <code class="highlighter-rouge">make</code> and exits. Now another user logs in, so the initial parent creates another child, and opens another shell (say, zsh). Note that init can create another process while waiting because it’s not really a normal process, it’s a “black magic” custom process.  All of this creates a tree hierarchy of processes and their children.</p>
+
+<p><img src="/images/os/process-tree.gif" alt="Linux process tree example gif" /></p>
+
+<h3 id="multiprocessing">Multiprocessing</h3>
+<p>As far as the OS is concerned, it either computes or does I/O. Back in the old days, in single-process systems, I/O would leave the CPU idle until it was complete. In a multiprocess system, another process can do processing in that time.</p>
+
+<p>There are five stages that a multiprocessing system can be in:</p>
+
+<ol>
+  <li>New</li>
+  <li>Ready</li>
+  <li>Running</li>
+  <li>Waiting</li>
+  <li>Terminated.</li>
+</ol>
+
+<p><img src="/images/os/process-states.png" alt="Process state diagram" /></p>
+
+<p>Typically, a process will start in new (1), go to ready (2), then running (3), then go to waiting to do I/O (4), then to ready (2, using an interrupt), then back to running (3, picked by the scheduler); it can loop in 2-4 an arbitrary number of times, and eventually terminates (5, leaving from the running state 3).</p>
+
+<h4 id="process-switching">Process switching</h4>
+<p>A process switch is a switch from one process running on the CPU to another CPU, so that you can later switch back to the process currently holding the CPU.</p>
+
+<p>This is not so simple, because a process consists of many things: the code, stack, heap, values in register (including <abbr title="Program Counter">PC</abbr>) and MMU info (memory management unit, we can ignore this for now). The first three reside in process-private location, but the last two reside in shared locations. To make the swap possible, the registers are backed up to the process control block (PCB, though Linux has another name for it); in addition it contains information about the process, and some save area (free space).</p>
+
+<p>A process switch is an expensive operation. It requires saving and restoring a lot of stuff, so it has to be implemented very efficiently (often written in machine code, as one of the only parts of the kernel), and has to be used with care.</p>
+
+<h4 id="process-scheduling">Process scheduling</h4>
+<p>In general, many processes may be in the ready state. It is the scheduler’s job to pick out a process in the ready state and set it to the running state.</p>
+
+<p>In practice, there’s often a timer on the running state that sets a thread back to ready after say, 10ms, if it isn’t doing IO. A scheduler that does this is called a <em>preemptive scheduler</em>.</p>
+
+<p>In a non-preemptive scheduler, a process can monopolize the CPU, as it is only stopped when it voluntarily does so; thus a non-preemptive scheduler is only useful in special circumstances (for instance, in the computer of an airplane autopilot, where we absolutely must have the thread running at all times).</p>
+
+<p>The scheduler must remember the running process, and maintain sets of queues (ready queue, I/O device queue). The PCBs sit in queues.</p>
+
+<p>The scheduler runs when:</p>
+
+<ol>
+  <li>A process starts or terminates (system call)</li>
+  <li>The running process performs an I/O (system call)</li>
+  <li>I/O completes (I/O interrupt)</li>
+  <li>Timer expires (timer interrupt)</li>
+</ol>
+
+<h4 id="scheduling-algorithm">Scheduling algorithm</h4>
+<p>What makes a good scheduling algorithm? It depends.</p>
+
+<p>There are two kinds of processes, that require different scheduling tactics:</p>
+
+<ul>
+  <li><strong>Interactive processes</strong>: the user is waiting for the result (browser, editor, …)</li>
+  <li><strong>Batch processes</strong>: the user will look at the result later (supercomputing center, …).</li>
+</ul>
+
+<p>For batch, we want high throughput, meaning that we want a high number of jobs completed over say, a day. From a throughput perspective, the scheduler is overhead, so we must run it as little as possible. But for interactive applications, we want to optimize response time, so we want to go from ready to running quickly, which means running the scheduler often.</p>
+
+<p>We’ll look at a few algorithms.</p>
+
+<ul>
+  <li><strong>FCFS (first come first served)</strong>: when a process goes to ready, we insert at the tail of the queue; this way, we always run the oldest process (head of the queue). By definition, this is non-preemptive. It has low overhead, good throughput, but uneven response time (you can get stuck behind a long job), and in extreme cases, a process can monopolize the CPU.</li>
+  <li><strong>SJF (shortest job first)</strong>: we order the queue according to job length. We always run the head of the queue, which is the shortest available job. It can be preemptive or non-preemptive, but we’ll consider the preemptive only. It has good response time for short, but can lead to starvation of long jobs, and it’s difficult to predict job length.</li>
+  <li><strong>RR (Round Robin)</strong>: We define a time quantum x. When a process is ready, we put it at the tail (like FCFS). We run the head and run it for x time, after which we put it at the tail of the queue.</li>
+</ul>
+
+<p>RR works as a nice compromise for long and short jobs. Short jobs finish quickly, long jobs are not postponed forever. There’s no need to know job length; we discover length by counting the number of time quantums it needs.</p>
+
+<h4 id="application-multiprocess-structuring">Application multiprocess structuring</h4>
+<p>If we wanted to build a web server, the minimal version would just wait from incoming requests, read files from disks and send the file back in response. This is pretty terrible, so we can use processes to accept other connections while we’re reading from disk, so that another process can use the CPU in the meantime, overlapping computing with IO.</p>
+
+<p>Thus, the server now has a structure with a single listener, and a number of worker processes. But generating processes is expensive, especially if we have to do it for <em>every</em> request! Therefore, we can create what’s called a <em>process pool</em>: we create worker processes during initialization, and hand incoming requests to them. The structure remains the same (a listener, multiple workers), but the amount of work per request decreases, since sending a message is cheaper than creating a worker.</p>
+
+<p>However, to be able to do so, we need a mechanism for interprocess communication, which is what we’ll see in the next section.</p>
+
+<h3 id="interprocess-communication">Interprocess communication</h3>
+<p>There are two key ways of doing this, and they’re somewhat related: message passing, and remote procedure call.</p>
+
+<h4 id="message-passing">Message passing</h4>
+<p>This is the simplest, with only two primitives: send a message, and receive a message. Note that message passing is always by value, never by reference.</p>
+
+<p>This is implemented in the kernel through a table (<code class="highlighter-rouge">proctable</code>) which, for every <code class="highlighter-rouge">pid</code> has a queue (linked list) of waiting messages for the process with <code class="highlighter-rouge">pid</code> to process; other processes can add to this queue.</p>
+
+<p>There are of course more complex alternatives:</p>
+
+<ul>
+  <li><strong>Symmetric vs. asymmetric</strong>: in symmetric, the sender and the receiver both communicate with a specific, given process (they know each other). In asymmetric, the sender sends to a particular process, and the client receives the message from any process, and get the message + pid (to be able to reply). Asymmetric is more common.</li>
+  <li><strong>Blocking vs. non-blocking</strong>: for sending, non-blocking returns immediately after the message is sent, while blocking blocks until the message has been received. For receiving, non-blocking returns immediately, while blocking blocks until a message is present. For receiving, non-blocking sending is more common.</li>
+</ul>
+
+<p>A very common pattern is:</p>
+
+<ul>
+  <li>Client:
+    <ul>
+      <li>Send request</li>
+      <li>Blocking receive</li>
+    </ul>
+  </li>
+  <li>Server
+    <ul>
+      <li>Blocking receive</li>
+      <li>Send reply</li>
+    </ul>
+  </li>
+</ul>
+
+<p>This works somewhat like a function call, and it’s basically how remote procedure calls work.</p>
+
+<h4 id="remote-procedure-call">Remote procedure call</h4>
+<p>Another possibility is to use remote procedure calls. To use these, we link a client stub with the client code, and a server stub with the server code. In other words, every code instance has an associated stub. The stubs’ job is to:</p>
+
+<ol>
+  <li>Client code does a proc call to the client stub</li>
+  <li>Client stub sends a message through the kernel</li>
+  <li>Server stub receives the request from the kernel</li>
+  <li>Server stub calls the correct code through a proc call</li>
+  <li>Server code sends a return proc call with the return value</li>
+  <li>Server stub replies to client stub through a message through the kernel</li>
+  <li>Client stub returns correct value to client code through a proc call</li>
+</ol>
+
+<h2 id="application-multithreading-and-synchronization">Application multithreading and synchronization</h2>
+<h3 id="multithreading-vs-multiprocessing">Multithreading vs. multiprocessing</h3>
+<p>In our example about the web server, there’s still a problem: disk access is expensive. To remediate this problem, we usually use caches for recently read data. But worker 1 and worker 2 are different processes, their memory is separate, and what we’ve cached for worker 1 hasn’t been cached for worker 2, who will store a separate copy (waste of time, waste of cache).</p>
+
+<p>This is exactly what multiprocessing is bad at, and multithreading is good at. If not sharing memory is the problem, then sharing memory is the solution.</p>
+
+<p>A thread is just like a process, but it does <strong>not</strong> have its own heap and globals. Two threads in a process share code, globals and heap, but have separate stacks, registers and program counters (<abbr title="Program Counter">PC</abbr>).</p>
+
+<p>Processes provide separation, and in particular, memory separation. This is useful for things that really should remain separate, so for coarse-grain separation. Threads do not provide such separation; in particular, they share memory, so they are suitable for tighter integrations.</p>
+
+<h3 id="pthreads">Pthreads</h3>
+<p>Having multiple threads reading and writing to shared data is obviously a performance advantage, but is also a problem, as it can lead to data races. Data races are a result of <em>interleaving</em> of the thread executions. This means that to write a multi-threaded program, a program must be correct for all interleavings. To do so, we use pthreads.</p>
+
+<p>The basic approach to multithreading is to divide “work” among threads. Then you need to think of which data is shared, where it’s accessed, and put the shared data in a critical section (n.b. this sentence would give professors a heart attack, but this is a good way to think about it). Putting something in a critical section means that the processor can’t interleave a code into a critical section.</p>
+
+<p>Pthreads have a few available methods:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">Pthread_create(&amp;threadid, threadcode, arg)</code>: Creates thread, returns <code class="highlighter-rouge">threadid</code>, runs <code class="highlighter-rouge">threadcode</code> with argument <code class="highlighter-rouge">arg</code>.</li>
+  <li><code class="highlighter-rouge">Pthread_exit(status)</code>: terminates the thread, optionally returns status</li>
+  <li><code class="highlighter-rouge">Pthread_join(threadid, &amp;status)</code>: waits for thread <code class="highlighter-rouge">threadid</code> to exit, and receives status, if any.</li>
+  <li><code class="highlighter-rouge">Pthread_mutex_lock(mutex)</code>: if mutex is held, block. Otherwise, acquire it and proceed.</li>
+  <li><code class="highlighter-rouge">Pthread_mutex_unlock(mutex)</code>: release mutex</li>
+</ul>
+
+<h3 id="synchronization">Synchronization</h3>
+<p>To synchronize code, we use <em>mutex locks</em>. A common mistake is that lines such as <code class="highlighter-rouge">a += 1</code> aren’t atomic; in reality, it corresponds to a load into a register, an increment of said register, and a store of the register into memory. During this process, the instruction sequence may be interleaved. Note that some machines have atomic increments available.</p>
+
+<p>We can use locks, but single locking inhibits parallelism. To remediate this, there are two approaches: fine-grained locking, and privatization.</p>
+
+<p>Privatization is the idea of defining local variables for each thread, using them for accesses in the loop, and only access shared data after the loop; when things are being put in common, we can lock.</p>
+
+<p>As an example:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ListenerThread</span> <span class="p">{</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">MAX_THREADS</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="kr">thread</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">Pthread_create</span><span class="p">(</span><span class="err">…</span><span class="p">)</span>
+    <span class="n">forever</span> <span class="p">{</span>
+        <span class="n">Receive</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+        <span class="n">Pthread_mutex_lock</span><span class="p">(</span><span class="n">queuelock</span><span class="p">)</span>
+        <span class="n">put</span> <span class="n">request</span> <span class="n">in</span> <span class="n">queue</span>
+        <span class="n">Pthread_mutex_unlock</span><span class="p">(</span><span class="n">queuelock</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">WorkerThread</span> <span class="p">{</span>
+    <span class="n">forever</span> <span class="p">{</span>
+        <span class="n">Pthread_mutex_lock</span><span class="p">(</span><span class="n">queuelock</span><span class="p">)</span>
+        <span class="n">take</span> <span class="n">request</span> <span class="n">out</span> <span class="n">of</span> <span class="n">queue</span>
+        <span class="n">Pthread_mutex_unlock</span><span class="p">(</span><span class="n">queuelock</span><span class="p">)</span>
+        <span class="n">read</span> <span class="n">file</span> <span class="n">from</span> <span class="n">disk</span>
+        <span class="n">Send</span><span class="p">(</span><span class="n">reply</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><strong>Warning</strong>: This won’t work! We need to tell worker(s) that there is something for them to do, an item in the queue for them. This is sometimes called task parallelism. Pthreads have a mechanism for this:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">Pthread_cond_wait(cond, mutex)</code>: wait for a signal on cond, and release the mutex</li>
+  <li><code class="highlighter-rouge">Pthread_cond_signal(cond, mutex)</code>: Signal one thread waiting on cond. The signaled thread re-acquires the mutex at some point in the future. If no thread is waiting, this is a no-op. Note that the function signature isn’t actually correct (there’s no mutex parameter) but it makes it easier to explain.</li>
+  <li><code class="highlighter-rouge">Pthread_cond_broadcast(cond, mutex)</code>: signal all threads waiting on cond.  If no thread is waiting, it’s a no-op.</li>
+</ul>
+
+<p>We must hold the mutex when calling any of these.</p>
+
+<p>We can now fix our previous example:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ListenerThread</span> <span class="p">{</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">MAX_THREADS</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="kr">thread</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">Pthread_create</span><span class="p">(</span><span class="err">…</span><span class="p">)</span>
+    <span class="n">forever</span> <span class="p">{</span>
+        <span class="n">Receive</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+        <span class="n">Pthread_mutex_lock</span><span class="p">(</span><span class="n">queuelock</span><span class="p">)</span>
+        <span class="n">put</span> <span class="n">request</span> <span class="n">in</span> <span class="n">queue</span>
+        <span class="c1">// Signal that the queue isn't empty</span>
+        <span class="n">Pthread_cond_signal</span><span class="p">(</span><span class="n">notempty</span><span class="p">,</span> <span class="n">queuelock</span><span class="p">)</span>
+        <span class="n">Pthread_mutex_unlock</span><span class="p">(</span><span class="n">queuelock</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">WorkerThread</span> <span class="p">{</span>
+    <span class="n">forever</span> <span class="p">{</span>
+        <span class="n">Pthread_mutex_lock</span><span class="p">(</span><span class="n">queuelock</span><span class="p">)</span>
+        <span class="c1">// Wait until there is something in the queue before taking it.</span>
+        <span class="n">Pthread_cond_wait</span><span class="p">(</span><span class="n">notempty</span><span class="p">,</span> <span class="n">queuelock</span><span class="p">)</span>
+        <span class="n">take</span> <span class="n">request</span> <span class="n">out</span> <span class="n">of</span> <span class="n">queue</span>
+        <span class="n">Pthread_mutex_unlock</span><span class="p">(</span><span class="n">queuelock</span><span class="p">)</span>
+        <span class="n">read</span> <span class="n">file</span> <span class="n">from</span> <span class="n">disk</span>
+        <span class="n">Send</span><span class="p">(</span><span class="n">reply</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Still, there is a slight bug in the above; if all worker threads are busy doing something, the <code class="highlighter-rouge">Pthread_cond_signal</code> will no-op. This is important to note: if no thread is waiting, either because they’re not listening or because they’re busy, the signal is a no-op. In general, signals have no memory, and they’re forgotten if no thread is waiting. So we need an extra variable to remember them:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ListenerThread</span> <span class="p">{</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">MAX_THREADS</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="kr">thread</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">Pthread_create</span><span class="p">(</span><span class="err">…</span><span class="p">)</span>
+    <span class="n">forever</span> <span class="p">{</span>
+        <span class="n">Receive</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+        <span class="n">Pthread_mutex_lock</span><span class="p">(</span><span class="n">queuelock</span><span class="p">)</span>
+        <span class="n">put</span> <span class="n">request</span> <span class="n">in</span> <span class="n">queue</span>
+        <span class="n">avail</span><span class="o">++</span>
+        <span class="n">Pthread_cond_signal</span><span class="p">(</span><span class="n">notempty</span><span class="p">,</span> <span class="n">queuelock</span><span class="p">)</span>
+        <span class="n">Pthread_mutex_unlock</span><span class="p">(</span><span class="n">queuelock</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">WorkerThread</span> <span class="p">{</span>
+    <span class="n">forever</span> <span class="p">{</span>
+        <span class="n">Pthread_mutex_lock</span><span class="p">(</span><span class="n">queuelock</span><span class="p">)</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">avail</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="n">Pthread_cond_wait</span><span class="p">(</span><span class="n">notempty</span><span class="p">,</span> <span class="n">queuelock</span><span class="p">)</span>
+        <span class="n">take</span> <span class="n">request</span> <span class="n">out</span> <span class="n">of</span> <span class="n">queue</span>
+        <span class="n">avail</span><span class="o">--</span>
+        <span class="n">Pthread_mutex_unlock</span><span class="p">(</span><span class="n">queuelock</span><span class="p">)</span>
+        <span class="n">read</span> <span class="n">file</span> <span class="n">from</span> <span class="n">disk</span>
+        <span class="n">Send</span><span class="p">(</span><span class="n">reply</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Note that we’re doing a <code class="highlighter-rouge">while</code> here, not <code class="highlighter-rouge">if</code>. If we used an <code class="highlighter-rouge">if</code> instead, we may have a problem. It’s important not to think of the signaler passing the mutex to the waiter. The only thing we know is that the waiter will acquire the mutex lock <em>at some point</em> in the future; another thread may come and steal it in the meantime, and take the item in the queue! This is subtle, and we’ll have exercises about it (week 4).</p>
+
+<h3 id="kernel-multithreading">Kernel multithreading</h3>
+<p>The kernel is a server. There are requests from users (system calls, traps), and from devices (interrupts). It’s an event-driven program, waiting for one of the above to start running. In Linux, there’s one kernel thread for each user thread; this is not the case in other OSes. This is called a 1-to-1 mapping.</p>
+
+<p>How does it work? The user thread makes a system call, there’s a switch to kernel mode, set the <abbr title="Program Counter">PC</abbr> to the system call handler routine, the SP to the kernel stack of the kernel thread. To go back to user mode, we set the SP to the stack of the user thread, and the <abbr title="Program Counter">PC</abbr> to the user thread <abbr title="Program Counter">PC</abbr>, return from kernel mode, and now run in user thread.</p>
+
+<p>The kernel and the user threads have different stacks; otherwise, another thread in user mode could read and modify the kernel’s stack, which would be a huge security risk.</p>
+
+<p>For synchronization in the kernel, there’s a different synchronization library (not Pthreads, which is a user-level library), but otherwise, it’s in any multithreaded program. There is a notable difference though; there are also interrupts in the kernel. When a device interrupts, the <abbr title="Program Counter">PC</abbr> is set to the interrupt handler, the SP to the interrupt thread stack, we run the interrupt handler.</p>
+
+<p>This is not exam-stuff, but let’s talk about it anyway. The interrupts must be served quickly, we cannot block it. The solution (in Linux) is to add another set of threads (soft interrupt threads). On an interrupt, we put the request in queue for soft interrupt threads, which will do the bulk of the work.</p>
+
+<h2 id="memory-management">Memory management</h2>
+<h3 id="goals-and-assumptions">Goals and assumptions</h3>
+<p>For this part of the course, a few assumptions:</p>
+
+<ul>
+  <li>We will only be concerned about processor and main memory; we do not worry about L1, L2, L3 caches and disk.</li>
+  <li>A program must be in memory to be executed (we’ll revisit this next week).</li>
+</ul>
+
+<p>The kernel is generally located in low physical memory (close to 0), because interrupt vectors are in low memory.</p>
+
+<h3 id="virtual-and-physical-address-spaces">Virtual and physical address spaces</h3>
+<p>For protection, one process must not be able to read or write in the memory of another process, or of the kernel. We cannot have unprotected access: all CPU memory accesses must be checked somehow (this is done in hardware; checking errors are traps).</p>
+
+<p>Additionnally, we want transparency: the programmer should not have to worry where his program is in memory, or where/what other programs in memory. With transparency, the program can be anywhere in memory, and it shouldn’t affect the behavior or code of the program.</p>
+
+<p>This is why we have the abstraction of virtual address space. The virtual (or logical) address space is what the program(mer) thinks is its memory, and is generated by the CPU. Physical is where it actually resides in memory.</p>
+
+<p>The piece of hardware that provides mapping from virtual-to-physical and protection is the Memory Management Unit (MMU).</p>
+
+<p>The size of the virtual address space is only limited by the size of addresses that CPUs can generate; on older machines, 2^32 bytes (4GB), on newer, 64-bit machines, 2^64 (16 Exabyte!). The physical address space is limited by the physical size of the memory; nowadays, it’s in the order of a few GB.</p>
+
+<h3 id="mapping-methods-and-allocation">Mapping methods and allocation</h3>
+<h4 id="base-and-bounds">Base and bounds</h4>
+<p>The virtual memory space is a linear address space, where addresses go from <code class="highlighter-rouge">0</code> to <code class="highlighter-rouge">MAX</code>.</p>
+
+<p>The physical memory space is a linear address space, where addresses go from <code class="highlighter-rouge">BASE</code> to <code class="highlighter-rouge">BOUNDS = BASE + MAX</code>.</p>
+
+<p><img src="/images/os/base-bounds-mmu.png" alt="MMU for base and bounds" /></p>
+
+<p>The MMU has a relocation register that holds the base value, and a limit register holding the bounds value. If a virtual address is smaller than the limit, the MMU adds the value of the relocation register to the virtual address. Otherwise, it generates a trap.</p>
+
+<p>All early machines were done this way, but this is not commonly used anymore, except in very specific machines (CRAY supercomputers keep it simple to go fast).</p>
+
+<h4 id="segmentation">Segmentation</h4>
+
+<p>With segmentation, you have multiple base and bounds within a single address space. There’s a set of segments from <code class="highlighter-rouge">0</code> to <code class="highlighter-rouge">n</code>, and each segment <code class="highlighter-rouge">i</code> is linear from <code class="highlighter-rouge">0</code> to <code class="highlighter-rouge">MAX(i)</code>. A segment is whatever you want it to be. It’s a more user-centric view of memory, where each segment contains one or more units of the program (a procedure’s code, an array, …). Segmentation reduces internal fragmentation (segments are not fixed size, can be fit exactly to requirements), but can create external fragmentation (some small free memory locations may remain which never get used).</p>
+
+<p>The virtual address space is two-dimensional: a segment number <code class="highlighter-rouge">s</code>, and an offset <code class="highlighter-rouge">d</code> within the segment.</p>
+
+<p>The physical address space is a set of segments, each linear. The segments don’t have to be ordered like the virtual space.</p>
+
+<p><img src="/images/os/segmentation-mmu.png" alt="MMU for segmentation" /></p>
+
+<p>The MMU contains a STBR (Segment Table Base Register) that points to the the segment table in memory, and the STLR (Segment Table Length Register) containing the length of the segment table. The segment table     is indexed by segment number, contains <code class="highlighter-rouge">(base, limit)</code> pairs where <code class="highlighter-rouge">base</code> is the physical address of   the segment in memory, and <code class="highlighter-rouge">limit</code> is the length of the segment.</p>
+
+<p>Segmentation is an Intel invention, but over time they’ve given it up for paging (it got programmers confused).</p>
+
+<h4 id="paging">Paging</h4>
+<p>A page is fixed-size portion of virtual memory. A frame is a fixed-size portion of physical memory. These two are always the same size, and they have to be. A typical size these days is 4-8KB. It reduces external fragmentation (no unusable free frames, since they are all of equal size), but may increase internal fragmentation (memory is allocated in say 4KB chunks, so going over 10B into the next page wastes 4086B).</p>
+
+<p>The virtual address space is linear from <code class="highlighter-rouge">0</code> up to a multiple of the page size. For mapping purposes, the virtual address is split into two pieces: a page number <code class="highlighter-rouge">o</code> and an offset <code class="highlighter-rouge">p</code> within that page.</p>
+
+<p>The physical address space is a non-contiguous set of frames. There’s one frame per page, but not necessarily in order.</p>
+
+<p><img src="/images/os/paging-mmu.png" alt="MMU for paging" /></p>
+
+<p>The MMU has a page table to translate page number to frame number; the offset stays the same.</p>
+
+<h4 id="segmentation-with-paging">Segmentation with Paging</h4>
+<p>This is a combination of the two previous methods. It looks like segmentation, but underneath it’s paged. It aims to reduce both internal and external fragmentation.</p>
+
+<p>The virtual address space is exactly like segmentation: we define segments for every abstract memory group of varying sizes.</p>
+
+<p>However, the physical is just like in paging (non-contiguous set of frames).</p>
+
+<p><img src="/images/os/segmentation-paging-mmu.png" alt="MMU for segmentation with paging" /></p>
+
+<p>Each process keeps one segment table, and multiple page tables (one for each segment). The logical addresses are first interpreted as <code class="highlighter-rouge">(segment, offset)</code>, which the segment table can translate into <code class="highlighter-rouge">(page_table_number, page_number, offset)</code>, which we can give to the page table to resolve a physical address.</p>
+
+<h3 id="optimizations">Optimizations</h3>
+<h4 id="memory-allocation">Memory allocation</h4>
+<p>How do we find memory for a newly arrived process? Base-and-bounds leaves “holes” in the memory, so we need to pick a “hole” for the new process to use. There are a few dynamic memory allocation mehtods:</p>
+
+<ul>
+  <li><strong>First-fit</strong>: Take the first hole that fits</li>
+  <li><strong>Best-fit</strong>: Take the smallest hole where we can fit what’s been requested. This sounds nice, but it also leaves small holes behind, which is problematic</li>
+  <li><strong>Worst-fit</strong>: takes the largest hole, and leaves big holes behind</li>
+</ul>
+
+<p>The problem here is external fragmentation: small holes become unusable, part of memory can never be used. This is a serious problem. Main memory allocation is easier to do in segmentation. Pieces are smaller, but there are more than one. Main memory allocation is easiest in paging, as pages have a fixed size. But we now have an internal fragmentation problem: part of the last page may be unused. With a reasonable page size though, this is not too much of a problem.</p>
+
+<h4 id="protection">Protection</h4>
+<p>Fine-grain protection means having different protections for different parts of the address space. In the page table, we can have a few bits to indicate read/write/execute rights on the memory, and whether the memory is valid. For instance, code should be valid, read-only (don’t let an attacker inject code) and executable.</p>
+
+<p>In base-and-bounds, this is not really possible; we do not have any break-up, there’s no page table. In segmentation, this is easy to do: there’s a segment for the code, so we set the bits in the segment table. Same goes for paging, we can set the bits, but we have to do it in every code page.</p>
+
+<h4 id="sharing">Sharing</h4>
+<p>Sharing memory between processes allows us to run twice the same program in different processes (we can share the code), or read twice the same file in different processes (we may want to share memory corresponding to the file).</p>
+
+<p>This is not possible in base and bounds. With segmentation, we create a segment for shared data, and add an entry in the segment tables of both processes pointing to shared segments in memory. With paging, this is somewhat more complex; we need to share pages, add entries in pages of both processes and point to the shared pages, and manage multiple shared pages.</p>
+
+<h4 id="feature-comparison">Feature comparison</h4>
+<p>Segmentation is best for sharing and fine-grain protection, while paging is best for memory allocation. This is the reason we have segmentation with paging: it combines the best of both worlds and allows us to do all three fairly easily.</p>
+
+<h4 id="tlbs">TLBs</h4>
+<p>For performance, we have TLBs (translation lookaside buffers), a piece of hardware outside physical memory.</p>
+
+<p>They are there because the page table actually is in memory, not in a separate device as we may have been led to believe. A virtual address reference would (without the TLB) result in 2 physical memory accesses, which would reduce performance by a factor of 2. The TLB is a small fast cache of mappings <code class="highlighter-rouge">(page_nb -&gt; frame_nb)</code>. If the mapping for <code class="highlighter-rouge">page_nb</code> is found in the TLB, we use the associated value instead of looking up the page table. If not, we have to do a lookup, but we add it the mapping to the TLB.</p>
+
+<p>The TLB is highly specialized, expensive hardware, but it’s also very fast. It’s an associative memory cache, meaning that there’s a hardware comparator for every entry, so the TLB is usually rather small (64-1024 entries). If it’s full, we replace existing entries.</p>
+
+<p>Note that flushing the TLB is actually the <em>real</em> reason that process switching is so expensive (moreso than switching register values, like we said earlier). Typical TLB hit rates are 95-100%.</p>
+
+<h3 id="dealing-with-large-virtual-address-spaces">Dealing with large virtual address spaces</h3>
+<p>The virtual address space is 64 bits, and we’ve got 4KB pages, which means 12 bits are needed for offset, which leaves 52 bits for page number, which would require 2<sup>52</sup> page table entries. Say they’re 4 bytes each, we’d need 2<sup>54</sup> bytes (18 petabytes) of memory, which is way more than we have!</p>
+
+<p>There are a few solutions to this (hierarchical page tables, hashed page tables, inverted page tables, …) but we’ll just take a look at hierarchical page tables.</p>
+
+<p>The number of levels of hierarchy can vary, but here we’ll just talk about two-level page tables:</p>
+
+<ul>
+  <li>In a single level page table, we have a set number of bits indicating the page number. In a two-level page table, we break this page number <code class="highlighter-rouge">p</code> into two numbers <code class="highlighter-rouge">p1</code> and <code class="highlighter-rouge">p2</code>.</li>
+  <li>The top-level page table entry is indexed by <code class="highlighter-rouge">p1</code>, and contains a pointer to second-level page table (and a valid bit)</li>
+  <li>The second-level page table entry is indexed by <code class="highlighter-rouge">p2</code>, and contains a frame number containing page <code class="highlighter-rouge">(p1, p2)</code> (and a valid bit)</li>
+</ul>
+
+<p>This is useful because most address spaces are sparsely populated: As we said above, the virtual address space is very large (say, 2<sup>52</sup> pages), and we won’t be using most virtual pages. But still, in a one-level page table we need an entry for every page. Therefore, most entries in the page table will be empty (in reality, they’re not empty, just invalid: the valid bit will be 0).</p>
+
+<p>We can solve this with hierarchical page tables. The first layer needs 2<sup><code class="highlighter-rouge">p1</code></sup> entries (one for every possible value of the first part of the page number), but we only need second-level page tables for the populated parts of the first level. For every invalid entry in the first level, we can save ourselves 2<sup><code class="highlighter-rouge">p2</code></sup> bytes, since we don’t need a level two for that.</p>
+
+<p>Note that hierarchical page tables are counter-productive for dense address spaces, but since most address spaces are quite sparse, it’s usually worth it. The price to be paid here is that each level adds another memory access; instead of 1 memory access, we’ll have n+1. But the TLB still works, so if this is rare (i.e. TLB hit rate 99%), we can live with it!</p>
+
+<h3 id="process-switching-and-memory-management">Process switching and memory management</h3>
+<p>One solution, is to invalidate all TLB entries on process switch. This makes the process switch expensive!</p>
+
+<p>The other solution is to have the process identifier in TLB entries, so that a match is a match on both <code class="highlighter-rouge">pid</code> and <code class="highlighter-rouge">pageno</code>. The process switch is now much cheaper; although this makes the TLB more complicated and expensive, all modern machines have this feature.</p>
+
+<h2 id="demand-paging">Demand Paging</h2>
+<p>We’re now going to drop the assumption that all of a program must be in memory. Typically, part of program is in memory, and all of it is on disk.</p>
+
+<p>Remember: the CPU can only directly access memory. It cannot acess data on disk directly, it must go through the OS to do IO.</p>
+
+<p>But what if the program acesses a part of the program that’s only on disk? The program will be suspended, the OS is run to get the page from disk, and the program is restarted. This is called a <em>page fault</em>, and what the OS does in response is <em>page fault handling</em>.</p>
+
+<p>To discover the page fault, we use the valid bit in the page table. Without demand paging, if it’s 1, the page is valid, otherwise it’s invalid. With demand paging:</p>
+
+<ul>
+  <li>If the valid bit is 0: the page is invalid <strong>or</strong> the page is on disk</li>
+  <li>If the valid bit is 1: the page is valid <strong>and</strong> it’s in memory</li>
+</ul>
+
+<p><em>Sidenote</em>: there’s also an additional table to see invalid, on-disk pages.</p>
+
+<p>Access to an invalid bit generates a trap. The OS allocates a free frame to the process, finds the page on disk, gets the disk to transfer the page from disk to this allocated frame. While the disk is busy, we can invoke the scheduler to run another process; when the disk interrupt comes in, we go back to the page fault handling, which updates the page table, and sets the valid bit to 1, gives control back to the process, restarting the previously faulting instruction which will now find a valid bit in the page table.</p>
+
+<h3 id="page-replacement">Page replacement</h3>
+<p>If no free frame is available for the disk to fill up, we must pick a frame to be replaced, replace its page table and TLB entry (maybe even writeback if it has a modified bit). Picking the correct page to replace is very important for performance: a normal memory access is 1ns, a page fault is 10ms. In general, we prefer replacing clean over dirty (one disk IO vs two, because we can save a writeback by picking the clean).</p>
+
+<p>There are many replacement policies:</p>
+
+<ul>
+  <li><strong>Random</strong>: easy to implement, performs poorly</li>
+  <li><strong>FIFO</strong>: oldest page (brought in the earliest) is replaced. This is very easy to implement with a queue of pages, but performs pretty badly.</li>
+  <li><strong>OPT</strong>: replace the page that will be referenced furthest in the future. This sounds fantastic and perfect, and it is: it’s an optimal algorithm, but we can’t actually implement this, because we can’t predict the future. We just use it as a basis for comparison.</li>
+  <li><strong>LRU</strong>: replace least recently accessed page. This is not the same as FIFO, which looks at when a page was brought in (vs. when it was used for LRU). LRU is difficult to implement perfectly: we’d need to timestamp every memory reference, which would be too expensive. But we <em>can</em> approximate it fairly well with a single reference bit: periodically, we read out and store all reference bits (those are bits set by the hardware when a page is referenced), and reset them all to 0. We keep all the reference bits of the last few periods; the more periods kept, the better the approximation. We replace the page with the smallest value of reference bit history (i.e. the one last referenced the furthest back).</li>
+  <li><strong>Second-chance</strong>: also called FIFO with second-chance. When we bring in a page, we place it at the tail of the queue, as with FIFO. To replace, instead of taking the head page invariably as with FIFO, we give it a second chance if its reference bit is 1 (if it’s 0, no second chances, replace it). A second chance means that we put it at the tail of the queue, set the reference bit to 0, and look at the head of the queue to see if we should replace that or give it a second chance (this happens in a loop until we can replace). This works, as it is a combination of FIFO and the LRU approximation with one reference bit</li>
+  <li><strong>Clock</strong>: this is a variation of second chance. Imagine all the pages arranged around a (one-armed) clock. For the replacement, we look at the page where the hand of the clock is; if the bit is 0, we replace it, but if it is 1, we set it to 0 and move the hand of the clock to the next page. This is actually exactly the same as FIFO+second-chance; the clock points to the head of the queue. But clock is more efficiently implemented (Microsoft’s code is closed source, but rumor goes that it’s quite close to a clock).</li>
+</ul>
+
+<p>In addition to the replacement algorithm, you can pick varying replacement scopes:</p>
+
+<ul>
+  <li><strong>Local replacement</strong> replaces a page of the faulting process. You cannot affect someone else’s working set (a term well define below), but it’s very inflexible for yourself, since you can’t grow (you cause yourself to thrash)</li>
+  <li><strong>Global replacement</strong> replaces any page (e.g. for FIFO, local replaces the oldest page of the faulting page, while global picks the oldest page overall). This can allow for DDOS-like attacks where one process takes over the whole memory, causing everyone else to thrash.</li>
+</ul>
+
+<p>It’s difficult to say which one is better; in a way, there’s a tradeoff to pick from. If you’re an OS writer, though, you have to favor security before performance, so you have to favor local replacement. In reality, most OSes find some middle ground: you use frame allocation periodically (see below), with local replacement in-between. You may thrash for a short amount of time, but at the next period you’ll probably get the bigger allocation, so that’s fine. You can’t cause thrashing of others, so that’s fine too.</p>
+
+<h3 id="frame-allocation">Frame allocation</h3>
+<p>There’s a close link between the degree of multiprocessing and the page fault rate. We can decide to:</p>
+
+<ul>
+  <li><strong>Give each process frames for all of its pages</strong>: this implies low multiprocessing, few page faults, slow switching on I/O</li>
+  <li><strong>Give each process 1 frame</strong>: high multiprocessing, many page faults (<em>thrashing</em>) and quick switching on I/O).</li>
+</ul>
+
+<p>Where is the correct tradeoff between these two extremes?</p>
+
+<p>To answer this, we need to know about the <em>working set</em> of a process: it’s the set of pages that a process will need for execution over the next execution interval. The intuition is that if the working set isn’t in memory, there will be many page faults; if it is, there will be none. There’s nothing to be gained by putting anything more than the working set in memory.</p>
+
+<p>If you could somehow give each process its working set, we would have a good tradeoff between few page faults and moderate degree of multiprocessing. Why use the working set instead of all pages? It’s the principle of locality: at any given time, a process only accesses part of its pages (initialization, main, termination, error, …).</p>
+
+<p>The frame allocation policy must then be able to give each process enough frames to maintain its working set in memory. If there’s no space in memory for all working sets, we need to swap out one or more processes; if there’s space, we can swap one in.</p>
+
+<p>The obvious question now is how we can predict a working set: in practice, what people do is to assume that it’ll be the same as before. The working set for the next 10k references will be the same as for the last 10k references. This prediction isn’t perfect, because a program may change state (i.e. initialization to main); this will temporarily cause a high page fault rate, but then it’ll work well again.</p>
+
+<p>So how do we measure the past working set? Well, we don’t really need the working set, we only need its size. Periodically, we count the reference bits set to 1, and them reset them all to 0. The working set is thus the number of reference bits set to 1.</p>
+
+<p><em>N.B.</em>: Frame allocation is done periodically, while page replacement is done at page fault time.</p>
+
+<h3 id="optimizations-1">Optimizations</h3>
+<h4 id="prepaging">Prepaging</h4>
+<p>So far we’ve been paging in one page at a time. Prepaging takes multiple pages at a time. This works because of locality of virtual memory access: nearby pages are often accessed soon after. This avoids future page faults, process switches, and also allows for better disk performance (more on that later), but may bring in unnecessary pages.</p>
+
+<h4 id="cleaning">Cleaning</h4>
+<p>So far, we’ve preferred to replace clean pages. Cleaning is about writing out dirty pages when the disk is idle, so that we have more clean pages at replacement time. The drawback is that the page may be modified again, which may create useless disk traffic. Still, cleaning is usually always a gain, so pretty much all systems do it periodically.</p>
+
+<h4 id="free-frame-pool">Free frame pool</h4>
+<p>So far, we used all possible frames for pages. With a free frame pool, we keep some frames unused. This makes page fault handling quick by offsetting replacement to outside page fault time. The drawback is that this reduces effective main memory size.</p>
+
+<h4 id="copy-on-write">Copy-on-write</h4>
+<p>This is a clever trick to share pages between the processes that:</p>
+
+<ol>
+  <li>Are initially the same</li>
+  <li>Are likely to be read-only (remain the same)</li>
+  <li>But may be modified in the future (although unlikely)</li>
+</ol>
+
+<p>To understand how this works, let’s remind ourselves how read-only sharing works: we make the page table entries point to same frame, set the read-only bit so that it generates a trap if the process writes; the trap is treated as an illegal memory access.</p>
+
+<p>We can’t do that in our case, because we will allow the unlikely write. Instead, when we receive the trap, we create a separate frame for the faulting process, insert the <code class="highlighter-rouge">(pageno, frameno)</code> in the page table, set the read-only bit to off (allowing read-write) and copy that page into that frame: further accesses won’t page fault.</p>
+
+<p>This works well if the page is rarely written, and allows us to save <code class="highlighter-rouge">sharers - 1</code> frames. Obviously, if the page is written often, as it causes more page faults without gaining in frame occupations. In practice though, this works very well and all OSes provide it. Linux implements <code class="highlighter-rouge">fork()</code> this way: we don’t copy the page straight away, we just wait for the new process’ first modification to copy the page.</p>
+
+<h2 id="file-systems">File Systems</h2>
+<h3 id="what-is-a-file-system">What is a file system?</h3>
+<p>The file system provides permanent storage. How permanent is permanent? For this course, it’ll just mean across machine failures and restarts (this is a stronger guarantee than across program invocations, but less strong than across disk failures or data center failures).</p>
+
+<p>Main memory is obviously not suitable for <em>permanent</em> storage. In this course, we’ll only talk about disks and flash (although other technologies exist, such as tape, or battery-backed memory).</p>
+
+<p>There’s no universally accepted definition of what a file is, but we’ll say the following: it’s an un-interpreted collection of objects surviving machine restarts. Un-interpreted means that the file system doesn’t know what the data means, only the application does. These objects can be different things for different OSes; in Linux, they are simple bytes (this is more common, and we’ll only talk about this), but other OSes see them as records.</p>
+
+<p>Should a file be typed or untyped? Typed means that the file system (FS) knows what the object means. This is useful, because it allows us to invoke certain programs by default, prevent errors, and perhaps even store the file more efficiently on disk. However, it can be inflexible, as it may require typecasts, and for the OS, it would involve a lot of code for each type.</p>
+
+<p>We will look at untyped files, which is how Linux works (but Windows uses a typed system). Note that file filename extensions (<code class="highlighter-rouge">.sh</code>, <code class="highlighter-rouge">.html</code>, …) aren’t types: in Linux, it’s pure convention. The user knows, but the system doesn’t do anything with it. In Windows, the user knows, and the system knows and enforces the type.</p>
+
+<h3 id="interface">Interface</h3>
+<h4 id="access-primitives">Access primitives</h4>
+<p>The main access primitives to the file system are:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">uid = create(...)</code>: creates a new file and returns a <code class="highlighter-rouge">uid</code>, a non human-readable unique identifier</li>
+  <li><code class="highlighter-rouge">delete(uid)</code>: deletes the file with the given <code class="highlighter-rouge">uid</code></li>
+  <li><code class="highlighter-rouge">read(uid, buffer, from, to)</code>: read from file with <code class="highlighter-rouge">uid</code>, from byte <code class="highlighter-rouge">from</code> to a byte <code class="highlighter-rouge">to</code> (this may cause an EOF condition) into a memory buffer (previously allocated, must be of sufficient size)</li>
+  <li><code class="highlighter-rouge">write(uid, buffer, from, to)</code>: write to file with <code class="highlighter-rouge">uid</code> from byte <code class="highlighter-rouge">from</code> to byte <code class="highlighter-rouge">to</code> from a memory buffer</li>
+</ul>
+
+<p>The above <code class="highlighter-rouge">read</code> and <code class="highlighter-rouge">write</code> are <strong>random access</strong> primitives: there’s no connection between two successive accesses. This is opposed to <strong>sequential access</strong>, which reads from where we stopped reading last time, and writes to where we stopped writing last time.</p>
+
+<p>In a sequential read, the file system keeps a file pointer <code class="highlighter-rouge">fp</code> (initially 0), and to execute <code class="highlighter-rouge">read(uid, buffer, bytes)</code>, reads <code class="highlighter-rouge">bytes</code> bytes into <code class="highlighter-rouge">buffer</code> and increments <code class="highlighter-rouge">fp</code> by <code class="highlighter-rouge">bytes</code>.</p>
+
+<p>Note that sequential could be built on top of random access; all it takes is maintaining to the file pointer. Sequential access is essentially a convenience, where the FS manages the file pointer. We can also build random access on top of sequential access thanks to the <code class="highlighter-rouge">seek(uid, from)</code> primitive, which allows us to move to a certain location in the file.</p>
+
+<p>Since sequential access is more common, and managing the file pointer manually leads to many errors, Linux offers sequential access with the addition of the <code class="highlighter-rouge">seek</code> primitive to enable random access.</p>
+
+<h4 id="concurrency-primitives">Concurrency primitives</h4>
+<p>If two processes access the same file, what happens to the file pointer <code class="highlighter-rouge">fp</code>? It would get overwritten. To solve this problem, we have the notion of an open file, with the following primitives:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">tid = open(uid, ...)</code>: creates an instance of file with <code class="highlighter-rouge">uid</code>, accessible by this process only, with the temporary, process-unique id <code class="highlighter-rouge">tid</code>. The file pointer <code class="highlighter-rouge">fp</code> is associated with the <code class="highlighter-rouge">tid</code>, not the <code class="highlighter-rouge">uid</code> (in other words, it is private to the process)</li>
+  <li><code class="highlighter-rouge">close(tid)</code>: destroys the instance of the file</li>
+</ul>
+
+<p>There are different ways of implementing this concurrency, and we can make the changes visible at different moments: on <code class="highlighter-rouge">write</code> (immediately visible) on <code class="highlighter-rouge">close</code> (separate instances until close), or never (separate instances altogether). In Linux, writes are immediately visible (this is much easier to implement).</p>
+
+<h4 id="naming-primitives">Naming primitives</h4>
+<p>A naming is a mapping from a human-readable string to a <code class="highlighter-rouge">uid</code>. A directory is a collection of such mappings.</p>
+
+<p>There are a bunch of naming primitives, which we won’t go into detail with, but here are some:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">insert(string, uid)</code></li>
+  <li><code class="highlighter-rouge">uid = lookup(string)</code></li>
+  <li><code class="highlighter-rouge">remove(string, uid)</code></li>
+</ul>
+
+<p>There are also directory primitives:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">createDirectory</code>: equivalent to <code class="highlighter-rouge">mkdir</code></li>
+  <li><code class="highlighter-rouge">deleteDirectory</code>: equivalent to <code class="highlighter-rouge">rm -rf</code></li>
+  <li><code class="highlighter-rouge">setWorkingDirectory</code>: equivalent to <code class="highlighter-rouge">cd</code></li>
+  <li><code class="highlighter-rouge">string = listWorkingDirectory</code>: equivalent to <code class="highlighter-rouge">ls</code></li>
+  <li><code class="highlighter-rouge">list(directory)</code>: equivalent to <code class="highlighter-rouge">ls ./dir</code></li>
+</ul>
+
+<p>The directory structure is hierarchical; it’s actually not a tree in Linux, it’s an acyclic graph, as Linux allows sharing of two <code class="highlighter-rouge">uid</code>s under different names. This is called a <strong>hard link</strong>, where, assuming the mapping <code class="highlighter-rouge">(string1, uid)</code> already exists, we can create a new mapping <code class="highlighter-rouge">(string2, uid)</code>. This is opposed to soft links, where we would add a <code class="highlighter-rouge">(string2, string1)</code> mapping. The difference is that when we remove the first mapping, the second remains with hard linking, and it becomes a dangling reference in soft linking.</p>
+
+<p>To keep the graph acyclic, Linux prevents hard links from making cycles by disallowing hard link to directories (only allowing links to files, i.e. leaves in the graph).</p>
+
+<h3 id="disks">Disks</h3>
+<h4 id="how-does-a-disk-work">How does a disk work?</h4>
+
+<p><img src="/images/os/disk.png" alt="Anatomy of a disk" /></p>
+
+<p>Information on a disk is magnetically recorded. The disks turn on the spindle (order of 15,000rpm). The arms do not move independently, they all move together. A disk has many concentric circles on the platter called tracks, on which a basic unit is a sector: on a disk, you cannot read or write a single byte, you can only work with a full sector at a time (which is usually around 512B).</p>
+
+<h4 id="interface-1">Interface</h4>
+<p>The disk interface is thus:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">readSector(logical_sector_number, buffer)</code></li>
+  <li><code class="highlighter-rouge">writeSector(logical_sector_number, buffer)</code></li>
+</ul>
+
+<p>The logical sector number is a function of the platter, cylinder or track, and sector. The main task of the file system is to translate from user interface methods to disk interface methods (e.g. from <code class="highlighter-rouge">read</code> to <code class="highlighter-rouge">readSector</code>).</p>
+
+<h4 id="performance">Performance</h4>
+<p>To access the disk, we need to do:</p>
+
+<ul>
+  <li><strong>Head selection</strong>: select platter. This is very cheap (ns), and it’s just an electronic switch (multiplexer)</li>
+  <li><strong>Seek</strong>: move arm over cylinder. This is very expensive (few ms), as it is a mechanical motion. The cost of a seek is approximately linear in the number of cylinders that you have to move over.</li>
+  <li><strong>Rotational latency</strong>: move head over sector. This is also expensive (15000 RPM, half a revolution to do on average, so around 2ms)</li>
+  <li><strong>Transfer time</strong>: disk throughput is around 1GB/s (maybe hundreds of MB/s), so it’s cheap (microseconds)</li>
+</ul>
+
+<h5 id="caching">Caching</h5>
+<p>The above is slow, so <em>rule number one</em> of optimizing disk access is to not access the disk: as much as possible, use main memory as a cache. To do this, keep recently acccessed blocks in memory to reduce latency and disk load by reserving kernel memory for cache; cache entries are file blocks. There are two strategies associated with this:</p>
+
+<ul>
+  <li><strong>Write-through</strong>: write to cache, write to disk, return to user</li>
+  <li><strong>Write-back</strong>: write to cache, return to user, and later, write to disk</li>
+</ul>
+
+<p>Write-back (also called write-behind) has better much response time (microseconds vs ms), but in case of a crash, there’s a window of vulnerability that write-through doesn’t have. Still, because of the performance impact, Linux chose write-back with a periodic cache flush, and provides a primitive to flush data.</p>
+
+<h5 id="read-ahead">Read-ahead</h5>
+<p>Still, if you have to use disk, <em>rule number two</em> is don’t wait for the disk. Prefetching allows us to put more blocks in the buffer cache than were requested, so that we can avoid disk IO for the next block; this is especially useful for sequential access (which most accesses are). Note that this does not reduce the number of disk IOs, and could actually increase them (for non-sequential access). Still, in practice it’s usually a win, and in Linux, this is the default: it always reads a block ahead.</p>
+
+<p><code class="highlighter-rouge">fadvise(2)</code> allows an application to tell the kernel how it expects to use a file so that the kernel can choose an appropriate read-ahead and caching strategy. The following values can be supplied as parameters:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">FADV_RANDOM</code>: expect accesses in random order (e.g. text editor)</li>
+  <li><code class="highlighter-rouge">FADV_SEQUENTIAL</code>: expect accesses in sequential order (e.g. media player)</li>
+  <li><code class="highlighter-rouge">FADV_WILLNEED</code>: expect accesses in the near future (e.g. database index)</li>
+  <li><code class="highlighter-rouge">FADV_DONTNEED</code>: do not expect accesses in the near future (e.g. backup application)</li>
+</ul>
+
+<p>Since Linux 2.4.10, the <code class="highlighter-rouge">open(2)</code> syscall accepts an <code class="highlighter-rouge">O_DIRECT</code> flag (<a href="http://yarchive.net/comp/linux/o_direct.html">a controversial addition</a>). When Direct I/O is enabled for a file, data is transferred directly from the disk to user-space buffers, bypassing the file buffer cache; read-ahead and caching is disabled. This is useful for databases, who probably want to manage their own caches.</p>
+
+<h5 id="disk-scheduling">Disk scheduling</h5>
+<p>Now, for times that we are actually reading, we can implement <em>rule number three</em> which is to minimize seeks by doing clever disk scheduling. There are different disk scheduling policies:</p>
+
+<ul>
+  <li><strong>FCFS first-come-first-served</strong>: serve requests in the order that they were requested</li>
+  <li><strong>SSTF shortest-seek-time-first</strong>: pick “nearest” request in queue; note that this can lead to starvation (far-away request may never be served), but leads to very good seek times</li>
+  <li><strong>SCAN</strong>: continue moving head in one direction, and pick up request as we’re moving. Also called the elevator algorithm, as the head goes up and down.</li>
+  <li><strong>C-SCAN</strong>: similar to SCAN, but the elevator only goes one way. From cylinders <code class="highlighter-rouge">0</code> to <code class="highlighter-rouge">MAX_CYL</code>, we pick up requests, and then going down from <code class="highlighter-rouge">MAX_CYL</code> to <code class="highlighter-rouge">0</code> we don’t serve any. This leads to more uniform wait times.</li>
+  <li><strong>C-LOOK</strong>: similar to C-SCAN, but instead of moving the head over the whole cylinder range, we only move it between the minimum and maximum in the queue</li>
+</ul>
+
+<p>In practice, a variation of C-LOOK is most common.</p>
+
+<h5 id="disk-allocation">Disk allocation</h5>
+
+<p>Finally, we have a final rule; <em>rule number four</em> is to minimize rotational latency by doing clever disk allocation. The idea here is to locate consecutive blocks of a file on consecutive sectors in a cylinder.</p>
+
+<p>When we’re under low load, it works best to do disk allocation; under high load, disk scheduling works better. This is because under high load, we get many good scheduling opportunities, while allocation typically gets defeated by interleaved access patterns for different files. Under low load, we have few requests in the queue and thus few scheduling opportunities; we also tend to see more sequential access, so it makes sense to optimize for that.</p>
+
+<h3 id="os-file-system-implementation">OS File System Implementation</h3>
+<h4 id="introduction">Introduction</h4>
+<p>The file system has two main functionalities: the naming/directory system, and the storage (on-disk and in-memory data structures). In this class, we’ll mainly focus on storage, because once we have this, directories can be trivially implemented by using a file to store directories.</p>
+
+<p>As we’ve said before, the main task of the file system is to translate from user interface methods (<code class="highlighter-rouge">read(ui, buffer, bytes)</code>) to disk interface methods (<code class="highlighter-rouge">readSector(logical_sector_number, buffer)</code>). To study this, we’ll introduce two small simplifications. First, we’ll simplify <code class="highlighter-rouge">read</code>, which normally allows to read an arbitrary number of bytes, to only allow reading a block at a time. A block is fixed size; typically, a block is (sector size) × 2<sup>n</sup> (for instance, 4KB block size and 512B sector size). Second, for simplicity, we’ll just assume that a block is the same size as a sector.</p>
+
+<p>A terminology note: the word pointer is often used, and it means a disk address (i.e. <code class="highlighter-rouge">logical_sector_number</code>), not a memory address.</p>
+
+<h4 id="disk-structure">Disk structure</h4>
+<p>The disk consists of a few data structures:</p>
+
+<ul>
+  <li><strong>Boot block</strong>: it’s at a fixed location on disk (usually sector 0); it contains the boot loader, which is read on machine boot.</li>
+  <li><strong>Device directory</strong>: a fixed, reserved area on disk. It’s an array of records (called “device directory entries”, DDE). It’s indexed by a <code class="highlighter-rouge">uid</code>, and each DDE record contains information about its <code class="highlighter-rouge">uid</code>s (in-use bit, reference count, size, access rights, disk addresses).</li>
+  <li><strong>User data</strong>: can be allocated in different ways, as we’ll see below</li>
+  <li><strong>Free space</strong></li>
+</ul>
+
+<h4 id="data-allocation">Data allocation</h4>
+<p>User data can be allocated in a number of ways:</p>
+
+<ul>
+  <li><strong>Contiguous</strong>: disk data blocks continuous on disk. With this, we only need one pointer per device directory entry, as well as the length of the block. This creates disk fragmentation (many unusable holes) and is generally quite impractical
+    <figure>
+<img src="/images/os/contiguous-alloc.png" alt="Contiguous allocation schema" />
+<figcaption>The DDE only contains a single pointer to the start of the contiguous data blocks</figcaption>
+</figure>
+  </li>
+  <li><strong>Linked list</strong>: each data block contains a pointer to the next. We only need one pointer in the DDE (2 if we store the tail), to the first data block. But this is inefficient, especially for random access, because it may require reading many blocks before getting to the right one; additionnally, it’s not great because we have a pointer taking up space in the block (and now usable block sizes aren’t a power of 2 anymore)
+    <figure>
+<img src="/images/os/linked-list-alloc.png" alt="Linked list allocation schema" />
+<figcaption>The DDE contains a pointer to the first data block, and every data block has a pointer to the next one</figcaption>
+</figure>
+  </li>
+  <li><strong>Indexed</strong>: N pointers in DDE, pointing to data blocks. The problem here is size: you can’t represent more than N blocks.
+    <figure>
+<img src="/images/os/indexed-alloc.png" alt="Indexed allocation schema" />
+<figcaption>The DDE can only point to up to N data blocks</figcaption>
+</figure>
+  </li>
+  <li><strong>Indexed with indirect blocks</strong>: we keep the idea of N pointers in the DDE, but with a twist: the M first pointers in the DDE point to files, while the last N-M pointers point to other blocks that can point to files (or blocks). This is optimized for small files (they can be fully represented in the first block level), but also works well for large files (they can be represented in deep block levels). This can be seen as an unbalanced tree (as opposed to a full tree).
+    <figure>
+<img src="/images/os/indirect-indexed-alloc.png" alt="Indirect indexing allocation schema" />
+<figcaption>This example shows direct indexing (left), first-level indirection (middle) and second-level indirection (right)</figcaption>
+</figure>
+  </li>
+  <li><strong>Extent based</strong>: the DDE contains a pointer as before, but we also store the length of the extent (a small integer). In other words, in this model, the DDE points to a sequence of disk blocks. This does even better than the above, offers good sequential <em>and</em> random access, and can be combined with indirect blocks. This is common practice in Linux.
+    <figure>
+<img src="/images/os/extent-alloc.png" alt="Extent based allocation schema" />
+<figcaption>The DDE contains pointers to contiguous blocks, as well as the length of these contiguous sections</figcaption>
+</figure>
+  </li>
+</ul>
+
+<p>One final word: we also need to keep track of free space. This can be done with a linked list or a bitmap, which is an <code class="highlighter-rouge">array[#sectors]</code>, with single-bit entries representing whether the sector is free or in-use.</p>
+
+<h4 id="in-memory-data-structures">In-memory data structures</h4>
+<ul>
+  <li>
+    <p><strong>Cache</strong>: a fixed, contiguous area of kernel memory is used as a cache. Its size is m×n, where m is the max number of cache blocks, and n is the block size. This usually makes up a large chunk of memory.</p>
+  </li>
+  <li>
+    <p><strong>Cache directory</strong>: usually a hash table, where the index is given by <code class="highlighter-rouge">hash(disk address)</code>, with an overflow list for collisions. It usually has a dirty bit.</p>
+  </li>
+  <li>
+    <p><strong>Queue of pending user requests</strong></p>
+  </li>
+  <li>
+    <p><strong>Queue of pending disk requests</strong></p>
+  </li>
+  <li>
+    <p><strong>Active file tables</strong>: an array for the whole file system, with an entry per <em>open file</em>. Each entry contains the device directory entry of the file, and additional information.</p>
+  </li>
+  <li>
+    <p><strong>Open file tables</strong>: an array per process, with an entry per <em>open file of that process</em>. It’s indexed by the file descriptor <code class="highlighter-rouge">fd</code>. Each entry contains a pointer to the entry in the active file table, the file pointer <code class="highlighter-rouge">fp</code>, and additional information.</p>
+
+    <p><img src="/images/os/open-file-table.png" alt="Open file table" /></p>
+  </li>
+</ul>
+
+<p>An inode is a data structure on a filesystem on Linux and other Unix-like operating systems that stores all the information about a file except its name and its actual data (<a href="http://www.linfo.org/inode.html">source</a>).</p>
+
+<h4 id="pseudo-code">Pseudo-code</h4>
+<p>Putting all together, the pseudo-code of the file system primitives looks like this (with some major simplifications, since we omit permission checks, return value checks, etc):</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">create</span><span class="p">():</span>
+    <span class="n">find</span> <span class="n">a</span> <span class="n">free</span> <span class="n">uid</span> <span class="p">(</span><span class="k">with</span> <span class="n">refcount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="c1"># device directory is cached; this is usually easy
+</span>    <span class="nb">set</span> <span class="n">refcount</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">fill</span> <span class="ow">in</span> <span class="n">additional</span> <span class="n">info</span>
+    <span class="n">write</span> <span class="n">back</span> <span class="n">to</span> <span class="n">cache</span> <span class="p">(</span><span class="ow">and</span> <span class="n">eventually</span> <span class="n">to</span> <span class="n">disk</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">uid</span>
+    
+<span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="n">uid</span><span class="p">):</span>
+    <span class="n">find</span> <span class="n">inode</span>
+    <span class="n">refcount</span><span class="o">--</span>
+    <span class="k">if</span> <span class="n">refcount</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">free</span> <span class="nb">all</span> <span class="n">data</span> <span class="n">blocks</span> <span class="ow">and</span> <span class="n">indirect</span> <span class="n">blocks</span>
+        <span class="nb">set</span> <span class="n">entries</span> <span class="ow">in</span> <span class="n">free</span> <span class="n">space</span> <span class="n">bitmap</span> <span class="n">to</span> <span class="mi">0</span>
+    <span class="n">write</span> <span class="n">back</span> <span class="n">to</span> <span class="n">cache</span> <span class="p">(</span><span class="ow">and</span> <span class="n">eventually</span> <span class="n">to</span> <span class="n">disk</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="n">uid</span><span class="p">):</span>
+    <span class="n">check</span> <span class="ow">in</span> <span class="n">active</span> <span class="nb">file</span> <span class="n">table</span> <span class="k">if</span> <span class="n">uid</span> <span class="n">already</span> <span class="nb">open</span>
+    <span class="k">if</span> <span class="n">so</span><span class="p">:</span>
+        <span class="n">refcount</span><span class="o">++</span> <span class="c1"># in active file table
+</span>        <span class="n">allocate</span> <span class="n">entry</span> <span class="ow">in</span> <span class="nb">open</span> <span class="nb">file</span> <span class="n">table</span>
+        <span class="n">point</span> <span class="n">to</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">active</span> <span class="nb">file</span> <span class="n">table</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">find</span> <span class="n">free</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">active</span> <span class="nb">file</span> <span class="n">table</span>
+        <span class="n">read</span> <span class="n">inode</span> <span class="ow">and</span> <span class="n">copy</span> <span class="ow">in</span> <span class="n">active</span> <span class="nb">file</span> <span class="n">table</span> <span class="n">entry</span>
+        <span class="n">refcount</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">allocate</span> <span class="n">entry</span> <span class="ow">in</span> <span class="nb">open</span> <span class="nb">file</span> <span class="n">table</span>
+        <span class="n">point</span> <span class="n">to</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">active</span> <span class="nb">file</span> <span class="n">table</span>
+    <span class="n">fp</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">return</span> <span class="n">tid</span>
+        
+<span class="k">def</span> <span class="nf">read</span><span class="p">():</span>
+    <span class="n">find</span> <span class="n">fp</span> <span class="ow">in</span> <span class="nb">open</span> <span class="nb">file</span> <span class="n">table</span> <span class="ow">and</span> <span class="n">increment</span>
+    <span class="n">compute</span> <span class="n">block</span> <span class="n">number</span> <span class="n">to</span> <span class="n">be</span> <span class="n">read</span>
+    <span class="n">find</span> <span class="n">disk</span> <span class="n">address</span> <span class="ow">in</span> <span class="n">inode</span> <span class="ow">in</span> <span class="n">active</span> <span class="nb">file</span> <span class="n">table</span>
+    <span class="n">look</span> <span class="n">up</span> <span class="ow">in</span> <span class="n">cache</span> <span class="n">directory</span> <span class="p">(</span><span class="n">disk</span> <span class="n">address</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">present</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">find</span> <span class="n">free</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">cache</span>
+        <span class="n">readSector</span><span class="p">(</span><span class="n">disk</span> <span class="n">addr</span><span class="p">,</span> <span class="n">free</span> <span class="n">cache</span> <span class="n">block</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">write</span><span class="p">():</span>
+    <span class="n">find</span> <span class="n">fp</span> <span class="ow">in</span> <span class="nb">open</span> <span class="nb">file</span> <span class="n">table</span> <span class="ow">and</span> <span class="n">increment</span>
+    <span class="n">compute</span> <span class="n">block</span> <span class="n">number</span> <span class="n">to</span> <span class="n">be</span> <span class="n">written</span>
+    <span class="n">find</span> <span class="o">/</span> <span class="n">allocate</span> <span class="n">disk</span> <span class="n">address</span> <span class="ow">in</span> <span class="n">Active</span> <span class="n">File</span> <span class="n">Table</span>
+    <span class="n">Look</span> <span class="n">up</span> <span class="ow">in</span> <span class="n">cache</span> <span class="n">directory</span> <span class="p">(</span><span class="n">disk</span> <span class="n">address</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">present</span><span class="p">:</span>
+        <span class="n">overwrite</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">find</span> <span class="n">free</span> <span class="n">cache</span> <span class="n">entry</span>
+        <span class="n">overwrite</span>
+
+<span class="k">def</span> <span class="nf">lseek</span><span class="p">(</span><span class="n">tid</span><span class="p">,</span> <span class="n">new_fp</span><span class="p">):</span>
+    <span class="ow">in</span> <span class="nb">open</span> <span class="nb">file</span> <span class="n">table</span><span class="p">,</span> <span class="nb">set</span> <span class="n">fp</span> <span class="o">=</span> <span class="n">new_fp</span>
+</code></pre></div></div>
+
+<p>In the pseudo-code above, we don’t write synchronously to disk; we typically use cache writeback. This is fine for user data, but for metadata, we write to disk more aggressively. Note that this does affect the integrity of the file system!</p>
+
+<p>Inodes contain a reference count (or refcount for short) because of hard links. The refcount is equal to the number of DDEs referencing the inode; if we have hard-linked files, we’ll have multiple DDEs referencing a same inode. The inode cannot be removed until no DDEs referencing it are left (<code class="highlighter-rouge">refcount == 0</code>) to ensure filesystem consistency.</p>
+
+<h4 id="loose-ends">Loose ends</h4>
+
+<p>For memory cache replacement, we keep a LRU list. Unlike with memory management, this is easy to do here; file accesses are far fewer than memory accesses. Again, replacing the clean block is usually preferred, if possible. Periodically (say, every 30s, when the disk is idle), we also flush the cache.</p>
+
+<p>Directories are stored as files. The only difference is that you cannot read them, only the OS can.</p>
+
+<p>A very common sequence of operations is an <code class="highlighter-rouge">open</code> followed by a <code class="highlighter-rouge">read</code>; this executes a directory lookup, inode lookup and disk read for data, which means that the disk head moves between directories, inode and data for a simple read. Since this is such a common pattern, how to do this properly been a subject of research for a long time: we want these operations to be efficient, so if possible, in the same “cylinder group”, next to each other. We won’t look into this more than this in this class, but just know that it is a thing.</p>
+
+<p>For file system startup, in a perfect world, no special actions are necessary. But sometimes, things aren’t normal: the disk sector can go bad, the FS can have bugs… Therefore, it’s common to check the file system. Linux has a utility called <code class="highlighter-rouge">fsck</code> (file system check) that checks that no sectors are allocated twice, and that no sectors are alloacted and on free list (this could happen in the case of a crash happening between freeing). Effectively, <code class="highlighter-rouge">fscheck</code> reconstructs the free list instead of trusting what is already there.</p>
+
+<p>Another thing that can go wrong is that some sectors can go bad. To solve this, we do replication of important blocks, like the boot block, and in modern systems, the device directory.</p>
+
+<p>Disk fragmentation happens even if we have good allocation. Over time, we’ll end up with small “holes” of one or two sectors, and files spread all over the disk. On a fragmented disk, it’s no longer possible to do good allocation. The solution is to take the FS offline, move files into contiguous locations, and put it back online (you can do it without taking the FS down, but it’s tricky and not advisable).</p>
+
+<h4 id="alternative-file-access-method-memory-mapping">Alternative file access method: memory mapping</h4>
+
+<p>There are alternative file access methods: <code class="highlighter-rouge">mmap()</code> maps the contents of a file in memory, and <code class="highlighter-rouge">munmap()</code> removes the mapping. This is the real reason why people wanted 64 bit address spaces: if you <code class="highlighter-rouge">mmap</code> a few big files, you’re out of address space really fast! (The reason wasn’t that the heap ran into the stack, or that the code got too big for 32 bits, it’s mainly a <code class="highlighter-rouge">mmap</code> problem). With 64 bits, there is ample space between the heap and the stack for <code class="highlighter-rouge">mmap</code>-ed files.</p>
+
+<p>To access <code class="highlighter-rouge">mmap</code>-ed files, we access the relevant memory region, page fault, and cause the page file to be brought in.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mmap</span><span class="p">():</span>
+    <span class="n">allocate</span> <span class="n">page</span> <span class="n">table</span> <span class="n">entries</span>
+    <span class="nb">set</span> <span class="n">valid</span> <span class="n">bit</span> <span class="n">to</span> <span class="s">"invalid"</span>
+    <span class="n">on</span> <span class="n">read</span><span class="p">:</span>
+        <span class="n">page</span> <span class="n">fault</span>
+        <span class="c1"># just like in demand paging:
+</span>        <span class="nb">file</span> <span class="o">=</span> <span class="n">backing</span> <span class="n">store</span> <span class="k">for</span> <span class="n">mapped</span> <span class="n">region</span> <span class="n">of</span> <span class="n">memory</span>
+        <span class="nb">set</span> <span class="n">valid</span> <span class="n">bit</span> <span class="n">to</span> <span class="s">"valid"</span>
+    <span class="n">on</span> <span class="n">write</span><span class="p">:</span>
+        <span class="n">write</span> <span class="n">to</span> <span class="n">memory</span>
+</code></pre></div></div>
+
+<p>Page replacement will take care of getting the data to disk (we can also force it through <code class="highlighter-rouge">msync()</code>). <code class="highlighter-rouge">mmap</code> is very good for small, random accesses to big files (in databases, for instance), as it only brings the data we need into memory. It’s also an easier programming model than <code class="highlighter-rouge">lseek</code> and <code class="highlighter-rouge">read</code>, and it’s easier to reuse data this way.</p>
+
+<p>But there are restrictions too: you can only <code class="highlighter-rouge">mmap</code> on a page boundary, it’s not easy to extend a file, and for small files, reads are usually cheaper than the <code class="highlighter-rouge">mmap</code> + page fault. Indeed, for random access to small files, it may be better to read the whole file into memory first.</p>
+
+<p>Another use of <code class="highlighter-rouge">mmap</code> is for sharing memory between processes, as a form of interprocess communication (through shared, anonymous map flags).</p>
+
+<h3 id="dealing-with-crashes">Dealing with crashes</h3>
+<h4 id="atomic-writes">Atomic writes</h4>
+<p>Crashes can happen in the middle of a sequence of writes, and it can have catastrophic effects. Therefore, we aim for atomicity: it’s all or nothing. In a file system, that means that either all updates are on disk, or no updates are on disk; we do not allow for in-betweens. How can we make sure that all or no updates to an open file get to disk?</p>
+
+<p>We’ll operate under the assumption that a single sector disk write is atomic (which is 99.99999…% true. Disk vendors work very hard at this, we’ll just assume it’s always true).</p>
+
+<p>To switch atomically from old to new, we cannot write in-place. Instead, we write to new, separate blocks on the disk, and switch the pointer in the DDE atomically. Old blocks are then de-allocated. If the crash happens before they’re de-allocated, the file system check will fix it.</p>
+
+<p>A more precise description of this process follows: when opening, we read the DDE into the AFT, which effectively creates a copy of the (on-disk) DDE in memory. For writes, we allocate new blocks for the data, write these addresses into the incore DDE, and write to cache. On close, we write all cached blocks to disk blocks, and atomically write the DDE to disk.</p>
+
+<h4 id="intentions-log">Intentions log</h4>
+<p>An alternative method is the intentions log. We reserve an area of disk for the intentions log.</p>
+
+<p><img src="/images/os/log.gif" alt="GIF of the steps involved in writing with a log" /></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">write</span><span class="p">():</span>
+    <span class="n">write</span> <span class="n">to</span> <span class="n">cache</span>
+    <span class="n">write</span> <span class="n">to</span> <span class="n">log</span>
+    <span class="n">make</span> <span class="ow">in</span><span class="o">-</span><span class="n">memory</span> <span class="n">inode</span> <span class="n">point</span> <span class="n">to</span> <span class="n">update</span> <span class="ow">in</span> <span class="n">log</span>
+
+<span class="k">def</span> <span class="nf">close</span><span class="p">():</span>
+    <span class="n">write</span> <span class="n">old</span> <span class="ow">and</span> <span class="n">new</span> <span class="n">inode</span> <span class="n">to</span> <span class="n">log</span> <span class="ow">in</span> <span class="n">one</span> <span class="n">disk</span> <span class="n">write</span>
+    <span class="n">copy</span> <span class="n">updates</span> <span class="k">from</span> <span class="n">log</span> <span class="n">to</span> <span class="n">original</span> <span class="n">disk</span> <span class="n">locations</span>
+    <span class="n">when</span> <span class="nb">all</span> <span class="n">updates</span> <span class="n">are</span> <span class="n">done</span><span class="p">,</span> <span class="n">overwrite</span> <span class="n">inode</span> <span class="k">with</span> <span class="n">new</span> <span class="n">value</span>
+    <span class="n">remove</span> <span class="n">updates</span><span class="p">,</span> <span class="ow">and</span> <span class="n">old</span> <span class="ow">and</span> <span class="n">new</span> <span class="n">inodes</span> <span class="k">from</span> <span class="n">log</span> 
+</code></pre></div></div>
+
+<p>On recovery from a crash (in other words, on any reboot, since we can’t know if we’ve crashed or not), we search through the log, and for every new inode found, we find and copy the updates to their original location. If all updates are done, we write to the new inode, and then remove updates and old and new inodes from log.</p>
+
+<p>If the new inode is in the log and we crash, then we’ll end up with the new inode. If it isn’t, then we keep the old one. This works even if we crash during crash recovery.</p>
+
+<h4 id="comparison">Comparison</h4>
+
+<p>The DDE method has one disk write for <code class="highlighter-rouge">write()</code>, and one for <code class="highlighter-rouge">close()</code>. Log does two disk writes for <code class="highlighter-rouge">write()</code> (one to the log, another for the data), and one for <code class="highlighter-rouge">close()</code>. And yet surprisingly, log works better! That’s because writes to the log are sequential, so we have no seeks. Data blocks stay in place, and disk allocation stays. To further optimize this, we can write from cache or log to data when the disk is idle, or during cache replacement.</p>
+
+<p>With DDE, disk allocation gets messed up, and we have high fragmentation.</p>
+
+<p>All modern OS file systems implement log-based systems.</p>
+
+<h3 id="log-structured-file-system-lfs">Log-Structured File System (LFS)</h3>
+
+<p>This is an alternative way of structuring the file system, which takes the idea of the log to the extreme. The rationale is that today, we have large memories and large buffer caches. Most reads are served from cache anyway, so most disk traffic is write traffic. So to optimize I/O, we need to optimize disk writes by making sure we write sequentially to disk. The key idea in LFS is to use the log, an <strong>append-only</strong> data structure <strong>on disk</strong>.</p>
+
+<h4 id="writing">Writing</h4>
+
+<p><em>All</em> writes are to a log, including data and inode modifications. Writes first go in a cache, and are eventually written with writeback. Writes also go into an in-memory buffer. When it’s full, we append it to the log: that way, we add to the log in blocks called <em>segments</em>. Since we’re adding sequentially, we don’t do any seeks on write.</p>
+
+<p>A single segment contains both data and inode blocks, and the log is a series of segments.</p>
+
+<p><img src="/images/os/log-segments.png" alt="The log is made of a series of segments" /></p>
+
+<p><img src="/images/os/segment.png" alt="The log is made of a series of segments" /></p>
+
+<h4 id="reading">Reading</h4>
+
+<p>When we write an inode, we write it to the inode map; this is an in-memory table of inode disk addresses:</p>
+
+<p><img src="/images/os/inode-map.png" alt="Inode map" /></p>
+
+<p>The inode map holds the following mapping: <code class="highlighter-rouge">uid -&gt; disk address of the last inode for that uid</code></p>
+
+<p>To read, we need to go through the indirection of the inode map:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">open</span><span class="p">():</span>
+    <span class="n">get</span> <span class="n">inode</span> <span class="n">address</span> <span class="k">from</span> <span class="n">inode</span> <span class="nb">map</span>
+    <span class="n">read</span> <span class="n">inode</span> <span class="k">from</span> <span class="n">disk</span> <span class="n">into</span> <span class="n">active</span> <span class="nb">file</span> <span class="n">table</span>
+   
+<span class="k">def</span> <span class="nf">read</span><span class="p">():</span> <span class="c1"># as before
+</span>    <span class="n">get</span> <span class="k">from</span> <span class="n">cache</span>
+    <span class="n">get</span> <span class="k">from</span> <span class="n">disk</span> <span class="n">address</span> <span class="ow">in</span> <span class="n">inode</span>
+</code></pre></div></div>
+
+<p>With the added indirection of the inode map, reading seems more complicated; but performance is chiefly determined by disk reads, so at the end of the day, there is little difference.</p>
+
+<h4 id="checkpoints">Checkpoints</h4>
+
+<p>How do we get the inode map to disk? We do what’s called a <strong>checkpoint</strong>: we write a copy of the inode map to a fixed location on disk, and we put a marker in the log.</p>
+
+<p><em>Fake news alert</em>:  we said “all data is written to the log”, but in reality, it’s “all except for checkpoints”.</p>
+
+<p>On a crash, we start from the inode map in the checkpoint. This contains addresses of all inodes written <em>before</em> the last checkpoint. To recover, we need to find the inodes that were in the in-memory inode map before the crash, but not yet written in the checkpoint. To do this, we “<strong>roll forward</strong>”. Remember that the checkpoint put a marker in the log: from this marker forward, we scan for inodes in the log, and add their addresses in to the inode map.</p>
+
+<p>We need to pick a time interval between checkpoints. Too short, and we’ll have too much disk I/O; too long, and the recovery time will be too long (the forward scan can be slow). The compromise is based on the assumption that crashes are rare (if they aren’t, you should probably buy another machine), so we can err towards larger time intervals. The compromise is typically on the side of long recovery times (there are exceptions for critical applications; if your OS is controlling a plane, then you probably want recovery time to be fast, so that the plane doesn’t crash because of forward scanning).</p>
+
+<h4 id="disk-cleaning">Disk cleaning</h4>
+<p>What if the disk is full? We always write to the end of the log, never overwriting. This means that the disk gets full quickly. Therefore, we need to <strong>clean</strong> the disk. In this process, we reclaim old data. In this context, “old” means logically overwritten but not physically overwritten. Data is logically overwritten when there’s a later write to the same <code class="highlighter-rouge">(uid, blockno)</code> in the log; it is physically overwritten once it’s been committed to disk (so if there’s an older version of <code class="highlighter-rouge">(uid, blockno)</code> in the log, it’s not physically overwritten yet).</p>
+
+<p>Disk cleaning is done one segment at a time. We determine which blocks in the segment are new, and write them into a buffer; when the buffer is full, we add it to the log as a segment. The cleaned segment is then marked free.</p>
+
+<p>How do we determine whether a block is old or new? We actually have to modify <code class="highlighter-rouge">write()</code> a little. Instead of only writing data to the buffer and log, we must write data, <code class="highlighter-rouge">uid</code> and <code class="highlighter-rouge">blockno</code>. With this, for a given block, we can take its disk address, its <code class="highlighter-rouge">uid</code> and <code class="highlighter-rouge">blockno</code>, and look them up in the inode map. This gives us an inode; if it has a different address, then it must be old. Otherwise, it must be new.</p>
+
+<p><img src="/images/os/cleaning-old.png" alt="How to determine whether a block is old with the inode map" /></p>
+
+<p><img src="/images/os/cleaning-new.png" alt="How to determine whether a block is new with the inode map" /></p>
+
+<p>Taking cleaning into account, the log actually is more complicated than a simple linear log. It’s actually a sequence of segments, some in use, some free. Writes thus don’t only append to the log, but typically write to a free segment.</p>
+
+<p><img src="/images/os/log-empty-segments.png" alt="The log with free segments" /></p>
+
+<p>But the whole point of the log is sequential access so that we never have to move the head! This is true, but the segments tend to be very large (100s of sectors, MBs), so we tend to still get large sequential accesses with the occasional seek. This stays rare, so performance is still very good.</p>
+
+<h4 id="summary">Summary</h4>
+<p>In summary, LFS reads mostly from cache. The writes to disk are heavily optimized, so we have very few seeks. The reads from disk are a bit more expensive, but it’s not so bad, since there are few of them. With LFS, we have to endure the cost of cleaning.</p>
+
+<p>The checkpoint and the log are on disk; the checkpoint region is at a fixed location, and the log uses the remainder of the disk. Individual segments in the log contain data and inode sectors, where data includes <code class="highlighter-rouge">uid</code> and <code class="highlighter-rouge">blockno</code>.</p>
+
+<p>Additional in-memory data structures assist us in this system: the <strong>cache</strong> is a regular write-behind buffer cache, and the <strong>segment buffer</strong> is for the segment currently being written, which goes to the log all at once when it’s full. The <strong>inode map</strong> is a map indexed by <code class="highlighter-rouge">uid</code> pointing to the last-written inode for <code class="highlighter-rouge">uid</code>. In addition to this, we also have the <strong>active</strong> and <strong>open file tables</strong>, as before.</p>
+
+<p>Writes put data and inodes into (write-back) cache and in-memory segment buffer, which goes to a free segment in the log once it’s full, which means almost no seeks on write! To open, we read the inode map map to find the inode, and read the inode into the active file table.  To read, we get from cache; if it isn’t there, we must get from disk using the disk address in the inode, as before.</p>
+
+<p>LFS is actually more complicated than we presented, but has not become mainstream. This is mainly because cleaning has a considerable cost, and causes performance dips (and people like systems that are predictable). On top of that, the complexity of this system makes it very difficult to implement the code for it. Still, there are similar ideas in some commercial systems (especially high-throughput systems, like computing clusters).</p>
+
+<p>What <em>has</em> become popular are journaling file systems, that use a log (called a journal) for reliability (we can cite ext4 in Linux).</p>
+
+<p>Note that cleaning is somewhat similar to garbage collection, both in its function and its effects. But cleaning happens on disk (as opposed to in memory), and is much slower.</p>
+
+<h2 id="alternative-storage-media">Alternative storage media</h2>
+<p>Since the 1970s disks have improved by a factor 100 to 1000 in terms of physical size, cost and capacity. But bandwidth and latency of disks, the two most important factors for performance, have lagged behind, only improving 10-fold. This is problematic for servers, big data computations, transaction systems, etc.</p>
+
+<p>There are two developments that have risen as a response to this: RAID and SSDs. They both improve performance, but remain more costly than disks.</p>
+
+<h3 id="raid">RAID</h3>
+<p><strong>RAID</strong> stands for “Redundant Array of Independent Disks”. The main concept behind RAID is <strong>striping</strong>: rather than put a file on one disk, we stripe it across a number of disk. The idea here is that if you put all your data on one disk, the bandwidth isn’t so good, but you can parallelize this: in the best of worlds, the bandwidth of n disks is n times the bandwidth of a single disk. There are other factors that put a cap on this (bandwidth of IO bus, controller, etc), but essentially this holds.</p>
+
+<p><img src="/images/os/striping.png" alt="Striping across disks" /></p>
+
+<p>The downside here is that one disk fail makes all data unavailable. When talking about disk failures, the main figure is MTBF (mean time between failures), which is typically 50,000 hours (5 years). But for RAID disks, it’s the MTBF of a single disk, <em>divided by n</em>. So for 10 disks, we’re looking at half a year, which is clearly not acceptable.</p>
+
+<p>That’s why RAID also has a notion of <strong>redundancy</strong>. RAID comes with a RAID level of redundancy. What we described above is RAID-0, i.e. no redundancy. But in reality, people use RAID-1 (mirroring), RAID-4 (parity disk), or RAID-5 (distributed parity).</p>
+
+<ul>
+  <li>
+    <p><strong>RAID-0</strong>: offers the best possible read and write bandwidth, the lack of redundancy makes failures result in data loss, which is typically not acceptable.</p>
+  </li>
+  <li>
+    <p><strong>RAID-1</strong>: we keep a full mirror (back-up) of all the data. Writes must go to both data and mirror disk, but reads may go to any of them. After a crash, we recover from the surviving disk. But in this process, we’ve also halved storage capacity for the same number of disks as RAID-0; we can do better.</p>
+
+    <p><img src="/images/os/raid-1.png" alt="RAID-1 disks" /></p>
+  </li>
+  <li><strong>RAID-2</strong>: practically never used in practice; stripes data at the bit level (instead of block level), and uses a Hamming code stored across at least 2 additional drives for error correction. The added complexity of Hamming codes offers no significant advantage over the simpler parity bits (it can repair undetected transient errors on a single bad bit, which other levels cannot do, but at the cost of an extra drive), so RAID 2 has rarely been implemented.
+    <figure>
+
+<img src="/images/os/raid-2.png" alt="RAID-2 disks" />
+<figcaption>Source: <a href="https://en.wikipedia.org/wiki/Standard_RAID_levels#/media/File:RAID2_arch.svg">Wikipedia</a>, <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA 3.0</a></figcaption>
+</figure>
+  </li>
+  <li>
+    <p><strong>RAID-3</strong>: practically never used in practice; stripes data at the byte level (instead of block level), is able to correct single-bit errors, and uses a dedicated parity disk. Because it stripes at the data level, any single block I/O is spread on all disks, meaning that RAID-3 cannot service multiple requests simultaneously.</p>
+
+    <figure>
+
+<img src="/images/os/raid-3.png" alt="RAID-3 disks" />
+<figcaption>Two six-byte blocks (in different colors) and their two parity bytes. Source: <a href="https://en.wikipedia.org/wiki/Standard_RAID_levels#/media/File:RAID_3.svg">Wikipedia</a>, <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA 3.0</a></figcaption>
+</figure>
+  </li>
+  <li>
+    <p><strong>RAID-4</strong>: N data disks and 1 parity disk. Parity is a simple form of error detection and repair (not specific to RAID, also used in communications). A parity bit is computed as the XOR of 4 bits: p = a ⊕ b ⊕ c ⊕ d. If we lose a bit, say bit b, we can reconstruct it as b = a ⊕ c ⊕ d ⊕ p. In RAID-4, we use the same idea at the disk block level; the parity disk holds the XOR of the bits of data blocks at the same position. Reads read from data disks, while writes must write to data and parity disks. On a crash, we can recover using the parity disk and the other disks.</p>
+
+    <p><img src="/images/os/raid-4.png" alt="RAID-4 disks" /></p>
+
+    <p>The issue is that every write implies an additional access to a parity disk, which quickly becomes a bottleneck for write-heavy workloads; we can do better.</p>
+  </li>
+  <li>
+    <p><strong>RAID-5</strong>: just like RAID-4, but we distribute the parity blocks over all disks; this balances parity write load over all disks.</p>
+  </li>
+  <li>
+    <p><strong>RAID-6</strong>: double parity, in case of double disk failures</p>
+  </li>
+  <li><strong>RAID-1+0</strong>: RAID-0 of RAID-1 configurations</li>
+</ul>
+
+<h3 id="ssd">SSD</h3>
+<p>The first thing to note is that SSD (Solid State Disks) are not in fact disks. They’re a purely electronic drive (based on NAND flash), with no moving parts. The basic unit in NAND flash are pages (4K) and blocks (e.g. 64 pages).</p>
+
+<p>SSDs were made to be a plug-and-play replacement for HDDs; they have the same form factor and interface as HDDs (even though they have no other technical reason to be so). The SSD interface is thus very much like a disk, with <code class="highlighter-rouge">readSector</code> and <code class="highlighter-rouge">writeSector</code>. The bandwidth is higher than disk, and the latency is much lower (order of 100 μs for read, 300 μs for write).</p>
+
+<p>Basic operations are:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">read(page)</code></li>
+  <li><code class="highlighter-rouge">write(page)</code>: note that we cannot <em>re</em>write a page, only write to a blank one (see below)</li>
+  <li><code class="highlighter-rouge">erase(block)</code>: we must erase a block before a page can be rewritten to. There’s a limited number of erase cycles that SSD manufacturers guarantees (order of 100,000)</li>
+</ul>
+
+<p>Since a block must be completely erased before any single page in a block is written, we write pages sequentially in a block. We cannot overwrite, but need to erase a block before writing. This should remind of us LFS… and indeed, an LFS-like system is perfectly suited for SSDs.</p>
+
+<p>With LFS, we can clean the block before erasing, move live data to a new block, and erase it. To do this, we have the TRIM command, <code class="highlighter-rouge">TRIM(range of logical sector numbers)</code> to indicate to the device that some sectors are no longer in use. If that’s been called, then there’s no need to do cleaning, we can just trust what we’ve been told and erase without checking.</p>
+
+<p>Still, when we do cleaning, our strategy when picking blocks is to even out the number of erase cycles, in an attempt to extend the longevity of the SSD.</p>
+
+<h2 id="virtual-machines">Virtual Machines</h2>
+
+<h3 id="virtualization">Virtualization</h3>
+
+<p>Virtualization is an instance of indirection, and to be more specific, of layering.</p>
+
+<blockquote>
+  <p>“Any problem in computer science can be solved with another layer of indirection. But that usually will create another problem.”</p>
+
+  <p>— David Wheeler</p>
+</blockquote>
+
+<p>There are three mechanisms of virtualization:</p>
+
+<ul>
+  <li><strong>Multiplexing</strong>: take one resource, and expose it as multiple virtual entities. Each entity appears to have the full resource (e.g. virtual memory on the MMU)</li>
+  <li><strong>Aggregation</strong>: take multiple resources, and expose it as a single virtual entity. The goal is typically to achieve enhanced properties, be it bandwidth, capacity, availability, redundancy… A canonical example for this is RAID.</li>
+  <li><strong>Emulation</strong>: make a resource appear as a different type of resource. For instance, use software to emulate a virtual resource which is different from the underlying physical resource. Examples include RAM disks, Android Emulator or the JVM (which is simply emulating a different instruction set)</li>
+</ul>
+
+<h3 id="terminology">Terminology</h3>
+
+<p>A virtual machine (<strong>VM</strong>) is virtualiization applied to an entire computer: a machine running on a machine. Usually, we use virtualization to run many machines on a single machine. The real, base machine is the <strong>physical</strong> machine, and the ones running on top are <strong>virtual</strong> machines.</p>
+
+<p>The <strong>VMM</strong> (Virtual Machine Monitor) is a resource manager for VM. It is comparable to the OS in the sense that they both provide resource management (between processes for an OS, between VMs for a VMM), but an OS provides abstractions (processes, address spaces, FS, …) and a VMM doesn’t; a VMM provides an identical copy of the machine.</p>
+
+<p>The VMM provides creation, destruction and scheduling of VMs, and takes care of memory, disk and I/O management for VMs. Note that this is <em>similar</em> to what an OS does (but with processes replaced by VMs), but again, it’s not the same because a VMM doesn’t provide abstraction.</p>
+
+<p>In a VM, you typically run an OS (called a <strong>guest OS</strong>), with applications on top. This is opposed to the <strong>host OS</strong>, which is the one running on the metal (as opposed to in the VM).</p>
+
+<p>The <strong>hypervisor</strong> or <strong>Type I VMM</strong> is a VMM that is also a host OS (e.g. Xen, VMware vSphere, Microsoft Hyper-V), while a <strong>hosted VMM</strong> or <strong>Type II VMM</strong> is separate from the host OS (e.g. KVM, VMware Workstation and Fusion, or Parallels).</p>
+
+<p>An application or OS running on real hardware runs in <strong>native mode</strong>. If it runs on virtual hardware, we say it’s running in <strong>virtualized mode</strong>.</p>
+
+<h3 id="history">History</h3>
+
+<p>As a bit of history, the VM was developed in the 1970’s by IBM. Back then, the mainframes were <em>very</em> expensive, and VMs allowed sharing by users running different OSes. It fell out of favor in the 80’s and 90’s as cheap microprocessors were introduced, but became prominent again in the 90’s, mainly for server consolidation (most servers are mostly idle, so to save power, we can run multiple servers on the same machine).</p>
+
+<h3 id="vmm-implementation">VMM Implementation</h3>
+
+<p>There are three requirements for a VMM:</p>
+
+<ul>
+  <li><strong>Equivalence</strong>: the virtual hardware needs to be sufficiently equivalent to the underlying hardware that you can run the same software in the virtual machine</li>
+  <li><strong>Safety</strong>: the VM must be completely isolated from other VMs and from the VMM. This also means that VMs cannot interfere with each other, or hog resources.</li>
+  <li><strong>Performance</strong>: the overhead of virtualization must be low enough that the VM can still reasonably run, i.e. that it can be used just as if it were running directly on the hardware.</li>
+</ul>
+
+<p>How do we implement a VMM? A major problem to solve is around kernel vs. user mode, privileged instructions and system calls. In native mode, the kernel-user boundary is between applications in the OS, but where should we place it in virtualized mode?</p>
+
+<p>Keeping it between the applications and the OS is incorrect; we would ruin the safety requirement because, as we saw in the beginning of this course, kernel mode is God mode. We can place the boundary between the VMM and the guest OSes, but that raises another problem: the guest OSes are now in user mode, even though they were written for kernel mode. As a result, we run into a host of problems:</p>
+
+<ol>
+  <li>System calls (that usually put the machine in kernel mode) won’t work correctly</li>
+  <li>Since the OS and the applications are in user mode together, the applications could access the guest OS memory</li>
+  <li>The guest OS uses privileged instructions</li>
+</ol>
+
+<p>We can solve the above with the following solutions:</p>
+
+<ol>
+  <li>
+    <p>If an application does a syscall, it wants to perform it in its <em>guest OS</em>. But the syscalls go to the VMM, which holds syscall vectors for the physical machine. But we want to access the syscall vectors for the OS in the guest OS, so the VMM must somehow forward the syscall.</p>
+
+    <p>Remember that hardware directs syscalls to physical syscall vectors; it puts the machine into kernel mode and jumps to the machine’s syscall handler.</p>
+
+    <p>Therefore, at boot time, the VMM installs physical machine syscall vectors. At guest OS boot time, the OS wants to install its syscall vectors through a privileged instruction. But being in user mode, it traps to the VMM, which will thus gain the information of where the OS syscall handlers are.</p>
+
+    <p>When the VMM’s syscall handler is called, it can set the <abbr title="Program Counter">PC</abbr> to the appropriate syscall vector in the OS, and returns to user mode, in which the guest OS will run its syscall handler. Inevitably, this guest OS syscall handler will execute the “return to user mode” instruction, which traps to the VMM, that can set the <abbr title="Program Counter">PC</abbr> to the instruction following the original syscall and return to user mode in the guest OS.</p>
+  </li>
+  <li>
+    <p>On switching back from the VMM to the VM, if the return address is in the guest OS, we allow all memory accesses within the VM. If it is outside the guest OS (i.e. to an application), we disallow access to the guest OS memory. This is all done through protections in the page table.</p>
+  </li>
+  <li>
+    <p>The solution to this is outline in the first one, but the gist of it is that privileged instructions will trap to the VMM, which will handle it (i.e. emulate the outcome of the privileged instructions) and return to the OS kernel (except for return to user mode, where we return the application). This is known as <strong>trap-and-emulate</strong>. Another solution is <strong>dynamic binary translation</strong>, where we translate a privileged instruction to an unprivileged one. But this has very high overhead and is best avoided.</p>
+  </li>
+</ol>
+
+<p>Note that unprivileged instructions (from an application, but also from the OS) can be run directly, without having to pass through the VMM; they are directly sent to the metal for performance. This is called <strong>limited direct execution</strong>: we let some instructions (but not all!) run directly on the metal.</p>
+
+<h4 id="popekgoldberg-theorem">Popek/Goldberg Theorem</h4>
+
+<p>An instruction is <strong>privileged</strong> if it can only be executed in kernel mode. It is <strong>sensitive</strong> if it behaves differently in kernel and user mode. The Popek/Goldberg theorem states:</p>
+
+<center>A VMM exists for an architecture &hArr;  {sensitive} &sube; {privileged}</center>
+
+<p>Note that trap-and-emulate doesn’t work if some privileged instructions don’t trap. Indeed, any privileged instruction that doesn’t trap is sensitive, and these exist in common architectures: x86 has 17 sensitive, unprivileged instructions. Writing a VMM is still possible, but it is more complicated.</p>
+
+<p>In this case, we must resort to some workarounds. We could do a binary rewrite of the guest OS to remove sensitive unprivileged instructions, but this is very tricky and has high overhead. More recently though, we have solutions like Intel VT-x and AMD-v (2005, available on all 64-bit processors) which duplicate protection rings to meet the Popek/Goldberg criteria.</p>
+
+<h3 id="virtual-memory">Virtual memory</h3>
+
+<p>To implement virtual memory, we use paging with valid bits.</p>
+
+<p>Remember that in native mode, processes (and the processor) issue virtual addresses. The memory management unit (MMU) produces a physical address from the TLB or page table, which goes to memory. The OS allocates physical memory to processes, and installs page table and TLB entries to do so.</p>
+
+<p>In virtualized mode, the VMM allocates memory between VMs, and the OS installs page tables and TLB entries to do so. The guest OS thinks it’s running on the real machine and has control over all memory of the real machine, but it is in fact running on the virtual machine and only has a limited portion (as allocated by the VMM).</p>
+
+<p>To implement this, we need two levels of memory translation. The virtual address is still the virtual address (<strong>VA</strong>). What we called physical address (<strong>PA</strong>) in native mode becomes the guest physical address (<strong>gPA</strong>) in virtualized mode, and we introduce an additional address, the host physical address (<strong>hPA</strong>).</p>
+
+<p>In native mode, we simply translated VA → PA. In virtualized mode, we translate VA → gPA in the guest OS (using guest TLB and guest page tables), and gPA → hPA in the VMM (using the real TLB and physical page tables). This means that we must have one guest page table per process in the guest OS, which we let reside in the guest OS memory. We also have a physical page table per VM, which resides in VMM memory.</p>
+
+<p>The VA → gPA translation is done by the guest OS (remember that it doesn’t change); to allocate a new page to a process, it finds a free frame, and inserts the page-frame mapping in both page table and TLB. These insertions are privileged instructions that trap to the VMM, which will trap-and-emulate. The gPA → hPA translation is done as in the native OS before. To allocate a page to a VM, we find a free frame and insert the page-to-frame mapping in the VM’s page table, and copy the mapping over in the TLB.</p>
+
+<p>This is an expensive process: we need to walk two levels of page tables. But modern processors have <strong>nested page tables</strong> available, which allows us to access the nested levels in parallel and in hardware, which reduces the cost of VM memory management.</p>
+
+<p>Without nested page tables, we have a challenge: we only have one physical TLB for the whole physical machine and all of the VMs! One solution is to implement <strong>shadow page tables</strong>: we keep two copies of the guests’ page tables. The <strong>real copy</strong> is in the hardware (backed by the real TLB) and contains VA → hPA, while the <strong>shadow copy</strong> is in software and contains VA → gPA. The guest updates the shadow copy, and the VMM updates the real copy from the shadow copy.</p>
+
+:ET

@@ -1,0 +1,12 @@
+I"�
+<p>We’ll do a proof by contradiction: suppose $p_j$ completes round $i$ without receiving a message from $p_i$, $j&gt;i$ and $p_i$ completes round $j$.</p>
+
+<p>Since $p_j$ completed round $i$ without hearing from $p_i$, ATTA, it must be because $p_j$ suspects $p_i$ in round $i$. We’re using a perfect failure detector $\mathcal{P}$. So in round $j$, we either have:</p>
+
+<ul>
+  <li>$p_i$ suspects $p_j$, which is impossible because $p_i$ crashes before $p_j$</li>
+  <li>$p_i$ receives the round $j$ message from $p_j$, which is also impossible because $p_i$ crashed before $p_j$ completes round $i &lt; j$</li>
+</ul>
+
+<p>We have proved the contradiction in the inverse, and thus the lemma.</p>
+:ET

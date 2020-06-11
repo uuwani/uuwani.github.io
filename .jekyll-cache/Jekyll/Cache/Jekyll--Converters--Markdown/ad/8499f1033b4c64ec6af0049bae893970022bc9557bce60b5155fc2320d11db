@@ -1,0 +1,265 @@
+I"�h<p>I suffer from the most common responsive issue. As my <a href="/travis/">recent</a> <a href="/web-performance-2.0/">post history</a> <a href="/quick-cache-this/">may attest to</a>, performance matters to me. At the same time, though, I also want my images to look great on every screen, and that’s not as trivial as it may sound. For a long time, it’s been impossible to have high quality images of minimal size on every screen. This classic problem is <em>just</em> being solved right now by the <a href="https://www.w3.org/community/respimg/">Responsive Issues Community Group</a>, but the solution isn’t quite ready for prime time yet.</p>
+
+<h2 id="responsive-images-a-relatively-immature-feature">Responsive images, a relatively immature feature</h2>
+<p>Indeed, as of this writing, CSS <code class="highlighter-rouge">image-set</code> only has <a href="http://caniuse.com/#feat=css-image-set">62% browser support</a> and is still very much <a href="https://drafts.csswg.org/css-images-3/#image-set-notation">an editor’s draft</a>. The <code class="highlighter-rouge">srcset</code> attribute isn’t much better, clocking in at <a href="http://caniuse.com/#feat=srcset">67%</a>, and <code class="highlighter-rouge">&lt;picture&gt;</code> is at a dismal <a href="http://caniuse.com/#feat=picture">57%</a>.</p>
+
+<p>Now, these new specifications are backwards-compatible (as in, they won’t break your site), so you could argue that mediocre support is an invalid concern. But support is mainly lacking in the very browsers that actually need this spec. As of right now, <strong>there are no phones out there that support this specification in their default browser</strong>. So why even bother?</p>
+
+<!-- More -->
+
+<p>As you can see in the <a href="http://caniuse.com/">caniuse.com</a> table below, the <code class="highlighter-rouge">&lt;picture&gt;</code>  element is barely supported on mobile. Now, in all fairness, it does say that the current version of the default Android browser supports it, but I’d argue against that: while the current listed version officially is a WebView of Chromium 47, it has 0% global usage, so I’d say that the <em>de facto</em> current version still is 4.4.4.</p>
+
+<p><img src="/images/picture-support.png" alt="A chart of which mobile browsers support the picture element; most of them don't" /></p>
+
+<p>Sure, I could use <a href="http://scottjehl.github.io/picturefill/">a polyfill</a>. But I’m interested in this new spec for performance reasons, so loading and running 1500 lines of Javascript is <em>not</em> going to cut it.</p>
+
+<h2 id="makeshift-responsiveness">Makeshift responsiveness</h2>
+<p>So what can we do in the meantime? We need a solution that works for all (or <em>almost</em> all) users, which means that it’ll have to be stringed together from well-supported technologies. Well, a few days ago, I had this random idea that I could probably emulate some basic functionality using media queries to load the correctly sized background-image.</p>
+
+<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">Random thought: background-image + media query has much better support that srcset. Could be a temporary hack... <a href="https://t.co/Cd2UzEhwC6">https://t.co/Cd2UzEhwC6</a></p>&mdash; Maxime Kjaer (@maximekjaer) <a href="https://twitter.com/maximekjaer/status/702487643678965761">February 24, 2016</a></blockquote>
+<script async="" src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<p>This is not an entirely new idea. Three years ago, Smashing Magazine published <a href="https://www.smashingmagazine.com/2013/07/simple-responsive-images-with-css-background-images/">an article</a> suggesting that instead of using an <code class="highlighter-rouge">&lt;img&gt;</code>, we could be using <code class="highlighter-rouge">&lt;div&gt;</code>s sporting a <code class="highlighter-rouge">background-image</code> defined through media queries.</p>
+
+<p>Let that sink in for a second.</p>
+
+<p>In your HTML, you’d have a <code class="highlighter-rouge">&lt;div&gt;</code> play the role of an image, and its source would be defined in the CSS. Smashing Magazine is a leading voice in the world of web development, and <em>that</em> was their suggestion? I can only imagine the shriek of pain and disgust that all the W3C members working on semantics or accessibility must’ve let out when that article was posted. Suffice to say that I’m not replacing all my images with this “suboptimal solution”, as they call it (that’s quite a euphemism, Smashing Magazine!).</p>
+
+<p>As much as I like to thrash it, it’s only a half bad idea. Replacing <code class="highlighter-rouge">&lt;img&gt;</code> with <code class="highlighter-rouge">&lt;div&gt;</code>s is appalling, but at the core of it, defining aptly sized background images through media queries is actually not that dumb. There are specific cases where this trick could come in handy, the banner image at the top of this post being one of them. It is indeed the background image of a <code class="highlighter-rouge">&lt;div&gt;</code>, so I feel that it’s entirely justifiable from a semantic standpoint.</p>
+
+<p>As a rule of thumb, you should never apply this trick to actual content, but only to the interface surrounding it — either way, if you’re replacing an <code class="highlighter-rouge">&lt;img&gt;</code> with a <code class="highlighter-rouge">&lt;div&gt;</code>, you’re probably doing it wrong.</p>
+
+<p>To see how far media queries could take us, I tried to implement them on the banner image of this site. Adding a few media queries to each banner image sounds simple, right? But a lot of factors come into play. I had to consider what breakpoints would be optimal for my visitors, how to get Grunt and Jekyll to play along nicely, how to write maintainable code… all while thinking about caching, optimal publishing workflow and whatnot.</p>
+
+<h2 id="how-i-picked-my-breakpoints">How I picked my breakpoints</h2>
+<p>The web isn’t just iPhones, iPads and iMacs. There is a huge ecosystem out there of weirdo screen sizes and resolutions, and it’s important to support them all. A quick glance at my latest analytics report confirmed this. I don’t have a whole lot of visitors, but look at the diversity in screen sizes!</p>
+
+<p><img src="/images/screensizes.png" alt="Cold hard data: a list of screen sizes visitors have been sporting" /></p>
+
+<p>There are quite a few screens in the 300px width range, but there is also a healthy number of 500 to 800px screens, along with screens wider than 1280px. Who knows what devices these may correspond to, but at least we have some sort of idea of what breakpoints we might pick.</p>
+
+<p>My selection is made up of somewhat arbitrary numbers, but they are not completely random either. First of all, I was trying to be narrower in crowded categories, and a bit wider in the less populated ones. This serves to keep the number of breakpoints down to a manageable level, while serving an image that is close to optimal for most users.</p>
+
+<p>Another concern is that I never want this performance improvement to come at the cost of the quality of the images. That’s why I’ve set my breakpoints just above what most devices need. For instance, I get quite a few visits from devices that are 320 to 375px wide: I’ve therefore set the lowest breakpoint at 380px because this still gives a good reduction in image size while still making sure that the image looks great.</p>
+
+<p>All in all, I’ve settled on the following breakpoints:</p>
+
+<ul>
+  <li>380px</li>
+  <li>550px</li>
+  <li>800px</li>
+  <li>1200px</li>
+  <li>1440px</li>
+</ul>
+
+<p>Screens wider than 1440px can just get the original image, which is usually 1920px wide. Knowing what sizes I wanted to serve, I now had to create them.</p>
+
+<p><em>If you’re not frankly interested by the nitty-gritty of my implementation, I recommend that you scroll to <a href="#resulting-code-and-considerations">the conclusion</a>.</em></p>
+
+<h2 id="my-less-than-trivial-implementation">My less-than-trivial implementation</h2>
+
+<h3 id="a-grunt-plugin-for-resizing-images">A Grunt plugin for resizing images</h3>
+<p>All these breakpoints make for a whole lot of resizing — more than I’d ever want to do manually. That’s why I’ve set up a task do do it automatically at build time. As you may know from my <a href="/travis/">previous post</a>, I build and deploy this site using Travis CI. I already have a Grunt task set up to run during the <a href="https://github.com/MaximeKjaer/kjaermaxi.me/blob/master/_scripts/build.sh">build process</a>, so Grunt was a good candidate for managing this additional task.</p>
+
+<p>I used a  plugin called <a href="https://github.com/andismith/grunt-responsive-images">grunt-responsive-images</a>, which runs on GraphicsMagick. That’s no real problem though, because I could just add a few lines to my <code class="highlighter-rouge">.travis.yml</code> to install it:</p>
+
+<figure class="highlight"><pre><code class="language-yml" data-lang="yml"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="nn">...</span>
+<span class="na">addons</span><span class="pi">:</span>
+  <span class="na">apt</span><span class="pi">:</span>
+    <span class="na">packages</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">graphicsmagick</span>
+<span class="nn">...</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h3 id="delivering-data-to-both-grunt-and-jekyll">Delivering data to both Grunt and Jekyll</h3>
+<p>I then defined my breakpoints in <code class="highlighter-rouge">_config.yml</code>; this way, they’d be directly accessible in Jekyll, using the <code class="highlighter-rouge">site.image_breakpoints</code> variable.</p>
+
+<figure class="highlight"><pre><code class="language-yml" data-lang="yml"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre><span class="nn">...</span>
+<span class="na">image_breakpoints</span><span class="pi">:</span> <span class="c1"># Important that these be in decreasing order!</span>
+  <span class="pi">-</span> <span class="s">1440px</span>
+  <span class="pi">-</span> <span class="s">1200px</span>
+  <span class="pi">-</span> <span class="s">800px</span>
+  <span class="pi">-</span> <span class="s">550px</span>
+  <span class="pi">-</span> <span class="s">380px</span>
+<span class="nn">...</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>At this point, Jekyll natively knows what our breakpoints are, but Grunt still doesn’t, so I got my <code class="highlighter-rouge">Gruntfile.js</code> to read it from the <code class="highlighter-rouge">_config.yml</code>:</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+</pre></td><td class="code"><pre><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">grunt</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">grunt</span><span class="p">.</span><span class="nx">loadNpmTasks</span><span class="p">(</span><span class="dl">'</span><span class="s1">grunt-responsive-images</span><span class="dl">'</span><span class="p">);</span>
+
+    <span class="c1">// Read what image breakpoints have been specified in _config.yml ...</span>
+    <span class="kd">var</span> <span class="nx">breakpoints</span> <span class="o">=</span> <span class="nx">grunt</span><span class="p">.</span><span class="nx">file</span><span class="p">.</span><span class="nx">readYAML</span><span class="p">(</span><span class="dl">'</span><span class="s1">_config.yml</span><span class="dl">'</span><span class="p">).</span><span class="nx">image_breakpoints</span><span class="p">;</span>
+    
+    <span class="c1">// ... and store them in the correct format</span>
+    <span class="kd">var</span> <span class="nx">sizes</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">breakpoints</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="nx">sizes</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span><span class="na">width</span><span class="p">:</span> <span class="nx">breakpoints</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span>
+                    <span class="na">name</span><span class="p">:</span> <span class="nx">breakpoints</span><span class="p">[</span><span class="nx">i</span><span class="p">]});</span>
+
+    <span class="nx">grunt</span><span class="p">.</span><span class="nx">initConfig</span><span class="p">({</span>
+        <span class="na">responsive_images</span><span class="p">:</span> <span class="p">{</span>
+            <span class="na">dist</span><span class="p">:</span> <span class="p">{</span>
+                <span class="na">options</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="na">sizes</span><span class="p">:</span> <span class="nx">sizes</span><span class="p">,</span>
+                    <span class="na">quality</span><span class="p">:</span> <span class="mi">80</span>
+                <span class="p">},</span>
+                <span class="na">files</span><span class="p">:</span> <span class="p">[{</span>
+                    <span class="na">expand</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                    <span class="na">src</span><span class="p">:</span> <span class="p">[</span><span class="dl">'</span><span class="s1">images/**.{jpg,gif,png}</span><span class="dl">'</span><span class="p">],</span>
+                    <span class="na">cwd</span><span class="p">:</span> <span class="dl">'</span><span class="s1">_site/</span><span class="dl">'</span><span class="p">,</span>
+                    <span class="na">dest</span><span class="p">:</span> <span class="dl">'</span><span class="s1">_site/</span><span class="dl">'</span>
+                <span class="p">}]</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+    <span class="nx">grunt</span><span class="p">.</span><span class="nx">registerTask</span><span class="p">(</span><span class="dl">'</span><span class="s1">build</span><span class="dl">'</span><span class="p">,</span> <span class="p">[</span><span class="dl">'</span><span class="s1">responsive_images:dist</span><span class="dl">'</span><span class="p">]);</span>
+<span class="p">};</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>With this addition, Grunt and Jekyll should play along nicely. If I want to change the breakpoints, I can just do it once in <code class="highlighter-rouge">_config.yml</code>. Running <code class="highlighter-rouge">grunt build</code> now generates the images we need. Cool!</p>
+
+<h3 id="fetching-the-correct-image-sizes">Fetching the correct image sizes</h3>
+<p>All that’s left to do is to set a few CSS rules to fetch the correct resolution at each given screen width.</p>
+
+<p>Every single post has its own banner image, so the best and easiest solution is to inline the relevant CSS, and inject the correct filenames into it using Jekyll.</p>
+
+<p>This would’ve been a walk in the park, if it weren’t because I had to do a bit of string manipulation. Indeed, I needed to add the image size to the file name, before the file extension. This isn’t hard to do <em>per se</em>, but it would require a bit of repetitive code if I had to do it for each breakpoint. To avoid just that, I set up the media query in a Jekyll function.</p>
+
+<h3 id="jekyll-functions">Jekyll functions?!</h3>
+<p>Now, if you’ve used Jekyll before, you might be thinking: “But there’s no such thing as a function in Jekyll!”, and you’d be totally right. However, since you can pass arguments to an include, it is possible to create a makeshift  function.</p>
+
+<p>The example below assumes that we have a <code class="highlighter-rouge">background-image</code> and a <code class="highlighter-rouge">size</code> variable available, and passes them on to our function:</p>
+
+<figure class="highlight"><pre><code class="language-liquid" data-lang="liquid"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="code"><pre><span class="p">{%</span><span class="w"> </span><span class="nt">for</span><span class="w"> </span><span class="nv">size</span><span class="w"> </span><span class="nt">in</span><span class="w"> </span><span class="nv">site.image_breakpoints</span><span class="w"> </span><span class="p">%}</span>
+    <span class="p">{%</span><span class="w"> </span><span class="nt">include</span><span class="w"> </span>functions/hero-responsive-background.css<span class="w"> </span><span class="na">size</span><span class="o">=</span><span class="nf">size</span><span class="w"> </span><span class="na">image</span><span class="o">=</span><span class="nv">background-image</span><span class="w"> </span><span class="p">%}</span>
+<span class="p">{%</span><span class="w"> </span><span class="nt">endfor</span><span class="w"> </span><span class="p">%}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>The function, which I’ve placed in <code class="highlighter-rouge">_includes/functions/hero-responsive-background.css</code>, can access the arguments it’s been given through the <code class="highlighter-rouge">include</code> object:</p>
+
+<figure class="highlight"><pre><code class="language-liquid" data-lang="liquid"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre><span class="p">{%</span><span class="w"> </span><span class="nt">capture</span><span class="w"> </span><span class="nv">jpg</span><span class="w"> </span><span class="p">%}</span>-<span class="p">{{</span><span class="w"> </span><span class="nv">include</span><span class="p">.</span><span class="nf">size</span><span class="w"> </span><span class="p">}}</span>.jpg<span class="p">{%</span><span class="w"> </span><span class="nt">endcapture</span><span class="w"> </span><span class="p">%}</span>
+<span class="p">{%</span><span class="w"> </span><span class="nt">capture</span><span class="w"> </span><span class="nv">png</span><span class="w"> </span><span class="p">%}</span>-<span class="p">{{</span><span class="w"> </span><span class="nv">include</span><span class="p">.</span><span class="nf">size</span><span class="w"> </span><span class="p">}}</span>.png<span class="p">{%</span><span class="w"> </span><span class="nt">endcapture</span><span class="w"> </span><span class="p">%}</span>
+<span class="p">{%</span><span class="w"> </span><span class="nt">capture</span><span class="w"> </span><span class="nv">gif</span><span class="w"> </span><span class="p">%}</span>-<span class="p">{{</span><span class="w"> </span><span class="nv">include</span><span class="p">.</span><span class="nf">size</span><span class="w"> </span><span class="p">}}</span>.gif<span class="p">{%</span><span class="w"> </span><span class="nt">endcapture</span><span class="w"> </span><span class="p">%}</span>
+
+<span class="p">{%</span><span class="w"> </span><span class="nt">capture</span><span class="w"> </span><span class="nv">filename</span><span class="w"> </span><span class="p">%}{{</span><span class="w"> </span><span class="nv">include</span><span class="p">.</span><span class="nv">image</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="nf">replace</span><span class="p">:</span><span class="w"> </span><span class="s1">'.jpg'</span><span class="p">,</span><span class="w"> </span><span class="nv">jpg</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="nf">replace</span><span class="p">:</span><span class="w"> </span><span class="s1">'.png'</span><span class="p">,</span><span class="w"> </span><span class="nv">png</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="nf">replace</span><span class="w"> </span><span class="s1">'.gif'</span><span class="p">,</span><span class="w"> </span><span class="nv">gif</span><span class="w"> </span><span class="p">}}{%</span><span class="w"> </span><span class="nt">endcapture</span><span class="w"> </span><span class="p">%}</span>
+
+@media (max-device-width: <span class="p">{{</span><span class="w"> </span><span class="nv">include</span><span class="p">.</span><span class="nf">size</span><span class="w"> </span><span class="p">}}</span>) {
+    .hero {
+        background-image: url('<span class="p">{{</span><span class="w"> </span><span class="nv">filename</span><span class="w"> </span><span class="p">}}</span>');
+    }
+}
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h2 id="resulting-code-and-considerations">Resulting code and considerations</h2>
+<p>The gist of this is that I’m creating a media query that sets the correct resolution of the image for each device width. For this post, for instance, it all works together to create the following:</p>
+
+<figure class="highlight"><pre><code class="language-css" data-lang="css"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre><span class="k">@media</span> <span class="p">(</span><span class="n">max-device-width</span><span class="p">:</span> <span class="m">1440px</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nc">.hero</span> <span class="p">{</span>
+        <span class="nl">background-image</span><span class="p">:</span> <span class="sx">url('/images/bench-1440px.jpg')</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="k">@media</span> <span class="p">(</span><span class="n">max-device-width</span><span class="p">:</span> <span class="m">1200px</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nc">.hero</span> <span class="p">{</span>
+        <span class="nl">background-image</span><span class="p">:</span> <span class="sx">url('/images/bench-1200px.jpg')</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c">/* et cetera */</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h3 id="max-width-or-max-device-width">max-width or max-device-width?</h3>
+<p>There are actually two variants of the above code. Here, I’m using <code class="highlighter-rouge">max-device-width</code>, but I could just as well be using <code class="highlighter-rouge">max-width</code>. There’s a slight difference in the way that these two rules apply: with <code class="highlighter-rouge">max-width</code>, the image size corresponding to the <em>actual</em> window width will be downloaded, while <code class="highlighter-rouge">max-device-width</code> downloads the image corresponding to the <em>maximal</em> window width on the user’s screen.</p>
+
+<p>The problem with <code class="highlighter-rouge">max-width</code> is that it’ll download a new image if the user resizes their window or rotates their screen; mind you, this is a rather dumb process. If you resize your window to a smaller size, it will redownload a smaller image instead of just keeping the bigger one.</p>
+
+<p>That being said, <code class="highlighter-rouge">max-device-width</code> isn’t flawless either. It downloads the biggest image that we may be required to show. If the user has a window open on half of their screen, and never resizes it to the maximum, we’ll have loaded too big of an image.</p>
+
+<p>Downloading an image on the fly during a resize may cause a small lag or flicker. This is not something that I want to happen, hence my decision to go with <code class="highlighter-rouge">max-device-width</code>. It may sometimes cost me a few kilobytes, but at least I hope to have avoided a small annoyance for the user.</p>
+
+<h3 id="so-is-it-a-viable-approach">So is it a viable approach?</h3>
+<p>The banner image is one of the biggest assets that I’m loading on this page, so dealing with that allowed me to significantly reduce the size of my pages. On this post, for instance, an iPhone will load <strong>40% less data</strong> than a big computer screen.</p>
+
+<p>But I’d like to mention the pitfalls of my approach; once again, this should only be done on actual background images, like the one I have at the top of every post. This is in no way a replacement for images.</p>
+
+<p>The fact that this method can’t and shouldn’t be applied to <code class="highlighter-rouge">&lt;img&gt;</code>s is only half the reason why we <em>need</em> this new spec for responsive images. The other half is that even when you can apply it, it’s not really ideal.</p>
+
+<p>See, what I’ve done here is to specify absolute rules, with breakpoints that are precise down to the pixel. As rational as my responsive image strategy may be, it just can’t account for all the different possible scenarios that someone may load my page under. Bandwidth, latency, data caps and loading priorities, to name a few, are all clues to what image sizes are fit for you. The truth of the matter is that I, as the developer of this site, can at best make a guess on what you’ll need. The browser, however, is in a <em>much better</em> position to predict what’ll be best for you in your current situation.</p>
+
+<p>That’s exactly what this new specification is all about. I can now just give the browser a discreet hint of what it could load, and it’ll make the decision itself. But right now, no matter how obvious and forced I make my hints, almost half of all browsers will be completely oblivious to them.</p>
+
+<p><img src="http://i.imgur.com/Exh8trU.gif" alt="A gif of what I look like giving a subtle hint" /></p>
+
+<p>Don’t get me wrong, I really do look forward to being able to implement <code class="highlighter-rouge">&lt;picture&gt;</code>, <code class="highlighter-rouge">srcset</code> and <code class="highlighter-rouge">image-set</code>. The reality is just that I wouldn’t have been able to achieve the same results with them.</p>
+:ET

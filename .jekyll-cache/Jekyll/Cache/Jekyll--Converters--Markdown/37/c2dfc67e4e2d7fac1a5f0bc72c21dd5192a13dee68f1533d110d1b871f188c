@@ -1,0 +1,16 @@
+I"u<p>In my previous post on <a href="/web-performance-2.0/">Web Performance 2.0</a>, I wrote:</p>
+
+<blockquote>
+  <p>Cache, compression and CDNs are still relevant, and should be used.</p>
+</blockquote>
+
+<p>In retrospect, this was a bit of a hypocritical sentence, since I was only doing one out of the three on this site, namely compression. Today, we’ll be taking a look at web caching. It’s not too hard to put it into place, but it <em>is</em> easy to mess up, so I’ll try to proceed with care.</p>
+
+<p>I run a fully static site hosted on a DigitalOcean droplet with Nginx, so luckily for me, I just have to mess with some config files. However, like any other good university student, I studied the theory long and arduously before I could ever dream of touching those files.</p>
+
+<p>All right, that’s a lie, I totally just dived headlong into my <code class="highlighter-rouge">nginx.conf</code> and googled stuff as I went. Still, let’s be smarter than I was, and take a minute to look at the theory.</p>
+
+<h2 id="the-theory">The theory</h2>
+<p>There are a number of HTTP headers that give the browser instructions on how to cache a website. As always when you’re working with the Web, for historical reasons, it’s far from simple or elegant. There are quite a few headers to set, and they often overlap. Here are the cache headers that you’ll probably have to consider:</p>
+
+:ET

@@ -1,119 +1,91 @@
-#########################
-### BASIC INFORMATION ###
-#########################
-
-# The name of the site.
-# Written in big on top of the hero image, and used in page titles.
-name: OUTPUT
-
-# A subtitle for the site.
-# Written below the site's name, and next to it in the page title.
-subtitle: The blog of Maxime Kjaer
-subtitle_html: The blog of <span title="/maksim ˈkjɛɹ/">Maxime Kjaer</span>
-
-# A default description for the site.
-# Used by search engines, Facebook and Twitter. Overridden by blog posts' description when possible.
-description: "Maxime Kjaer's blog posts about the Web, software & technology. Most likely in that order."
-
-# Your website URL
-# Used in sitemap.xml and feed.xml
-url: "https://uuwani.github.io/"
-
-# Information about the author. Used in feed.xml
+site: Colorie
+url: 
+author: Colorie
 author:
-  name: Maxime Kjaer
-  email: maxime.kjaer@gmail.com
-  twitter: maximekjaer
-  url: https://kjaer.io
+  name: Colorie
+  email: 
+  url: 
+  avatar: 
+title: Colorie
+description: Colorie - Single column blog and portfolio Jekyll theme 
+logo: 
+image: 
+twitter: ronaldsvilcins  
+twitter:
+  username: ronaldsvilcins
+  creator: ronaldsvilcins
+  card: summary
+social:
+  name: Ronalds Vilcins
+  links:
+    - https://twitter.com/#
+    - https://www.dribbble.com/#
+    - https://github.com/#
+    - https://codepen.io/#
+  
+permalink: pretty
 
-# Your disqus shortname. Entering this will enable commenting on posts by default
-disqus: kjaermaxime
+disqus:
+  name: "your disqus username" # required
+  noscript: "Please enable JavaScript to view the comments powered by Disqus." # optional
 
-# Enter your Google Analytics web tracking code (e.g. UA-2110908-2) to activate tracking
-google_analytics: UA-59915030-2
+baseurl:             ""
 
-# Data for the hero image
-hero:
-  image: /images/hero/trees.jpg # The relative path to the default hero image
-  fallback-color: "#d3dbe7" # The fallback color that will be used behind the image
-  breakpoints: # Responsive image breakpoints. Important that these be in decreasing order!
-    - 1440px
-    - 1200px
-    - 800px
-    - 550px
-    - 380px
-
-# The URL of your GitHub repo
-github: https://github.com/MaximeKjaer/kjaer.io
-
-# If you're hosting your site at a Project repository on GitHub pages
-# (http://yourusername.github.io/repository-name)
-# and NOT your User repository (http://yourusername.github.io)
-# then add in the baseurl here, like this: "/repository-name"
-baseurl: ""
-
-##############################
-### ADVANCED OPTIONS BELOW ###
-##############################
-
-permalink: /:title/
-excerpt_separator: "<!--"
-
-collections:
-  notes:
-    output: true
-    permalink: /:title/
-    sort_by: title
-  unlisted:
-    output: true
+include:
+  - _redirects
+  
+compress_html:
+  clippings: all
+  comments: ["<!-- ", " -->"]
 
 sass:
-  sass_dir: _sass
-  style: :compressed # Can also be :expanded
+  sass_dir:          _sass
+  style:            :compressed
 
-# Use the following gems when building the site
 plugins:
-  - jekyll-sitemap # Automatically create a sitemap on build
-  - jekyll-feed # Automatically create an RSS feed on build
-  - jekyll-mathjax-csp # Server-side rendering of math with MathJax
-  - jekyll-diagrams # Server-side rendering of graphs with Graphviz
-  - jekyll-block
+  - jekyll-paginate
+  - jekyll-gist
+  - jekyll-seo-tag
+  - jekyll-sitemap
+  - disqus-for-jekyll
 
-feed:
-  excerpt_only: true
-
-mathjax_csp:
-  output: CommonHTML # SVG, CommonHTML, or MML (default: SVG)
-  single_dollars: true # allow single dollar delimiters for inline math (default: false)
-  ex_size: 10
-  strip_css: false
-
+collections:
+  pages:
+    output: true
+    permalink: /:name
+  posts:
+    output: true
+    permalink: /:year/:month/:day/:slug
+  projects:
+    output: true
+    permalink: /projects/:slug
+  
 defaults:
-  - scope:
-      type: posts
+  -
+    scope:
+      path: ""
     values:
-      layout: post
-      published: true
-      comments: true
-      edited: false
-  - scope:
-      type: notes
+      layout: "default"
+  -
+    scope:
+      path: ""
+      type: "pages"
     values:
-      layout: post
-      published: true
-      comments: true
-      edited: true
-
-# Exclude these files from your production _site
-exclude:
-  - Rakefile
-  - gulpfile.js
-  - LICENSE
-  - nohup.out
-  - npm-debug.log
-  - package.json
-  - package-lock.json
-  - .git
-  - README.md
-  - serve.bat
-  - zopfli
+      layout: "page"
+  -
+    scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+  -
+    scope:
+      path: ""
+      type: "projects"
+    values:
+      layout: "project"     
+      
+  - scope:
+      path: "assets/images"
+    values:
+      image: true

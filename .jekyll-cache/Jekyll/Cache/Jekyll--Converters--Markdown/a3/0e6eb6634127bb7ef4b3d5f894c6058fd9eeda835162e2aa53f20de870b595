@@ -1,0 +1,165 @@
+I"�=<p>In my previous post on <a href="/web-performance-2.0/">Web Performance 2.0</a>, I wrote:</p>
+
+<blockquote>
+  <p>Cache, compression and CDNs are still relevant, and should be used.</p>
+</blockquote>
+
+<p>In retrospect, this was a bit of a hypocritical sentence, since I was only doing one out of the three on this site, namely compression. Today, we’ll be taking a look at web caching. It’s not too hard to put it into place, but it <em>is</em> easy to mess up, so I’ll try to proceed with care.</p>
+
+<p>I run a fully static site hosted on a DigitalOcean droplet with Nginx, so luckily for me, I just have to mess with some config files. However, like any other good university student, I studied the theory long and arduously before I could ever dream of touching those files.</p>
+
+<p>All right, that’s a lie, I totally just dived headlong into my <code class="highlighter-rouge">nginx.conf</code> and googled stuff as I went. Still, let’s be smarter than I was, and take a minute to look at the theory.</p>
+
+<h2 id="the-theory">The theory</h2>
+<p>There are a number of HTTP headers that give the browser instructions on how to cache a website. As always when you’re working with the Web, for historical reasons, it’s far from simple or elegant. There are quite a few headers to set, and they often overlap. Here are the cache headers that you’ll probably have to consider:</p>
+
+<!-- More -->
+
+<ul>
+  <li><code class="highlighter-rouge">ETag</code></li>
+  <li><code class="highlighter-rouge">If-None-Match</code></li>
+  <li><code class="highlighter-rouge">Last-Modified</code></li>
+  <li><code class="highlighter-rouge">If-Modified-Since</code></li>
+  <li><code class="highlighter-rouge">Cache-Control</code></li>
+  <li><code class="highlighter-rouge">Expires</code></li>
+  <li><code class="highlighter-rouge">Date</code></li>
+</ul>
+
+<p>Yes, this <em>is</em> a lot. Still, let’s dive into it.</p>
+
+<h3 id="cache-validation-entity-tags--last-modified-dates">Cache validation: Entity Tags &amp; “Last Modified” dates</h3>
+<p>An ETag is a validation token, or, simply put, a sort of version number that is stuck on the file. This is useful when a browser wants to check whether its cached copy of a file still is up to date (this check is called a “cache validation”). Instead of asking for the whole file again, it can just ask if the server still is serving the same file as last time. If so, there’s no need to redownload it.</p>
+
+<p>Technically, this is done by giving each file a code. Received files will come with a header such as <code class="highlighter-rouge">ETag: "564bb8e6-4d4b"</code>. This information is saved, and the next time we request the same file, the browser sends along the header <code class="highlighter-rouge">If-None-Match: "564bb8e6-4d4b"</code>. The web server checks that this corresponds to the file it’s got. If we have a match, the server will respond with <a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#3xx_Redirection">304 Not Modified</a>. Otherwise, it’ll send <a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#2xx_Success">200 OK</a> along with the new version of the file (and its new ETag header).</p>
+
+<p>It’s important to note that there exists an alternative to <code class="highlighter-rouge">ETag/If-None-Match</code> with overlapping functionality: <code class="highlighter-rouge">Last-Modified/If-Modified-Since</code>. The validation token is a date instead of a hash, but for all intents and purposes, it’s pretty much identical. They can be used interchangeably, but using both is a bit redundant. If you are creating a page dynamically, it may make more sense to use <code class="highlighter-rouge">ETags</code>, as you can hash the data to see if it’s the same as last time. For static files, it’s perhaps easier to use <code class="highlighter-rouge">Last-Modified</code>. However, Nginx abstracts the concern away from us, so let’s disregard this problem here.</p>
+
+<p>ETags are an important cache mechanism, as they introduce big optimizations. A roundtrip to the server is still necessary, but it can save us the trouble of redownloading a file we already have. They come into play if <code class="highlighter-rouge">Cache-Control</code> has been set to <code class="highlighter-rouge">no-cache</code> or if the cached file is older than the specified <code class="highlighter-rouge">max-age</code>. If you are unfamiliar with web cache, this may still sound like some technical mumbo jumbo, so let’s clear it up.</p>
+
+<h3 id="cache-freshness-with-cache-control--expiration-dates">Cache freshness with Cache-Control &amp; Expiration dates</h3>
+<p><code class="highlighter-rouge">Cache-Control</code> is an HTTP response header that defines the caching rules for a file. It can be set to a comma-separated selection of the following values:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">public</code> or <code class="highlighter-rouge">private</code> define who should be able to cache the file.
+    <ul>
+      <li><code class="highlighter-rouge">public</code>: The file is cacheable by the browser and by all intermediaries (such as CDNs).</li>
+      <li><code class="highlighter-rouge">private</code>: The file is only cacheable by the browser.</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">no-cache</code> or <code class="highlighter-rouge">no-store</code> define stricter caching rules
+    <ul>
+      <li><code class="highlighter-rouge">no-cache</code>: Cache the file, but don’t use it without checking with the server that it hasn’t changed.</li>
+      <li><code class="highlighter-rouge">no-store</code>: Nobody should cache <em>anything</em>.</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">max-age</code>: The number of seconds for which we can use the cached file. After this, we will have to check for it again (although we may not <em>have</em> to redownload it; see <a href="#cache-validation-entity-tags--last-modified-dates">cache validation</a>).</li>
+</ul>
+
+<p>Combining these settings can be useful in a number of configurations:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">public</code> and a given <code class="highlighter-rouge">max-age</code> is useful for purely static content.</li>
+  <li><code class="highlighter-rouge">private</code> and a given <code class="highlighter-rouge">max-age</code> is for information that isn’t necessarily personal, but is user-specific.</li>
+  <li><code class="highlighter-rouge">no-cache</code> is great when it’s critical to have the latest version of a file (for live feeds, or content based on random numbers, for instance).</li>
+  <li><code class="highlighter-rouge">no-store</code> is mainly for private, personal data that shouldn’t be cached (for security reasons).</li>
+</ul>
+
+<p>Once again, there is another header with overlapping functionality: <code class="highlighter-rouge">Expires</code>. While <code class="highlighter-rouge">Cache-Control: max-age=600</code> will set a 10 minute timeout, <code class="highlighter-rouge">Expires: Fri, 20 Nov 2015 23:56:13 GMT</code> will just time out at the set date. When using <code class="highlighter-rouge">Expires</code>, we also add a <code class="highlighter-rouge">Date</code> header so we know what time the server thinks it currently is.</p>
+
+<p>Also good to know: <code class="highlighter-rouge">max-age</code> overrides <code class="highlighter-rouge">Expires</code>. See, I told you that there would be inelegant overlap!</p>
+
+<h2 id="choosing-a-strategy">Choosing a strategy</h2>
+<p>With all of this in mind, how can we devise an optimal caching strategy? Our caching settings will depend on how often a file is updated, and on how important it is that the user has the latest version. Obviously, as files are different in nature, we will need to use different caching settings for each kind of resource.</p>
+
+<p>Here is the reasoning behind <em>my</em> caching strategy.</p>
+
+<h3 id="html">HTML</h3>
+<p>The HTML has to be fresh. I can’t set a long cache time, because visitors would risk missing out on new content, so we need to validate the cache every once in a while. The question that remains is how often to do this.</p>
+
+<p>Should I validate it every time, which implies using <code class="highlighter-rouge">Cache-Control: no-cache</code>? Or should I have the cache expire shortly, which means using <code class="highlighter-rouge">Cache-Control: max-age=XXX</code>?</p>
+
+<p>Sadly, the reality is that I only write 5 or 6 posts a year, and that doesn’t really justify validating the cache for every request. The content is just very unlikely to be updated between two page refreshes. This is why I’ve decided to cache the HTML for the duration of a session, which I’ve (arbitrarily, and rather optimistically) set to <strong>10 minutes</strong>. If the content of a page is updated while someone is viewing the page, then they’ll just be able to see it next time — I find this to be a decent trade-off for the performance gains.</p>
+
+<p>It’s super important to have a low max age on cached HTML, because this allows you to make mistakes in other areas. Say that I messed up, and gave too high of a max age to a CSS file. Since my cached HTML often is revalidated, I can just change the name of the CSS file, which will prompt the browser to treat it as a new item and download it.</p>
+
+<p>This is why a lot of people add a so-called fingerprint to CSS, JS and images during their build process. For example, <code class="highlighter-rouge">style.css</code> would be served under the name <code class="highlighter-rouge">style.4ba39f2.css</code> before a modification, and automatically be renamed <code class="highlighter-rouge">style.63fa213.css</code> after a change. This way, we get the best of both worlds: caching and quick updates.</p>
+
+<h3 id="images">Images</h3>
+<p>I don’t usually modify my images, except if I’ve been able to further compress it. If the user already has a slightly bigger image in cache, there’s no real need to download another version that might be a few KB smaller. So for images, I can just use the <strong>longest possible max age</strong>. In case I ever need to actually change it, I’ll use a different filename.</p>
+
+<h3 id="css--js">CSS &amp; JS</h3>
+<p>I don’t serve any JavaScript files on this site, but cache-wise, it should fall into the same category as CSS. I update it every once in a while, but little will be lost if the user doesn’t get the absolute latest version. I should be able to get away with a max age that is a bit longer, like <strong>a week</strong> or so. I only want to build using Jekyll, and it can’t add fingerprints to files, so this is “good enough” of an alternative.</p>
+
+<h2 id="lets-get-it-into-practice">Let’s get it into practice!</h2>
+<p>Phew, the hard part is over! Now, let’s kick back and see how we can get Nginx to apply what we’ve decided.</p>
+
+<p>First, let’s make sure that we at least have Nginx 1.7.3. Before this version, we couldn’t have ETags on gzip compressed content. This is some pretty important functionality, so let’s just check:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre><span class="nv">$ </span>nginx <span class="nt">-v</span>
+nginx version: nginx/1.8.0
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>If you don’t have the necessary version, you can just quickly update:</p>
+
+<figure class="highlight"><pre><code class="language-sh" data-lang="sh"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="code"><pre><span class="nv">$ </span><span class="nb">sudo </span>add-apt-repository ppa:nginx/stable
+<span class="nv">$ </span><span class="nb">sudo </span>apt-get update
+<span class="nv">$ </span><span class="nb">sudo </span>apt-get <span class="nb">install </span>nginx
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Now we’ll get into the thick of it. You’ll have to modify your <code class="highlighter-rouge">server</code> block in <code class="highlighter-rouge">/etc/nginx/nginx.conf</code> (or possibly another file, depending on your configuration).</p>
+
+<p>To set a <code class="highlighter-rouge">max-age</code>, we use the <code class="highlighter-rouge">expires</code> <a href="http://nginx.org/en/docs/http/ngx_http_headers_module.html">keyword</a>. This adds both a <code class="highlighter-rouge">Cache-Control</code> and an <code class="highlighter-rouge">Expires</code> header, which is a bit redundant, but oh well. We’re not setting <code class="highlighter-rouge">Cache-Control: public</code>, since it’s implicit with <code class="highlighter-rouge">Cache-Control: max-age=XXX</code>. Otherwise, there’s not much left for us to do, since Nginx is nice enough to enable <code class="highlighter-rouge">ETag</code> and <code class="highlighter-rouge">Last-Modified</code> by default. The server block of our configuration files ends up looking like this:</p>
+
+<figure class="highlight"><pre><code class="language-nginx" data-lang="nginx"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+</pre></td><td class="code"><pre><span class="k">server</span> <span class="p">{</span>
+    <span class="c1"># HTML and XML</span>
+    <span class="kn">location</span> <span class="p">~</span><span class="sr">*</span> <span class="err">\</span><span class="s">.(?:html|xml)</span>$ <span class="p">{</span>
+        <span class="kn">add_header</span> <span class="s">Content-Language</span> <span class="s">"en"</span><span class="p">;</span>
+        <span class="kn">expires</span> <span class="mi">10m</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1"># Media: images, icons, video, audio</span>
+    <span class="kn">location</span> <span class="p">~</span><span class="sr">*</span> <span class="err">\</span><span class="s">.(?:jpg|jpeg|gif|png|ico|cur|gz|svg|svgz|mp4|ogg|ogv|webm)</span>$ <span class="p">{</span>
+        <span class="kn">access_log</span> <span class="no">off</span><span class="p">;</span>
+        <span class="kn">expires</span> <span class="s">max</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1"># CSS and Javascript</span>
+    <span class="kn">location</span> <span class="p">~</span><span class="sr">*</span> <span class="err">\</span><span class="s">.(?:css|js)</span>$ <span class="p">{</span>
+        <span class="kn">access_log</span> <span class="no">off</span><span class="p">;</span>
+        <span class="kn">expires</span> <span class="s">1d</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>To apply our changes, don’t forget to run:</p>
+
+<figure class="highlight"><pre><code class="language-sh" data-lang="sh"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+</pre></td><td class="code"><pre><span class="nv">$ </span>nginx <span class="nt">-s</span> reload
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>That should be about it. It’s almost disappointingly simple, right? But I did warn you in the beginning: this is not hard to do, it’s just easy to mess up, which is why the theoretical part is so important. You really need to be able to explain your choices, and hopefully, this post will have taught you that. Now go out and apply what you’ve learned. Go out and make the Web just a little bit faster.</p>
+:ET

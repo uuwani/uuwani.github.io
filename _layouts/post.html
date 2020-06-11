@@ -1,20 +1,30 @@
 ---
 layout: default
 ---
-<article class="post">
-	{% if page.title %}
-	<header>
-		<h1>{{ page.title }}</h1>
-		{% include date.html date=page.date %}
-		{% include date.html prefix="Updated " date=page.updated %}
-	</header>
-	{% endif %}
-	
-	{{ content }}
-	
-	{% include bottom-links.html %}
+
+
+
+<article role="article" class="post">
+	<div class="post-meta">
+  <h1>{{ page.title }}</h1>
+  <time class="date" datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %-d, %Y" }}</time>
+	</div>
+
+  {{ content }}
+  
+  <br>
+  
+  <p>
+      Tagged 
+      {% for tag in page.tags %}
+      <a href="/tag/{{tag}}">#{{tag}}</a>{% unless forloop.last %}, {% endunless %}{% endfor %}.
+    </p>
+                   
+ <hr style="height:2px; border:none; margin: 2rem 0; background-color:#e7e9ee;">
+
+
+  {% disqus %}
+  
 </article>
 
-{% if page.comments %}
-	{% include disqus.html disqus_identifier=page.disqus_identifier %}
-{% endif %}
+

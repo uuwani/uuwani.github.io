@@ -1,17 +1,4 @@
 ---
-layout: default
+layout: blog
+title: Home
 ---
-
-{% for post in site.posts %}
-    <article class="post">
-        <header>
-            <a href="{{ post.url }}">
-                <h1>{{ post.title }}</h1>
-            </a>
-            {% include date.html date=post.date %}
-            {% include date.html prefix="Updated " date=post.updated %}
-        </header>
-        {{ post.excerpt }}
-        <a href="{{ post.url }}">Read more</a>
-    </article>
-{% endfor %}

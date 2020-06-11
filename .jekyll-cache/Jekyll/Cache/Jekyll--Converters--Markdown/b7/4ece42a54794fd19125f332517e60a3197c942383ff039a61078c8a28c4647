@@ -1,0 +1,5 @@
+I"Ð
+<p>This follows from the fact that an acyclic graph with $k$ edges has $n-k$ connected components, as we previously stated. Thus, for any acyclic edge sets $S, T$ with $\abs{S} &gt; \abs{T}$, the graph $(V, S)$ has fewer components than $(V, T)$, so there must be an edge $e \in S$ connecting two components in $(V, T)$; it follows that $e \notin T$ and $T + e$ is acyclic.</p>
+
+<p>More succinctly, $\exists e \in S \setminus T$ such that $T + e$ is acyclic.</p>
+:ET

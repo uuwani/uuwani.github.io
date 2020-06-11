@@ -1,0 +1,15 @@
+I" 
+<p>Weâ€™ll prove equivalence between the following:</p>
+
+<ol>
+  <li>$f$ has a maximum flow</li>
+  <li>$G_f$ has no augmenting path</li>
+  <li>$| f | = c(S, T)$ for a minimum cut $(S, T)$</li>
+</ol>
+
+<p>$(1) \Rightarrow (2)$: Suppose toward contradiction that $G_f$ has an augmenting path <em>p</em>. However, the Ford-Fulkerson method would augment <em>f</em> by <em>p</em> to obtain a flow if increased value which contradicts that <em>f</em> is a maximum flow.</p>
+
+<p>$(2) \Rightarrow (3)$: Let <em>S</em> be the set of nodes reachable from <em>s</em> in a residual network. Every edge flowing out of <em>S</em> in <em>G</em> must be at capacity, otherwise we can reach a node outside <em>S</em> in the residual network.</p>
+
+<p>$(3) \Rightarrow (1)$: Recall that $| f| \leq c(S, T) \forall \text{cut } (S, T)$. Therefore, if the value of a flow is equal to the capacity of some cut, then it cannot be further improved.</p>
+:ET

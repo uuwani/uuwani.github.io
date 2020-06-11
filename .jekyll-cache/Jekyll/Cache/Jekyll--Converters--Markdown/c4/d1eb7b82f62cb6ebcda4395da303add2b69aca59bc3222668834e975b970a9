@@ -1,0 +1,296 @@
+I"#`<p>I really like using static site generators. I guess the computer scientist in me likes optimized systems, and that’s exactly what I get here: static sites  make for a secure, performant and simple setup. It doesn’t get much more basic than serving static files with Nginx. It’s rather hard convincing myself to manage a big PHP framework and an SQL database just to show some blog posts, but I am painfully aware of how much easier to use Wordpress is for the users. Compare Wordpress’ workflow to that of a static site: even though making changes to my Jekyll site may seem rather easy to me, it really isn’t that straightforward. Here’s how I’ve done it up until this point:</p>
+
+<ol>
+  <li>Write a post in Markdown</li>
+  <li>Optimize images manually</li>
+  <li>Commit changes to GitHub</li>
+  <li>Build the site on my local machine</li>
+  <li>Compress generated HTML and CSS files</li>
+  <li>Manually transfer the changed files to the server</li>
+</ol>
+
+<p>Good luck trying to convince your clients to use a static site if this is what it takes for them to do a simple task, like fixing a typo. Getting your content online requires knowledge about Markdown, compression, git, command line, and file transfer. That’s a very steep learning curve if you aren’t very technically inclined. It’s also a rather tedious process. What if we could reduce it to one or two steps?</p>
+
+<!-- More -->
+
+<p>Another problem I had with that workflow was that I would often have either undeployed or uncommitted changes. The GitHub repo sometimes wouldn’t be up to date with the content I was serving, or vice versa, because I hadn’t exactly followed all the steps. I want the code on GitHub to actually represent what I’m serving. I mean, what’s the idea of releasing the code if it doesn’t reflect the reality? This hard link between the source code and what I’m serving needed to rely on more than my goodwill.</p>
+
+<p>In my continuous quest to make this site lean and mean, all of the above have led me to set up automatic deployments to my server. This means that my workflow now just consists of creating content and committing it — the rest is done automatically. Travis CI builds the site, compresses assets, runs a few tests, and deploys it all to DigitalOcean, where Nginx serves it.</p>
+
+<h2 id="server-set-up">Server set-up</h2>
+
+<p>The first step to achieving this new workflow was to have rigorous rules set up on the server. No more deployments as root, from now on we’re doing things correctly.</p>
+
+<p>For the sake of simplicity, we’ll assume that our server’s live directory is <code class="highlighter-rouge">/var/www/kjaer.io/public_html</code>. Additionally, commands run on the server will be denoted by a <code class="highlighter-rouge">$</code>, while a <code class="highlighter-rouge">λ</code> will precede commands entered on our local machine; if you are on Windows, I would recommend using <a href="https://www.howtogeek.com/249966/how-to-install-and-use-the-linux-bash-shell-on-windows-10/">WSL</a> or <a href="http://cmder.net/">cmder</a>, as all following instructions will rely on Linux command-line tools.</p>
+
+<h3 id="create-a-new-user-with-restricted-access">Create a new user with restricted access</h3>
+
+<p>I’ve created a new user called <code class="highlighter-rouge">deploy</code> with limited permissions: it’s only allowed to operate in <code class="highlighter-rouge">/var/www/kjaer.io</code>, the directory for this site’s content.</p>
+
+<p>First, we’ll need to log in via SSH to the root account. We’ll create a new user that Travis CI can use to log in, and we’ll give it ownership of our live directory.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>adduser deploy
+<span class="nv">$ </span><span class="nb">chown</span> <span class="nt">-R</span> deploy:deploy /var/www/kjaer.io</code></pre></figure>
+
+<p>It will ask you to create a password for that user (pick something strong!), and fill out some more optional information. Just press Enter if you wish to skip some of those steps.</p>
+
+<h3 id="set-up-public-key-authentication">Set up public key authentication</h3>
+<p>For Travis CI to log in to the server, we’ll set up public key authentication. To do this, on your local machine, you should run:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">λ ssh-keygen</code></pre></figure>
+
+<p>Which should output something like this:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">Generating public/private rsa key pair.
+Enter file in which to save the key (~/.ssh/id_rsa):</code></pre></figure>
+
+<p>I suggest calling it <code class="highlighter-rouge">deploy-key</code>. It will also ask for a passphrase; leave that blank. This process should leave you with two files in your <code class="highlighter-rouge">.ssh</code> folder: <code class="highlighter-rouge">deploy-key</code>, which is your private key (this is like a password, so protect it at all times!) and <code class="highlighter-rouge">deploy-key.pub</code>, your public key.</p>
+
+<p>The server needs to know your public key so that you can log in using your private key. There are multiple ways of copying it, but since we have an open SSH connection, we can just copy paste it. Not the most elegant solution, but it’ll do the job just fine. To do that, we’ll first need to log in to the <code class="highlighter-rouge">deploy</code> user:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>su - deploy</code></pre></figure>
+
+<p>Then, we’ll create a <code class="highlighter-rouge">.ssh</code> directory in the home directory, and an <code class="highlighter-rouge">authorized_keys</code> file inside of it:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span><span class="nb">mkdir</span> .ssh
+<span class="nv">$ </span><span class="nb">chmod </span>700 .ssh
+<span class="nv">$ </span>nano .ssh/authorized_keys</code></pre></figure>
+
+<p>At this point, you can paste in the contents of your <code class="highlighter-rouge">deploy-key.pub</code> file. Hit Ctrl+X, Y and Enter to save and exit. Before we log out, we’ll just restrict the permissions to the <code class="highlighter-rouge">authorized_keys</code> file:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span><span class="nb">chmod </span>600 .ssh/authorized_keys
+<span class="nv">$ </span><span class="nb">exit</span></code></pre></figure>
+
+<p>You now have a way to log in to the server. Now, let’s set it up to receive files.</p>
+
+<h3 id="create-a-remote">Create a remote</h3>
+<p>You most likely already have a local repository on your computer, which is where you work. A remote repository, or just “a remote”, is a place where you can keep everything in sync. GitHub, for instance, is a remote. It’s essentially just a hosted copy of your Git project. In our case, it’ll just mean a repository on our web server to which we can push.</p>
+
+<p>We’ll want to push to a repository in <code class="highlighter-rouge">/var/www/kjaer.io/.git</code>, and have the files available in <code class="highlighter-rouge">/var/www/kjaer.io/public_html</code>. We’re placing the <code class="highlighter-rouge">.git</code> one level above <code class="highlighter-rouge">public_html</code> because we don’t want to serve it.</p>
+
+<p>To do this, we’ll start out by creating an empty Git repo in <code class="highlighter-rouge">/var/www/kjaer.io</code>:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span><span class="nb">cd</span> /var/www/kjaer.io
+<span class="nv">$ </span><span class="nb">mkdir</span> .git
+<span class="nv">$ </span><span class="nb">cd</span> .git
+<span class="nv">$ </span>git init <span class="nt">--bare</span></code></pre></figure>
+
+<p>That’s all it really takes to have a remote that we can push to! But our repository is in <code class="highlighter-rouge">/var/www/kjaer.io</code>, and we want to have the pushed files in <code class="highlighter-rouge">/var/www/kjaer.io/public_html</code>. To achieve this, we can add what’s called a post-receive hook, which is a list of commands to run once the remote has received a push.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span><span class="nb">cd </span>hooks
+<span class="nv">$ </span>nano post-receive</code></pre></figure>
+
+<p>Then, you’ll need to type the following in:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#!/bin/sh</span>
+git <span class="nt">--work-tree</span><span class="o">=</span>/var/www/kjaer.io/public_html/ <span class="nt">--git-dir</span><span class="o">=</span>/var/www/kjaer.io/.git checkout <span class="nt">-f</span></code></pre></figure>
+
+<p>Save and exit with Ctrl+X, Y and Enter. The post-receive hook will just need to be executable, so that it actually can do its job:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span><span class="nb">chmod</span> +x post-receive</code></pre></figure>
+
+<p>That’s it for server configuration!</p>
+
+<h2 id="set-travis-ci-up">Set Travis CI up</h2>
+<p>Everything should now be ready for Travis to log in to our server and push content to the repo. However, we have a slight problem: how can we give Travis CI the private key without disclosing it to the general public? If our GitHub repo were private, we could just place the key in the repo and use that directly in Travis (though I’d still recommend against that approach, because if you ever plan on open-sourcing the repo, the private key will be in the commit history), but that won’t be an option here.</p>
+
+<h3 id="encrypt-the-private-key">Encrypt the private key</h3>
+<p>It turns out that Travis has a command-line utility to encrypt files. Using this, it’s safe to upload the key publicly to GitHub, and Travis CI can still use it. You’ll need to log in first though, because it will have to add two private environment variables to your Travis account, so that it can decrypt the encrypted private key later on (yes, we’re getting into some pretty heavy crypto setups now, but it’s the best we can do).</p>
+
+<p>If you don’t have a <code class="highlighter-rouge">.travis.yml</code> file yet, you can just create one real fast. We’ll talk about what it does later on.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">λ <span class="nb">touch</span> .travis.yml</code></pre></figure>
+
+<p>You’ll need to copy your private key file (<code class="highlighter-rouge">deploy-key</code>) to your local repository. Then, we’ll install the Travis command line utility, log in, and encrypt the file:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">λ gem <span class="nb">install </span>travis
+λ travis login
+λ travis encrypt-file deploy-key <span class="nt">--add</span></code></pre></figure>
+
+<p>The last command will create an encrypted copy of your deployment key, <code class="highlighter-rouge">deploy-key.enc</code>. It will also add a few lines to your <code class="highlighter-rouge">.travis.yml</code>, something that looks a bit like this:</p>
+
+<figure class="highlight"><pre><code class="language-yml" data-lang="yml"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre><span class="na">before_install</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s">openssl aes-256-cbc -K $encrypted_22009518e18d_key -iv $encrypted_22009518e18d_iv -in deploy-key.enc -out deploy-key -d</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>This is the command that will allow you to decrypt the key on the Travis CI platform. Once Travis runs this, it will be able to access the decrypted key, which is in the <code class="highlighter-rouge">deploy-key</code> file.</p>
+
+<p>You should immediately remove the unencrypted private key from your repo, so that you don’t risk uploading it to GitHub. There are bots out there that do nothing but analyze GitHub commits to find login information, and they <em>will</em> compromise your server in a matter of seconds if you <a href="https://archive.is/bL5DB">accidentally disclose the key</a>.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">λ <span class="nb">rm </span>deploy-key</code></pre></figure>
+
+<p>In fact, once you have Travis CI deployments working, you should probably delete the unencrypted private key altogether from your computer.</p>
+
+<h3 id="create-your-travisyml-file">Create your .travis.yml file</h3>
+<p>All we need to do now is to tell Travis <em>how</em> to build, test and deploy the site. For that purpose, we have a file called <code class="highlighter-rouge">.travis.yml</code>, which acts as a list of instructions for Travis.</p>
+
+<p>Right now, my <code class="highlighter-rouge">.travis.yml</code> file looks like this:</p>
+
+<figure class="highlight"><pre><code class="language-yml" data-lang="yml"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="code"><pre><span class="na">language</span><span class="pi">:</span> <span class="s">ruby</span>
+<span class="na">rvm</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s">2.4.3</span>
+<span class="na">env</span><span class="pi">:</span>
+  <span class="na">global</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s">NOKOGIRI_USE_SYSTEM_LIBRARIES=true</span>
+<span class="na">addons</span><span class="pi">:</span>
+  <span class="na">ssh_known_hosts</span><span class="pi">:</span> <span class="s">kjaer.io</span>
+<span class="na">before_install</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s">bash _scripts/install.sh</span>
+<span class="na">script</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s">bash _scripts/build.sh</span>
+  <span class="pi">-</span> <span class="s">bash _scripts/test.sh</span>
+<span class="na">after_success</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s">bash _scripts/deploy.sh</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>It defines that Ruby version 2.4.3 (a <a href="https://www.ruby-lang.org/en/downloads/">stable release</a> compatible with the <a href="https://jekyllrb.com/news/2018/01/02/jekyll-3-7-0-released/">latest versions of Jekyll</a>) should be installed on Travis, gives the encrypted key, says that <a href="/">kjaer.io</a> is a known host so that I don’t get a warning when I try to connect to it, and references a few bash scripts to run at various stages of the build process. These scripts have been placed in the <code class="highlighter-rouge">_scripts</code> directory, which won’t be built by Jekyll since its name starts with an underscore. I’ve made a bash script for each task, because I think it’s more readable this way.</p>
+
+<h4 id="install">Install</h4>
+<p>Before we do anything else, we need decrypt and import the private key, and also install a few dependencies. Ubuntu 12.04 (the distribution Travis uses) comes preinstalled with a lot of things, but it may not always be enough. For instance, I need to install Zopfli so that I can compress my HTML, CSS, XML (and JS, if I had any) as much as possible.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="code"><pre><span class="c">#!/bin/bash</span>
+<span class="nb">set</span> <span class="nt">-x</span> <span class="c"># Show the output of the following commands (useful for debugging)</span>
+    
+<span class="c"># Import the SSH deployment key</span>
+openssl aes-256-cbc <span class="nt">-K</span> <span class="nv">$encrypted_22009518e18d_key</span> <span class="nt">-iv</span> <span class="nv">$encrypted_22009518e18d_iv</span> <span class="nt">-in</span> deploy-key.enc <span class="nt">-out</span> deploy-key <span class="nt">-d</span>
+<span class="nb">rm </span>deploy-key.enc <span class="c"># Don't need it anymore</span>
+<span class="nb">chmod </span>600 deploy-key
+<span class="nb">mv </span>deploy-key ~/.ssh/id_rsa
+    
+<span class="c"># Install zopfli</span>
+git clone https://code.google.com/p/zopfli/
+<span class="nb">cd </span>zopfli
+make
+<span class="nb">chmod</span> +x zopfli
+<span class="nb">cd</span> ..
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>The <code class="highlighter-rouge">openssl</code> command decrypts the encrypted private key. I haven’t written it by hand, I’ve actually just copy-pasted what <code class="highlighter-rouge">travis encrypt-file</code> added to <code class="highlighter-rouge">.travis.yml</code> earlier on.</p>
+
+<p>Also, note that I’m moving the key to the <code class="highlighter-rouge">.ssh</code> directory under the name <code class="highlighter-rouge">id_rsa</code>. This is the default name for the key Git will look for when pushing to the server. It makes our lives a bit easier to place it there, under that name, since we won’t need to specify what key should be used later on.</p>
+
+<h4 id="build">Build</h4>
+<p>Building is actually pretty straightforward. I build the site with Jekyll, and compress with Zopfli, so that a super compressed version can be served by Nginx (see <a href="http://nginx.org/en/docs/http/ngx_http_gzip_static_module.html">gzip_static</a>).</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre><span class="c">#!/bin/bash</span>
+<span class="nb">set</span> <span class="nt">-x</span>
+<span class="c"># Build the site with Jekyll</span>
+bundle <span class="nb">exec </span>jekyll build
+
+<span class="c"># Compress assets with Zopfli</span>
+zopfli/zopfli <span class="nt">--i1000</span> _site/<span class="k">**</span>/<span class="k">*</span>.html _site/<span class="k">*</span>.html  _site/<span class="k">**</span>/<span class="k">*</span>.css _site/<span class="k">*</span>.css _site/<span class="k">**</span>/<span class="k">*</span>.js _site/<span class="k">*</span>.js _site/<span class="k">**</span>/<span class="k">*</span>.xml _site/<span class="k">*</span>.xml
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>This level of Zopfli compression is quite slow, so I’ve actually set up my build step to look at the <code class="highlighter-rouge">git diff</code> and only work on changed files. This is much faster, but the <a href="https://github.com/MaximeKjaer/kjaer.io/blob/master/_scripts/build.sh">build script</a> becomes fairly complex as a result, so I won’t go into too much detail.</p>
+
+<h4 id="test">Test</h4>
+<p>Testing is done with HTML-Proofer. Note that I haven’t installed <code class="highlighter-rouge">html-proofer</code> manually, since it is in my <a href="https://github.com/MaximeKjaer/kjaer.io/blob/master/Gemfile#L15">Gemfile</a>, and Travis is therefore nice enough to automatically install it for us.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="c">#!/bin/bash</span>
+<span class="nb">set</span> <span class="nt">-x</span>
+
+<span class="nb">timeout </span>30s bundle <span class="nb">exec </span>htmlproofer _site <span class="nt">--only-4xx</span> <span class="nt">--external_only</span> <span class="nt">--check-html</span> <span class="nt">--check-favicon</span> <span class="nt">--allow-hash-href</span> <span class="nt">--http-status-ignore</span> 429
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>In this one command, I’m validating HTML, checking that no external link returns a 4xx-error (which would mean that I’m linking to something that no longer exists, or that I have a typo in one of my links), and that the favicon is present and referenced on every page. It’s rather important to have the <code class="highlighter-rouge">--external_only</code> flag; otherwise, whenever you’re adding a new post, it’ll return an error because the post isn’t online yet.</p>
+
+<p>All of this has to be done within a 30 second deadline, just in case it starts hanging for no apparent reason and blocks the deployment (it’s happened before).</p>
+
+<h4 id="deploy">Deploy</h4>
+<p>If nothing has failed yet, then we should be good to deploy! However, we need to be a bit careful: we don’t want to deploy the code that is on GitHub, we want to deploy what we’ve just built. That’s why we’re going to push from a new repo in our <code class="highlighter-rouge">_site</code> folder.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre></td><td class="code"><pre><span class="c">#!/bin/bash</span>
+<span class="nb">set</span> <span class="nt">-x</span>
+<span class="k">if</span> <span class="o">[</span> <span class="nv">$TRAVIS_BRANCH</span> <span class="o">==</span> <span class="s1">'master'</span> <span class="o">]</span> <span class="p">;</span> <span class="k">then</span>
+    <span class="c"># Initialize a new git repo in _site, and push it to our server.</span>
+    <span class="nb">cd </span>_site
+    git init
+        
+    git remote add deploy <span class="s2">"deploy@kjaer.io:/var/www/kjaer.io"</span>
+    git config user.name <span class="s2">"Travis CI"</span>
+    git config user.email <span class="s2">"maxime.kjaer+travisCI@gmail.com"</span>
+    
+    git add <span class="nb">.</span>
+    git commit <span class="nt">-m</span> <span class="s2">"Deploy"</span>
+    git push <span class="nt">--force</span> deploy master
+<span class="k">else
+    </span><span class="nb">echo</span> <span class="s2">"Not deploying, since this branch isn't master."</span>
+<span class="k">fi</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>We’re adding our remote with the deployment username, on the path where our <code class="highlighter-rouge">.git</code> directory is. We commit everything and push it using the <code class="highlighter-rouge">--force</code>. This is necessary, since this new repo isn’t strictly linked to our remote; it doesn’t have the same history or anything. This argument just tells Git to ignore that fact.</p>
+
+<h2 id="jekyll--travis-ci--digitalocean--">Jekyll + Travis CI + DigitalOcean = <span style="color:#db3a3a;">❤</span></h2>
+<p>That should be all it takes to get automatic deployments to DigitalOcean! I know that it’s no small task, but hopefully, this guide will make it easier.  I’m now proud to say that my workflow now consists of only two steps:</p>
+
+<ol>
+  <li>Write content in Markdown</li>
+  <li>Commit to GitHub</li>
+</ol>
+
+<p>This is getting pretty good, almost good enough to sell to a client! <a href="http://prose.io/">Prose.io</a> provides us with an editor that commits directly to Github, which abstracts the technical difficulties away from the user on both steps. As the developer, you can also revert commits if the user messes up, which is a huge plus. Add Travis CI tests to it, and you can even see if everything still is going fine. It’s close to the ideal setup to manage a static site.</p>
+
+<p>Setting this continuous integration workflow up probably took more time than I’m willing to admit. I couldn’t find much online about deploying from Travis to DigitalOcean. Though <a href="https://docs.travis-ci.com/user/deployment/custom/">Travis’ documentation</a> provided a good starting point, it didn’t really help. I had to piece this setup up from a lot of different resources, which took a lot of time, but also led me to learn a lot about a few different technologies.</p>
+
+<p>If I missed something, please make sure to scold me in the comments, and I’ll update this post accordingly. If anything isn’t clear, feel free to ask or check out my <a href="https://github.com/MaximeKjaer/kjaer.io">GitHub repo</a>.</p>
+:ET
