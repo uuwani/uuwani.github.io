@@ -2,7 +2,7 @@
 <html lang="en" prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
 <head>
     {% include head.html %}
-    {% strip %}
+    {% raw %}{% strip %}{% endraw %}
         {% if page.image %}
             {% if page.fallback-color %}
                 {% assign background-color = page.fallback-color %}
@@ -25,7 +25,7 @@
         {% endfor %}
 
         </style>
-{% endstrip %}
+{% raw %}{% endstrip %}{% endraw %}
 </head>
 <body>
     <header class="hero">
